@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fantasy Sports</title>
+  <style>
+    /* Estilos CSS para o layout e aparência do jogo */
+    body {
+      font-family: 'Inter', sans-serif; /* Fonte Inter */
+      background: #0f172a; /* Fundo azul escuro */
+      color: #fff; /* Cor do texto principal */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Altura mínima para preencher a tela */
+      margin: 0;
+      padding: 20px; /* Preenchimento em torno do conteúdo */
+      box-sizing: border-box; /* Inclui padding na largura/altura total */
+    }
+
+    .container {
+      background: #1e293b; /* Azul escuro ligeiramente mais claro */
+      padding: 30px;
+      border-radius: 12px; /* Cantos mais arredondados */
+      width: 100%;
+      max-width: 500px; /* Largura máxima para melhor visualização */
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
+      text-align: center; /* Centraliza o texto nos contentores */
+    }
+
+    h1, h2 {
+      color: #cbd5e1; /* Cinzento claro para os títulos */
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: #94a3b8; /* Cinzento suave para os parágrafos */
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #0ea5e9; /* Azul vibrante */
+      color: white;
+      font-weight: bold;
+      padding: 12px 20px; /* Mais preenchimento para os botões */
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px; /* Botões arredondados */
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease; /* Transição suave ao passar o rato e ao clicar */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra do botão */
+    }
+
+    button:hover {
+      background: #0284c7; /* Azul mais escuro ao passar o rato */
+      transform: translateY(-2px); /* Efeito de elevação */
+    }
+
+    button:active {
+      transform: translateY(0); /* Efeito de clique */
+    }
+
+    .player-selection, .team-player {
+      background: #334155; /* Fundo mais escuro para os cartões de jogador */
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #475569; /* Borda subtil */
+    }
+
+    .player-selection button {
+      width: auto; /* Permite que o botão se ajuste naturalmente */
+      padding: 8px 15px;
+      margin: 0;
+      font-size: 0.9em;
+    }
+
+    .team-list, .ranking-list {
+      list-style: none; /* Remove marcadores de lista */
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .team-list li, .ranking-list li {
+      background: #334155;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #475569;
+      color: #e2e8f0; /* Texto mais claro para os itens da lista */
+    }
+
+    .ranking-list li strong {
+      color: #67e8f9; /* Ciano para os nomes na classificação */
+    }
+
+    .score-display {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #22c55e; /* Verde para as pontuações */
+    }
+
+    .error-message {
+      color: #ef4444; /* Vermelho para mensagens de erro */
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="telaDashboard">
+    <h2>Bem-vindo, <span id="userNome">...</span>!</h2>
+    <p>O seu Saldo de Pontos: <span id="userPontos" class="score-display">0</span></p>
+    <button onclick="window.mostrarSelecaoTime()">Gerir a Minha Equipa</button>
+    <button onclick="window.mostrarDiaDeJogo()">Simular Dia de Jogo</button>
+    <button onclick="window.mostrarRanking()">Ver Classificação Global</button>
+    <button onclick="window.logout()">Sair</button>
+  </div>
+
+  <div class="container" id="telaSelecaoTime" style="display: none;">
+    <h2>Gerir a Minha Equipa</h2>
+    <div id="selectedTeam" class="team-list">
+      <h3>A Sua Equipa Atual:</h3>
+      <p id="emptyTeamMessage">Nenhum jogador selecionado. Escolha abaixo!</p>
+    </div>
+    <h3>Jogadores Disponíveis:</h3>
+    <div id="playerList">
+    </div>
+    <button onclick="window.voltarParaDashboard()">Voltar</button>
+  </div>
+
+  <div class="container" id="telaDiaDeJogo" style="display: none;">
+    <h2>Dia de Jogo</h2>
+    <p>Prepare-se para ver os seus jogadores em ação!</p>
+    <button onclick="window.simularPontuacao()">Simular Pontuação</button>
+    <div id="gameResults">
+    </div>
+    <button onclick="window.voltarParaDashboard()">Voltar</button>
+  </div>
+
+  <div class="container" id="telaRanking" style="display: none;">
+    <h2>Classificação Global</h2>
+    <ol id="rankingList" class="ranking-list">
+    </ol>
+    <button onclick="window.voltarParaDashboard()">Voltar</button>
+  </div>
+
+  <!-- Firebase SDKs - Versão Modular -->
+  <script type="module">
+    // Importar as funções necessárias dos SDKs do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // As suas credenciais do Firebase - AGORA COM OS SEUS VALORES REAIS!
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2kP9ZbC6kiTcShOEZaXtkZcuBKVcPw88",
+      authDomain: "fantasysportsgame-dc63d.firebaseapp.com",
+      projectId: "fantasysportsgame-dc63d",
+      storageBucket: "fantasysportsgame-dc63d.firebasestorage.app",
+      messagingSenderId: "179581906873",
+      appId: "1:179581906873:web:5fcbc0906a2cc5763ad068"
+    };
+    
+    // Inicializa o Firebase com as suas configurações
+    const app = initializeApp(firebaseConfig);
+    
+    // Obtém as instâncias dos serviços do Firebase
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Variáveis globais para gerir o estado do utilizador e os seus dados
+    let usuario = null;
+    let userData = null;
+
+    // Lista de jogadores disponíveis para o jogo de Fantasy Sports
+    const jogadoresDisponiveis = [
+      { id: 'p1', nome: 'Messi', posicao: 'Atacante', valor: 100 },
+      { id: 'p2', nome: 'Cristiano Ronaldo', posicao: 'Atacante', valor: 95 },
+      { id: 'p3', nome: 'Neymar Jr.', posicao: 'Atacante', valor: 90 },
+      { id: 'p4', nome: 'De Bruyne', posicao: 'Meio-campo', valor: 85 },
+      { id: 'p5', nome: 'Modric', posicao: 'Meio-campo', valor: 80 },
+      { id: 'p6', nome: 'Van Dijk', posicao: 'Defensor', valor: 75 },
+      { id: 'p7', nome: 'Rúben Dias', posicao: 'Defensor', valor: 70 },
+      { id: 'p8', nome: 'Alisson Becker', posicao: 'Guarda-redes', valor: 65 },
+      { id: 'p9', nome: 'Courtois', posicao: 'Guarda-redes', valor: 60 },
+      { id: 'p10', nome: 'Mbappé', posicao: 'Atacante', valor: 110 },
+      { id: 'p11', nome: 'Haaland', posicao: 'Atacante', valor: 105 },
+      { id: 'p12', nome: 'Vinicius Jr.', posicao: 'Atacante', valor: 92 },
+    ];
+
+    // Função para mostrar uma tela específica e esconder as outras
+    window.mostrarTela = function(id) {
+      const telas = ["telaDashboard", "telaSelecaoTime", "telaDiaDeJogo", "telaRanking"];
+      telas.forEach(t => document.getElementById(t).style.display = "none");
+      document.getElementById(id).style.display = "block";
+    }
+
+    // Carrega os dados do utilizador do Firestore para o dashboard
+    window.carregarDashboard = async function() {
+      if (!auth.currentUser) {
+        return;
+      }
+      try {
+        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          userData = docSnap.data();
+          document.getElementById("userNome").innerText = userData.nome || "Utilizador Anónimo";
+          document.getElementById("userPontos").innerText = parseFloat(userData.pontos || 0).toFixed(0);
+          window.mostrarTela("telaDashboard");
+        } else {
+          console.error("Dados do utilizador não encontrados no Firestore. A criar novo documento...");
+          await window.criarNovoUsuarioAnonimo();
+          window.carregarDashboard();
+        }
+      } catch (error) {
+        console.error("Erro ao carregar dashboard:", error);
+        await signOut(auth);
+        await signInAnonymously(auth);
+        await window.criarNovoUsuarioAnonimo();
+        window.carregarDashboard();
+      }
+    }
+
+    // Cria um novo documento de utilizador no Firestore para utilizadores anónimos
+    window.criarNovoUsuarioAnonimo = async function() {
+      if (!auth.currentUser) return;
+      const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
+      const docSnap = await getDoc(userDocRef);
+      if (!docSnap.exists()) {
+        await setDoc(userDocRef, {
+          nome: "Utilizador Anónimo",
+          pontos: 0,
+          time: []
+        });
+        userData = { nome: "Utilizador Anónimo", pontos: 0, time: [] };
+      }
+    }
+
+    // Desautentica o utilizador (anónimo) e inicia sessão como um novo utilizador anónimo
+    window.logout = async function() {
+      try {
+        await signOut(auth);
+        usuario = null;
+        const userCredential = await signInAnonymously(auth);
+        usuario = userCredential.user;
+        await window.criarNovoUsuarioAnonimo();
+        window.carregarDashboard();
+      } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+      }
+    }
+
+    // Funções para navegar entre as telas do aplicativo
+    window.voltarParaDashboard = function() {
+      window.carregarDashboard();
+    }
+
+    window.mostrarSelecaoTime = async function() {
+      await window.carregarTimeDoUsuario();
+      window.exibirJogadoresDisponiveis();
+      window.mostrarTela("telaSelecaoTime");
+    }
+
+    window.mostrarDiaDeJogo = function() {
+      document.getElementById("gameResults").innerHTML = "";
+      window.mostrarTela("telaDiaDeJogo");
+    }
+
+    window.mostrarRanking = async function() {
+      await window.carregarRanking();
+      window.mostrarTela("telaRanking");
+    }
+
+    // --- Lógica de Seleção de Equipa ---
+
+    // Carrega a equipa do utilizador do Firestore
+    window.carregarTimeDoUsuario = async function() {
+      if (!auth.currentUser) return;
+      try {
+        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          userData = docSnap.data();
+          window.exibirTimeSelecionado(userData.time || []);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar equipa do utilizador:", error);
+      }
+    }
+
+    // Exibe os jogadores disponíveis para seleção
+    window.exibirJogadoresDisponiveis = function() {
+      const playerListDiv = document.getElementById("playerList");
+      playerListDiv.innerHTML = "";
+
+      const selectedPlayerIds = (userData.time || []).map(p => p.id);
+
+      jogadoresDisponiveis.forEach(jogador => {
+        const playerDiv = document.createElement("div");
+        playerDiv.classList.add('player-selection');
+        const isSelected = selectedPlayerIds.includes(jogador.id);
+
+        playerDiv.innerHTML = `
+          <div>
+            <strong>${jogador.nome}</strong><br>
+            Posição: ${jogador.posicao} | Valor: $${jogador.valor}
+          </div>
+          <button data-player-id="${jogador.id}" ${isSelected ? 'disabled' : ''} onclick="window.adicionarRemoverJogador(${JSON.stringify(jogador).replace(/"/g, '&quot;')}, 'add')">
+            ${isSelected ? 'Na Equipa' : 'Adicionar'}
+          </button>
+        `;
+        playerListDiv.appendChild(playerDiv);
+      });
+    }
+
+    // Adiciona ou remove um jogador da equipa do utilizador
+    window.adicionarRemoverJogador = async function(jogador, acao) {
+      if (!auth.currentUser) return;
+
+      let timeAtual = userData.time || [];
+
+      if (acao === 'add') {
+        if (timeAtual.length >= 5) { // Limite de 5 jogadores por equipa
+          const mensagemErro = document.createElement('div');
+          mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
+          mensagemErro.innerText = "A sua equipa está cheia! Remova um jogador antes de adicionar outro.";
+          document.body.appendChild(mensagemErro);
+          setTimeout(() => document.body.removeChild(mensagemErro), 3000);
+          return;
+        }
+        if (!timeAtual.some(p => p.id === jogador.id)) {
+          timeAtual.push(jogador);
+        }
+      } else if (acao === 'remove') {
+        timeAtual = timeAtual.filter(p => p.id !== jogador.id);
+      }
+
+      try {
+        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
+        await updateDoc(userDocRef, { time: timeAtual });
+        userData.time = timeAtual; // Atualiza os dados locais
+        window.exibirTimeSelecionado(timeAtual);
+        window.exibirJogadoresDisponiveis(); // Atualiza os botões de adicionar/remover
+      } catch (error) {
+        console.error("Erro ao atualizar equipa:", error);
+        const mensagemErro = document.createElement('div');
+        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
+        mensagemErro.innerText = "Erro ao atualizar a sua equipa. Tente novamente.";
+        document.body.appendChild(mensagemErro);
+        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
+      }
+    }
+
+    window.exibirTimeSelecionado = function(time) {
+      const selectedTeamDiv = document.getElementById("selectedTeam");
+      selectedTeamDiv.innerHTML = '<h3>A Sua Equipa Atual:</h3>';
+      const emptyMessage = document.getElementById("emptyTeamMessage");
+      if (emptyMessage) emptyMessage.remove();
+
+      if (time.length === 0) {
+        const msg = document.createElement('p');
+        msg.id = 'emptyTeamMessage';
+        msg.innerText = 'Nenhum jogador selecionado. Escolha abaixo!';
+        selectedTeamDiv.appendChild(msg);
+        return;
+      }
+
+      time.forEach(jogador => {
+        const playerDiv = document.createElement("div");
+        playerDiv.classList.add('team-player');
+        playerDiv.innerHTML = `
+          <div>
+            <strong>${jogador.nome}</strong><br>
+            Posição: ${jogador.posicao}
+          </div>
+          <button data-player-id="${jogador.id}" onclick="window.adicionarRemoverJogador(${JSON.stringify(jogador).replace(/"/g, '&quot;')}, 'remove')">Remover</button>
+        `;
+        selectedTeamDiv.appendChild(playerDiv);
+      });
+    }
+
+    async function simularPontuacao() {
+      if (!auth.currentUser || !userData || !userData.time || userData.time.length === 0) {
+        const mensagemErro = document.createElement('div');
+        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
+        mensagemErro.innerText = "Precisa de ter uma equipa selecionada para simular!";
+        document.body.appendChild(mensagemErro);
+        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
+        return;
+      }
+
+      const gameResultsDiv = document.getElementById("gameResults");
+      gameResultsDiv.innerHTML = "<h3>Resultados da Simulação:</h3>";
+      let pontosGanhosNestaRodada = 0;
+
+      userData.time.forEach(jogador => {
+        const pontosJogador = Math.floor(Math.random() * 51);
+        pontosGanhosNestaRodada += pontosJogador;
+
+        const resultEl = document.createElement("p");
+        resultEl.innerText = `${jogador.nome} (${jogador.posicao}): ${pontosJogador} pontos`;
+        gameResultsDiv.appendChild(resultEl);
+      });
+
+      const novosPontosTotais = (userData.pontos || 0) + pontosGanhosNestaRodada;
+      try {
+        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
+        await updateDoc(userDocRef, { pontos: novosPontosTotais });
+        userData.pontos = novosPontosTotais;
+        document.getElementById("userPontos").innerText = novosPontosTotais.toFixed(0);
+        
+        const totalPontosEl = document.createElement("h3");
+        totalPontosEl.innerHTML = `Ganhou <span style="color: #22c55e;">${pontosGanhosNestaRodada}</span> pontos nesta ronda!`;
+        gameResultsDiv.prepend(totalPontosEl);
+
+      } catch (error) {
+        console.error("Erro ao atualizar pontos:", error);
+        const mensagemErro = document.createElement('div');
+        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
+        mensagemErro.innerText = "Erro ao guardar a sua pontuação.";
+        document.body.appendChild(mensagemErro);
+        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
+      }
+    }
+
+    window.carregarRanking = async function() {
+      try {
+        const q = query(collection(db, "usuarios"), orderBy("pontos", "desc"), limit(10));
+        const querySnapshot = await getDocs(q);
+
+        const list = document.getElementById("rankingList");
+        list.innerHTML = "";
+
+        if (querySnapshot.empty) {
+          list.innerHTML = "<li>Nenhum utilizador na classificação ainda.</li>";
+          return;
+        }
+
+        querySnapshot.forEach((docSnap, index) => {
+          const data = docSnap.data();
+          const item = document.createElement("li");
+          item.innerHTML = `<strong>${index + 1}. ${data.nome || 'Utilizador Anónimo'}</strong> - Pontos: <span class="score-display">${parseFloat(data.pontos || 0).toFixed(0)}</span>`;
+          list.appendChild(item);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar classificação:", error);
+        const list = document.getElementById("rankingList");
+        list.innerHTML = "<li>Erro ao carregar a classificação.</li>";
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        usuario = user;
+        await window.criarNovoUsuarioAnonimo();
+        window.carregarDashboard();
+      } else {
+        try {
+            const userCredential = await signInAnonymously(auth);
+            usuario = userCredential.user;
+            await window.criarNovoUsuarioAnonimo();
+            window.carregarDashboard();
+        } catch (error) {
+            console.error("Erro crítico ao iniciar sessão anónima:", error);
+            const mensagemErroCritico = document.createElement('div');
+            mensagemErroCritico.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
+            mensagemErroCritico.innerText = "Não foi possível iniciar a aplicação. Verifique a sua ligação ou as configurações do Firebase.";
+            document.body.appendChild(mensagemErroCritico);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
