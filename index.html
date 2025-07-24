@@ -1,484 +1,467 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fantasy Sports</title>
-  <style>
-    /* Estilos CSS para o layout e aparência do jogo */
-    body {
-      font-family: 'Inter', sans-serif; /* Fonte Inter */
-      background: #0f172a; /* Fundo azul escuro */
-      color: #fff; /* Cor do texto principal */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh; /* Altura mínima para preencher a tela */
-      margin: 0;
-      padding: 20px; /* Preenchimento em torno do conteúdo */
-      box-sizing: border-box; /* Inclui padding na largura/altura total */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prévia de Site - Valentim Web</title>
+    <style>
+        /* Estilos CSS embutidos */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
 
-    .container {
-      background: #1e293b; /* Azul escuro ligeiramente mais claro */
-      padding: 30px;
-      border-radius: 12px; /* Cantos mais arredondados */
-      width: 100%;
-      max-width: 500px; /* Largura máxima para melhor visualização */
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
-      text-align: center; /* Centraliza o texto nos contentores */
-    }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    h1, h2 {
-      color: #cbd5e1; /* Cinzento claro para os títulos */
-      margin-bottom: 20px;
-    }
+        h1, h2 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
 
-    p {
-      color: #94a3b8; /* Cinzento suave para os parágrafos */
-      margin-bottom: 15px;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
 
-    button {
-      background: #0ea5e9; /* Azul vibrante */
-      color: white;
-      font-weight: bold;
-      padding: 12px 20px; /* Mais preenchimento para os botões */
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px; /* Botões arredondados */
-      width: 100%;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease; /* Transição suave ao passar o rato e ao clicar */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra do botão */
-    }
+        input[type="text"], input[type="email"], input[type="url"], textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    button:hover {
-      background: #0284c7; /* Azul mais escuro ao passar o rato */
-      transform: translateY(-2px); /* Efeito de elevação */
-    }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
 
-    button:active {
-      transform: translateY(0); /* Efeito de clique */
-    }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button + button {
+            margin-left: 10px;
+        }
 
-    .player-selection, .team-player {
-      background: #334155; /* Fundo mais escuro para os cartões de jogador */
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #475569; /* Borda subtil */
-    }
+        .form-section {
+            display: none;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #fdfdfd;
+        }
+        .form-section.active {
+            display: block;
+        }
 
-    .player-selection button {
-      width: auto; /* Permite que o botão se ajuste naturalmente */
-      padding: 8px 15px;
-      margin: 0;
-      font-size: 0.9em;
-    }
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .color-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        .color-box.selected {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+        }
+        .color1 { background-color: #007bff; } /* Primary */
+        .color2 { background-color: #28a745; } /* Primary */
+        .color3 { background-color: #dc3545; } /* Primary */
 
-    .team-list, .ranking-list {
-      list-style: none; /* Remove marcadores de lista */
-      padding: 0;
-      margin-top: 20px;
-    }
+        /* Estilos da Prévia do Site */
+        .website-preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            min-height: 400px; /* Garante altura mínima para a prévia */
+            display: flex;
+            flex-direction: column;
+        }
 
-    .team-list li, .ranking-list li {
-      background: #334155;
-      padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #475569;
-      color: #e2e8f0; /* Texto mais claro para os itens da lista */
-    }
+        .preview-header {
+            background-color: var(--primary-color, #007bff); /* Fallback */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .preview-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 2em;
+        }
+        .preview-header p {
+            margin: 5px 0 10px;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .preview-header nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .ranking-list li strong {
-      color: #67e8f9; /* Ciano para os nomes na classificação */
-    }
+        .preview-section {
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .preview-section:nth-child(odd) {
+            background-color: #f8f8f8;
+        }
+        .preview-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .preview-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .preview-section ul li {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
 
-    .score-display {
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #22c55e; /* Verde para as pontuações */
-    }
+        .preview-footer {
+            background-color: var(--secondary-color, #333); /* Fallback */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: auto; /* Empurra o footer para baixo */
+        }
 
-    .error-message {
-      color: #ef4444; /* Vermelho para mensagens de erro */
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-  </style>
+        /* Botão do WhatsApp */
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366; /* Cor do WhatsApp */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+        }
+
+        /* Variáveis CSS para cores dinâmicas */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+        }
+    </style>
 </head>
 <body>
-  <div class="container" id="telaDashboard">
-    <h2>Bem-vindo, <span id="userNome">...</span>!</h2>
-    <p>O seu Saldo de Pontos: <span id="userPontos" class="score-display">0</span></p>
-    <button onclick="window.mostrarSelecaoTime()">Gerir a Minha Equipa</button>
-    <button onclick="window.mostrarDiaDeJogo()">Simular Dia de Jogo</button>
-    <button onclick="window.mostrarRanking()">Ver Classificação Global</button>
-    <button onclick="window.logout()">Sair</button>
-  </div>
+    <div class="container">
+        <h1>Crie a Prévia do Seu Site em Minutos!</h1>
+        <p>Preencha as informações e veja seu negócio ganhar forma na web. É rápido e fácil!</p>
 
-  <div class="container" id="telaSelecaoTime" style="display: none;">
-    <h2>Gerir a Minha Equipa</h2>
-    <div id="selectedTeam" class="team-list">
-      <h3>A Sua Equipa Atual:</h3>
-      <p id="emptyTeamMessage">Nenhum jogador selecionado. Escolha abaixo!</p>
+        <div class="form-section active" id="section-info">
+            <h2>1. Informações da Empresa</h2>
+            <label for="nome_empresa">Nome da Empresa:</label>
+            <input type="text" id="nome_empresa" placeholder="Sua Empresa Ltda." onkeyup="updatePreview()">
+
+            <label for="slogan">Slogan:</label>
+            <input type="text" id="slogan" placeholder="Seu sucesso online, nossa missão" onkeyup="updatePreview()">
+
+            <label for="descricao">Sobre Nós:</label>
+            <textarea id="descricao" placeholder="Uma breve descrição da sua empresa..." onkeyup="updatePreview()"></textarea>
+            <button onclick="nextSection('section-design')">Próximo</button>
+        </div>
+
+        <div class="form-section" id="section-design">
+            <h2>2. Escolha o Estilo</h2>
+            <label>Paleta de Cores:</label>
+            <div class="color-options">
+                <div class="color-box color1" data-primary="#007bff" data-secondary="#6c757d" onclick="selectColors(this, '#007bff', '#6c757d')"></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#ffc107" onclick="selectColors(this, '#28a745', '#ffc107')"></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#00bcd4" onclick="selectColors(this, '#dc3545', '#00bcd4')"></div>
+                </div>
+            <p>Selecione uma paleta para ver a prévia.</p>
+            <button onclick="prevSection('section-info')">Anterior</button>
+            <button onclick="nextSection('section-content')">Próximo</button>
+        </div>
+
+        <div class="form-section" id="section-content">
+            <h2>3. Seções do Site</h2>
+            <label for="titulo_servicos">Título da Seção de Serviços:</label>
+            <input type="text" id="titulo_servicos" value="Nossos Serviços" onkeyup="updatePreview()">
+
+            <label for="servicos_lista">Lista de Serviços (um por linha):</label>
+            <textarea id="servicos_lista" placeholder="Serviço 1&#10;Serviço 2&#10;Serviço 3" onkeyup="updatePreview()"></textarea>
+
+            <button onclick="prevSection('section-design')">Anterior</button>
+            <button onclick="nextSection('section-contact')">Próximo</button>
+        </div>
+
+        <div class="form-section" id="section-contact">
+            <h2>4. Contato</h2>
+            <label for="contato_email">Seu Email:</label>
+            <input type="email" id="contato_email" placeholder="contato@empresa.com" onkeyup="updatePreview()">
+            <label for="contato_telefone">Telefone/WhatsApp:</label>
+            <input type="text" id="contato_telefone" placeholder="(XX) XXXXX-XXXX" onkeyup="updatePreview()">
+            <label for="link_redes">Link Rede Social:</label>
+            <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
+
+            <button onclick="prevSection('section-content')">Anterior</button>
+            <button onclick="generateFinalPreview()">Ver Minha Prévia!</button>
+        </div>
+
+        <hr>
+
+        <h2>Sua Prévia Rápida do Site:</h2>
+        <div id="website-preview" class="website-preview">
+            <header class="preview-header">
+                <h1 id="preview-empresa">Nome da Sua Empresa</h1>
+                <p id="preview-slogan">Seu Slogan Incrível Aqui</p>
+                <nav><a href="#">Início</a> <a href="#">Serviços</a> <a href="#">Contato</a></nav>
+            </header>
+            <section class="preview-section preview-about">
+                <h2 style="color: var(--primary-color);">Sobre Nós</h2>
+                <p id="preview-descricao">A descrição da sua empresa aparecerá aqui. Conte um pouco sobre o que você faz e seus valores.</p>
+            </section>
+            <section class="preview-section preview-services">
+                <h2 style="color: var(--primary-color);" id="preview-titulo-servicos">Nossos Serviços</h2>
+                <ul id="preview-servicos-lista">
+                    <li>Serviço 1</li>
+                    <li>Serviço 2</li>
+                    <li>Serviço 3</li>
+                </ul>
+            </section>
+            <section class="preview-section preview-contact">
+                <h2 style="color: var(--primary-color);">Entre em Contato</h2>
+                <p id="preview-contato-email">Email: seuemail@empresa.com</p>
+                <p id="preview-contato-telefone">Telefone: (XX) XXXXX-XXXX</p>
+                <p id="preview-redes"><a href="#" target="_blank" style="color: var(--primary-color);">Nossas Redes Sociais</a></p>
+            </section>
+            <footer class="preview-footer">
+                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por Valentim Web.</p>
+            </footer>
+        </div>
+
+        <div id="cta-final" style="text-align: center; margin-top: 30px; display: none;">
+            <h3>Gostou do que viu? Isso é só o começo!</h3>
+            <p>Imagine seu site completo, com fotos profissionais, textos otimizados, formulários funcionando e atraindo clientes reais.</p>
+            <a href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20mais!" target="_blank" class="whatsapp-button">Quero o Site Completo! Fale Conosco no WhatsApp!</a>
+            <p style="margin-top: 15px;">Ou ligue: (XX) XXXX-XXXX</p>
+        </div>
     </div>
-    <h3>Jogadores Disponíveis:</h3>
-    <div id="playerList">
-    </div>
-    <button onclick="window.voltarParaDashboard()">Voltar</button>
-  </div>
 
-  <div class="container" id="telaDiaDeJogo" style="display: none;">
-    <h2>Dia de Jogo</h2>
-    <p>Prepare-se para ver os seus jogadores em ação!</p>
-    <button onclick="window.simularPontuacao()">Simular Pontuação</button>
-    <div id="gameResults">
-    </div>
-    <button onclick="window.voltarParaDashboard()">Voltar</button>
-  </div>
+    <script>
+        // Código JavaScript embutido
+        let currentPrimaryColor = '#007bff';
+        let currentSecondaryColor = '#6c757d';
 
-  <div class="container" id="telaRanking" style="display: none;">
-    <h2>Classificação Global</h2>
-    <ol id="rankingList" class="ranking-list">
-    </ol>
-    <button onclick="window.voltarParaDashboard()">Voltar</button>
-  </div>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Atualiza o ano no footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
 
-  <!-- Firebase SDKs - Versão Modular -->
-  <script type="module">
-    // Importar as funções necessárias dos SDKs do Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+            // Event listeners para atualização em tempo real
+            const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
+            inputs.forEach(input => {
+                input.addEventListener('keyup', updatePreview);
+            });
 
-    // As suas credenciais do Firebase - AGORA COM OS SEUS VALORES REAIS!
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2kP9ZbC6kiTcShOEZaXtkZcuBKVcPw88",
-      authDomain: "fantasysportsgame-dc63d.firebaseapp.com",
-      projectId: "fantasysportsgame-dc63d",
-      storageBucket: "fantasysportsgame-dc63d.firebasestorage.app",
-      messagingSenderId: "179581906873",
-      appId: "1:179581906873:web:5fcbc0906a2cc5763ad068"
-    };
-    
-    // Inicializa o Firebase com as suas configurações
-    const app = initializeApp(firebaseConfig);
-    
-    // Obtém as instâncias dos serviços do Firebase
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Variáveis globais para gerir o estado do utilizador e os seus dados
-    let usuario = null;
-    let userData = null;
-
-    // Lista de jogadores disponíveis para o jogo de Fantasy Sports
-    const jogadoresDisponiveis = [
-      { id: 'p1', nome: 'Messi', posicao: 'Atacante', valor: 100 },
-      { id: 'p2', nome: 'Cristiano Ronaldo', posicao: 'Atacante', valor: 95 },
-      { id: 'p3', nome: 'Neymar Jr.', posicao: 'Atacante', valor: 90 },
-      { id: 'p4', nome: 'De Bruyne', posicao: 'Meio-campo', valor: 85 },
-      { id: 'p5', nome: 'Modric', posicao: 'Meio-campo', valor: 80 },
-      { id: 'p6', nome: 'Van Dijk', posicao: 'Defensor', valor: 75 },
-      { id: 'p7', nome: 'Rúben Dias', posicao: 'Defensor', valor: 70 },
-      { id: 'p8', nome: 'Alisson Becker', posicao: 'Guarda-redes', valor: 65 },
-      { id: 'p9', nome: 'Courtois', posicao: 'Guarda-redes', valor: 60 },
-      { id: 'p10', nome: 'Mbappé', posicao: 'Atacante', valor: 110 },
-      { id: 'p11', nome: 'Haaland', posicao: 'Atacante', valor: 105 },
-      { id: 'p12', nome: 'Vinicius Jr.', posicao: 'Atacante', valor: 92 },
-    ];
-
-    // Função para mostrar uma tela específica e esconder as outras
-    window.mostrarTela = function(id) {
-      const telas = ["telaDashboard", "telaSelecaoTime", "telaDiaDeJogo", "telaRanking"];
-      telas.forEach(t => document.getElementById(t).style.display = "none");
-      document.getElementById(id).style.display = "block";
-    }
-
-    // Carrega os dados do utilizador do Firestore para o dashboard
-    window.carregarDashboard = async function() {
-      if (!auth.currentUser) {
-        return;
-      }
-      try {
-        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
-        const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists()) {
-          userData = docSnap.data();
-          document.getElementById("userNome").innerText = userData.nome || "Utilizador Anónimo";
-          document.getElementById("userPontos").innerText = parseFloat(userData.pontos || 0).toFixed(0);
-          window.mostrarTela("telaDashboard");
-        } else {
-          console.error("Dados do utilizador não encontrados no Firestore. A criar novo documento...");
-          await window.criarNovoUsuarioAnonimo();
-          window.carregarDashboard();
-        }
-      } catch (error) {
-        console.error("Erro ao carregar dashboard:", error);
-        await signOut(auth);
-        await signInAnonymously(auth);
-        await window.criarNovoUsuarioAnonimo();
-        window.carregarDashboard();
-      }
-    }
-
-    // Cria um novo documento de utilizador no Firestore para utilizadores anónimos
-    window.criarNovoUsuarioAnonimo = async function() {
-      if (!auth.currentUser) return;
-      const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
-      const docSnap = await getDoc(userDocRef);
-      if (!docSnap.exists()) {
-        await setDoc(userDocRef, {
-          nome: "Utilizador Anónimo",
-          pontos: 0,
-          time: []
+            // Seleciona a primeira opção de cor por padrão
+            const defaultColorBox = document.querySelector('.color-box.color1');
+            if (defaultColorBox) {
+                selectColors(defaultColorBox, defaultColorBox.dataset.primary, defaultColorBox.dataset.secondary);
+            }
         });
-        userData = { nome: "Utilizador Anónimo", pontos: 0, time: [] };
-      }
-    }
 
-    // Desautentica o utilizador (anónimo) e inicia sessão como um novo utilizador anónimo
-    window.logout = async function() {
-      try {
-        await signOut(auth);
-        usuario = null;
-        const userCredential = await signInAnonymously(auth);
-        usuario = userCredential.user;
-        await window.criarNovoUsuarioAnonimo();
-        window.carregarDashboard();
-      } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-      }
-    }
+        function updatePreview() {
+            // Atualiza informações básicas
+            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Nome da Sua Empresa';
+            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Seu Slogan Incrível Aqui';
+            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'A descrição da sua empresa aparecerá aqui. Conte um pouco sobre o que você faz e seus valores.';
 
-    // Funções para navegar entre as telas do aplicativo
-    window.voltarParaDashboard = function() {
-      window.carregarDashboard();
-    }
+            // Atualiza serviços
+            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Serviços';
+            const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
+            const ulServicos = document.getElementById('preview-servicos-lista');
+            ulServicos.innerHTML = ''; // Limpa a lista existente
+            if (servicosLista.length > 0) {
+                servicosLista.forEach(servico => {
+                    const li = document.createElement('li');
+                    li.textContent = servico.trim();
+                    ulServicos.appendChild(li);
+                });
+            } else {
+                ulServicos.innerHTML = '<li>Serviço 1</li><li>Serviço 2</li><li>Serviço 3</li>'; // Conteúdo padrão
+            }
 
-    window.mostrarSelecaoTime = async function() {
-      await window.carregarTimeDoUsuario();
-      window.exibirJogadoresDisponiveis();
-      window.mostrarTela("telaSelecaoTime");
-    }
 
-    window.mostrarDiaDeJogo = function() {
-      document.getElementById("gameResults").innerHTML = "";
-      window.mostrarTela("telaDiaDeJogo");
-    }
-
-    window.mostrarRanking = async function() {
-      await window.carregarRanking();
-      window.mostrarTela("telaRanking");
-    }
-
-    // --- Lógica de Seleção de Equipa ---
-
-    // Carrega a equipa do utilizador do Firestore
-    window.carregarTimeDoUsuario = async function() {
-      if (!auth.currentUser) return;
-      try {
-        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
-        const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists()) {
-          userData = docSnap.data();
-          window.exibirTimeSelecionado(userData.time || []);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar equipa do utilizador:", error);
-      }
-    }
-
-    // Exibe os jogadores disponíveis para seleção
-    window.exibirJogadoresDisponiveis = function() {
-      const playerListDiv = document.getElementById("playerList");
-      playerListDiv.innerHTML = "";
-
-      const selectedPlayerIds = (userData.time || []).map(p => p.id);
-
-      jogadoresDisponiveis.forEach(jogador => {
-        const playerDiv = document.createElement("div");
-        playerDiv.classList.add('player-selection');
-        const isSelected = selectedPlayerIds.includes(jogador.id);
-
-        playerDiv.innerHTML = `
-          <div>
-            <strong>${jogador.nome}</strong><br>
-            Posição: ${jogador.posicao} | Valor: $${jogador.valor}
-          </div>
-          <button data-player-id="${jogador.id}" ${isSelected ? 'disabled' : ''} onclick="window.adicionarRemoverJogador(${JSON.stringify(jogador).replace(/"/g, '&quot;')}, 'add')">
-            ${isSelected ? 'Na Equipa' : 'Adicionar'}
-          </button>
-        `;
-        playerListDiv.appendChild(playerDiv);
-      });
-    }
-
-    // Adiciona ou remove um jogador da equipa do utilizador
-    window.adicionarRemoverJogador = async function(jogador, acao) {
-      if (!auth.currentUser) return;
-
-      let timeAtual = userData.time || [];
-
-      if (acao === 'add') {
-        if (timeAtual.length >= 5) { // Limite de 5 jogadores por equipa
-          const mensagemErro = document.createElement('div');
-          mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
-          mensagemErro.innerText = "A sua equipa está cheia! Remova um jogador antes de adicionar outro.";
-          document.body.appendChild(mensagemErro);
-          setTimeout(() => document.body.removeChild(mensagemErro), 3000);
-          return;
-        }
-        if (!timeAtual.some(p => p.id === jogador.id)) {
-          timeAtual.push(jogador);
-        }
-      } else if (acao === 'remove') {
-        timeAtual = timeAtual.filter(p => p.id !== jogador.id);
-      }
-
-      try {
-        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
-        await updateDoc(userDocRef, { time: timeAtual });
-        userData.time = timeAtual; // Atualiza os dados locais
-        window.exibirTimeSelecionado(timeAtual);
-        window.exibirJogadoresDisponiveis(); // Atualiza os botões de adicionar/remover
-      } catch (error) {
-        console.error("Erro ao atualizar equipa:", error);
-        const mensagemErro = document.createElement('div');
-        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
-        mensagemErro.innerText = "Erro ao atualizar a sua equipa. Tente novamente.";
-        document.body.appendChild(mensagemErro);
-        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
-      }
-    }
-
-    window.exibirTimeSelecionado = function(time) {
-      const selectedTeamDiv = document.getElementById("selectedTeam");
-      selectedTeamDiv.innerHTML = '<h3>A Sua Equipa Atual:</h3>';
-      const emptyMessage = document.getElementById("emptyTeamMessage");
-      if (emptyMessage) emptyMessage.remove();
-
-      if (time.length === 0) {
-        const msg = document.createElement('p');
-        msg.id = 'emptyTeamMessage';
-        msg.innerText = 'Nenhum jogador selecionado. Escolha abaixo!';
-        selectedTeamDiv.appendChild(msg);
-        return;
-      }
-
-      time.forEach(jogador => {
-        const playerDiv = document.createElement("div");
-        playerDiv.classList.add('team-player');
-        playerDiv.innerHTML = `
-          <div>
-            <strong>${jogador.nome}</strong><br>
-            Posição: ${jogador.posicao}
-          </div>
-          <button data-player-id="${jogador.id}" onclick="window.adicionarRemoverJogador(${JSON.stringify(jogador).replace(/"/g, '&quot;')}, 'remove')">Remover</button>
-        `;
-        selectedTeamDiv.appendChild(playerDiv);
-      });
-    }
-
-    async function simularPontuacao() {
-      if (!auth.currentUser || !userData || !userData.time || userData.time.length === 0) {
-        const mensagemErro = document.createElement('div');
-        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
-        mensagemErro.innerText = "Precisa de ter uma equipa selecionada para simular!";
-        document.body.appendChild(mensagemErro);
-        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
-        return;
-      }
-
-      const gameResultsDiv = document.getElementById("gameResults");
-      gameResultsDiv.innerHTML = "<h3>Resultados da Simulação:</h3>";
-      let pontosGanhosNestaRodada = 0;
-
-      userData.time.forEach(jogador => {
-        const pontosJogador = Math.floor(Math.random() * 51);
-        pontosGanhosNestaRodada += pontosJogador;
-
-        const resultEl = document.createElement("p");
-        resultEl.innerText = `${jogador.nome} (${jogador.posicao}): ${pontosJogador} pontos`;
-        gameResultsDiv.appendChild(resultEl);
-      });
-
-      const novosPontosTotais = (userData.pontos || 0) + pontosGanhosNestaRodada;
-      try {
-        const userDocRef = doc(db, "usuarios", auth.currentUser.uid);
-        await updateDoc(userDocRef, { pontos: novosPontosTotais });
-        userData.pontos = novosPontosTotais;
-        document.getElementById("userPontos").innerText = novosPontosTotais.toFixed(0);
-        
-        const totalPontosEl = document.createElement("h3");
-        totalPontosEl.innerHTML = `Ganhou <span style="color: #22c55e;">${pontosGanhosNestaRodada}</span> pontos nesta ronda!`;
-        gameResultsDiv.prepend(totalPontosEl);
-
-      } catch (error) {
-        console.error("Erro ao atualizar pontos:", error);
-        const mensagemErro = document.createElement('div');
-        mensagemErro.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
-        mensagemErro.innerText = "Erro ao guardar a sua pontuação.";
-        document.body.appendChild(mensagemErro);
-        setTimeout(() => document.body.removeChild(mensagemErro), 3000);
-      }
-    }
-
-    window.carregarRanking = async function() {
-      try {
-        const q = query(collection(db, "usuarios"), orderBy("pontos", "desc"), limit(10));
-        const querySnapshot = await getDocs(q);
-
-        const list = document.getElementById("rankingList");
-        list.innerHTML = "";
-
-        if (querySnapshot.empty) {
-          list.innerHTML = "<li>Nenhum utilizador na classificação ainda.</li>";
-          return;
+            // Atualiza contato
+            document.getElementById('preview-contato-email').textContent = 'Email: ' + (document.getElementById('contato_email').value || 'seuemail@empresa.com');
+            document.getElementById('preview-contato-telefone').textContent = 'Telefone: ' + (document.getElementById('contato_telefone').value || '(XX) XXXXX-XXXX');
+            const linkRedes = document.getElementById('link_redes').value;
+            const previewRedesLink = document.querySelector('#preview-redes a');
+            if (linkRedes) {
+                previewRedesLink.href = linkRedes;
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
+            } else {
+                previewRedesLink.href = '#';
+                previewRedesLink.textContent = 'Nossas Redes Sociais'; // Texto padrão
+            }
         }
 
-        querySnapshot.forEach((docSnap, index) => {
-          const data = docSnap.data();
-          const item = document.createElement("li");
-          item.innerHTML = `<strong>${index + 1}. ${data.nome || 'Utilizador Anónimo'}</strong> - Pontos: <span class="score-display">${parseFloat(data.pontos || 0).toFixed(0)}</span>`;
-          list.appendChild(item);
-        });
-      } catch (error) {
-        console.error("Erro ao carregar classificação:", error);
-        const list = document.getElementById("rankingList");
-        list.innerHTML = "<li>Erro ao carregar a classificação.</li>";
-      }
-    }
+        function selectColors(element, primary, secondary) {
+            // Remove a classe 'selected' de todos os boxes
+            document.querySelectorAll('.color-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            // Adiciona a classe 'selected' ao box clicado
+            element.classList.add('selected');
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        usuario = user;
-        await window.criarNovoUsuarioAnonimo();
-        window.carregarDashboard();
-      } else {
-        try {
-            const userCredential = await signInAnonymously(auth);
-            usuario = userCredential.user;
-            await window.criarNovoUsuarioAnonimo();
-            window.carregarDashboard();
-        } catch (error) {
-            console.error("Erro crítico ao iniciar sessão anónima:", error);
-            const mensagemErroCritico = document.createElement('div');
-            mensagemErroCritico.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 1000; text-align: center;';
-            mensagemErroCritico.innerText = "Não foi possível iniciar a aplicação. Verifique a sua ligação ou as configurações do Firebase.";
-            document.body.appendChild(mensagemErroCritico);
+            // Atualiza as variáveis CSS
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--secondary-color', secondary);
+            currentPrimaryColor = primary;
+            currentSecondaryColor = secondary;
+            // Opcional: Chama updatePreview() se a mudança de cor não afetar apenas o CSS
+            // updatePreview();
         }
-      }
-    });
-  </script>
+
+        // Funções para navegação entre as seções do formulário
+        let currentSectionIndex = 0;
+        const formSections = document.querySelectorAll('.form-section');
+
+        function showSection(index) {
+            formSections.forEach((section, i) => {
+                if (i === index) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            currentSectionIndex = index;
+        }
+
+        function nextSection(nextSectionId) {
+            const currentSection = formSections[currentSectionIndex];
+            const nextSection = document.getElementById(nextSectionId);
+
+            // Validação básica antes de avançar
+            const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                    input.style.borderColor = 'red'; // Feedback visual
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (!allFilled) {
+                alert('Por favor, preencha todos os campos obrigatórios nesta seção.');
+                return;
+            }
+
+            if (nextSection) {
+                currentSection.classList.remove('active');
+                nextSection.classList.add('active');
+                const nextIndex = Array.from(formSections).indexOf(nextSection);
+                currentSectionIndex = nextIndex;
+            }
+        }
+
+        function prevSection(prevSectionId) {
+            const currentSection = formSections[currentSectionIndex];
+            const prevSection = document.getElementById(prevSectionId);
+            if (prevSection) {
+                currentSection.classList.remove('active');
+                prevSection.classList.add('active');
+                const prevIndex = Array.from(formSections).indexOf(prevSection);
+                currentSectionIndex = prevIndex;
+            }
+        }
+
+        function generateFinalPreview() {
+            // Esconde o formulário e mostra a prévia e a CTA final
+            formSections.forEach(section => section.style.display = 'none');
+            document.getElementById('website-preview').style.display = 'block';
+            document.getElementById('cta-final').style.display = 'block';
+
+            // Rola para a prévia
+            document.getElementById('website-preview').scrollIntoView({ behavior: 'smooth' });
+
+            // Opcional: Aqui você pode coletar os dados para um back-end se tiver um
+            // para salvar as escolhas do cliente e o link da prévia para seu acompanhamento.
+            const finalData = {
+                nome_empresa: document.getElementById('nome_empresa').value,
+                slogan: document.getElementById('slogan').value,
+                descricao: document.getElementById('descricao').value,
+                primary_color: currentPrimaryColor,
+                secondary_color: currentSecondaryColor,
+                titulo_servicos: document.getElementById('titulo_servicos').value,
+                servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
+                contato_email: document.getElementById('contato_email').value,
+                contato_telefone: document.getElementById('contato_telefone').value,
+                link_redes: document.getElementById('link_redes').value,
+            };
+            console.log("Dados finais para envio:", finalData); // Apenas para debug no console
+            // Exemplo de como enviar para um back-end (você precisaria configurar um endpoint)
+            /*
+            fetch('/api/save_preview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(finalData)
+            })
+            .then(response => response.json())
+            .then(data => console.log('Dados salvos:', data))
+            .catch(error => console.error('Erro ao salvar:', error));
+            */
+        }
+
+        // Inicia mostrando a primeira seção
+        showSection(0);
+    </script>
 </body>
 </html>
