@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sua Prévia de Site Profissional - Valentim Web</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         /* Variáveis CSS para cores dinâmicas */
         :root {
@@ -16,6 +17,12 @@
             --dark-bg: #e9ecef;
             --font-montserrat: 'Montserrat', sans-serif;
             --font-open-sans: 'Open Sans', sans-serif;
+
+            /* Variáveis de layout padrão (serão sobrescritas pelo JS) */
+            --preview-font-heading: var(--font-montserrat);
+            --preview-font-body: var(--font-open-sans);
+            --preview-border-radius: 8px;
+            --preview-spacing-unit: 20px;
         }
 
         body {
@@ -210,12 +217,36 @@
             transform: translateY(0);
         }
 
+        /* Animações para as seções da prévia */
+        .preview-section.fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: sectionFadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes sectionFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Aplica atraso para cada seção */
+        .preview-section:nth-child(1).fade-in { animation-delay: 0.1s; } /* Header */
+        .preview-section:nth-child(2).fade-in { animation-delay: 0.3s; } /* About */
+        .preview-section:nth-child(3).fade-in { animation-delay: 0.5s; } /* Services */
+        .preview-section:nth-child(4).fade-in { animation-delay: 0.7s; } /* Contact */
+        .preview-footer.fade-in { animation-delay: 0.9s; }
+
         .preview-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 30px 20px;
+            padding: var(--preview-spacing-unit) 20px;
             text-align: center;
-            font-family: var(--font-montserrat);
+            font-family: var(--preview-font-heading); /* Fonte dinâmica */
+            border-bottom-left-radius: var(--preview-border-radius); /* Borda dinâmica */
+            border-bottom-right-radius: var(--preview-border-radius); /* Borda dinâmica */
+            position: relative; /* Para o botão de "Ver em Tela Cheia" */
         }
         .preview-header h1 {
             margin: 0;
@@ -227,35 +258,46 @@
             font-size: 1.2em;
             opacity: 0.9;
         }
+        .preview-header nav {
+            margin-top: 15px;
+        }
+        /* Botões fantasma na prévia */
         .preview-header nav a {
             color: white;
-            margin: 0 12px;
+            margin: 0 8px; /* Menor margem para parecer mais com botões */
             text-decoration: none;
             font-weight: 600;
             font-size: 1.05em;
-            transition: opacity 0.3s ease, transform 0.3s ease; /* Adicionado transform aqui */
+            padding: 8px 15px; /* Padding para parecer botão */
+            border: 1px solid rgba(255,255,255,0.5); /* Borda sutil */
+            border-radius: 5px; /* Bordas arredondadas */
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            display: inline-block; /* Para o padding funcionar */
         }
         .preview-header nav a:hover {
-            opacity: 0.8; /* Um pouco mais sutil */
-            transform: translateY(-3px); /* Efeito de "levitar" sutil */
+            opacity: 0.9;
+            transform: translateY(-3px);
+            background-color: rgba(255,255,255,0.1); /* Fundo sutil ao hover */
+            border-color: white; /* Borda mais visível ao hover */
         }
 
         .preview-section {
-            padding: 40px 20px;
+            padding: calc(2 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
             text-align: center;
-            font-family: var(--font-open-sans);
+            font-family: var(--preview-font-body); /* Fonte dinâmica */
         }
         .preview-section:nth-child(odd) {
             background-color: var(--light-bg);
         }
         .preview-section h2 {
             font-size: 2em;
-            margin-bottom: 20px;
+            margin-bottom: var(--preview-spacing-unit);
             color: var(--primary-color); /* Títulos de seção com cor primária */
+            font-family: var(--preview-font-heading); /* Fonte dinâmica */
         }
         .preview-section p {
             max-width: 700px;
-            margin: 0 auto 20px auto;
+            margin: 0 auto var(--preview-spacing-unit) auto;
         }
         .preview-section ul {
             list-style: none;
@@ -270,7 +312,7 @@
         .preview-section ul li {
             background-color: #fff;
             border: 1px solid #eee;
-            border-radius: 8px;
+            border-radius: var(--preview-border-radius); /* Borda dinâmica */
             padding: 15px 20px;
             flex: 1 1 calc(33% - 30px); /* 3 itens por linha */
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -304,10 +346,12 @@
         .preview-footer {
             background-color: var(--secondary-color);
             color: white;
-            padding: 20px;
+            padding: var(--preview-spacing-unit);
             text-align: center;
             font-size: 0.95em;
             margin-top: auto;
+            border-top-left-radius: var(--preview-border-radius); /* Borda dinâmica */
+            border-top-right-radius: var(--preview-border-radius); /* Borda dinâmica */
         }
 
         /* Botão do WhatsApp CTA Final */
@@ -360,6 +404,27 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Botão de Ver em Tela Cheia */
+        #fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        #fullscreen-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+            border-color: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -445,7 +510,9 @@
 
         <h2>Sua Prévia de Site - Descubra o Potencial!</h2>
         <div id="website-preview" class="website-preview">
-            <header class="preview-header">
+            <button id="fullscreen-btn" onclick="openFullscreenPreview()">Ver em Tela Cheia</button>
+
+            <header class="preview-header fade-in">
                 <h1 id="preview-empresa">Sua Empresa Online</h1>
                 <p id="preview-slogan">Transformando Ideias em Resultados</p>
                 <nav>
@@ -454,12 +521,12 @@
                     <a href="#">Contato</a>
                 </nav>
             </header>
-            <section class="preview-section preview-about">
+            <section class="preview-section preview-about fade-in">
                 <img src="https://source.unsplash.com/150x150/?logo,abstract" alt="Logo da Empresa" style="border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
                 <h2 id="preview-titulo-sobre">Sobre Nós</h2>
                 <p id="preview-descricao">Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].</p>
             </section>
-            <section class="preview-section preview-services">
+            <section class="preview-section preview-services fade-in">
                 <h2 id="preview-titulo-servicos">Nossos Serviços e Soluções</h2>
                 <ul id="preview-servicos-lista">
                     <li>Desenvolvimento Web Personalizado</li>
@@ -468,7 +535,7 @@
                 </ul>
                 <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
-            <section class="preview-section preview-contact">
+            <section class="preview-section preview-contact fade-in">
                 <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
                 <div class="contact-item">
                     <span class="icon">📧</span> <p id="preview-contato-email">contato@suaempresa.com</p>
@@ -480,7 +547,7 @@
                     <span class="icon">📱</span> <p id="preview-redes"><a href="#" target="_blank">Nossas Redes Sociais</a></p>
                 </div>
             </section>
-            <footer class="preview-footer">
+            <footer class="preview-footer fade-in">
                 <p>&copy; <span id="current-year"></span> Sua Empresa. Prévia criada por Valentim Web. <br>Isso é só o começo!</p>
             </footer>
         </div>
@@ -536,30 +603,16 @@
             document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
             document.documentElement.style.setProperty('--accent-color', currentAccentColor);
 
-            // No need to add 'selected' class here, it's already in HTML for default
-            // const defaultColorBox = document.querySelector('.color-box.color1');
-            // if (defaultColorBox) {
-            //     defaultColorBox.classList.add('selected');
-            // }
-            // const defaultLayoutBox = document.querySelector('.layout-box[data-layout="modern"]');
-            // if (defaultLayoutBox) {
-            //     defaultLayoutBox.classList.add('selected');
-            // }
-
             const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
             inputs.forEach(input => {
                 input.addEventListener('keyup', updatePreview);
             });
 
-            // Adiciona o nome da empresa ao botão final do WhatsApp para personalização
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
-                // Remove a referência específica a Porto Alegre na mensagem do WhatsApp
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
-            // Inicializa com o placeholder
-            // Remove a referência específica a Porto Alegre na mensagem do WhatsApp inicial
             whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
         });
 
@@ -616,9 +669,24 @@
             });
             element.classList.add('selected');
             currentLayout = layout;
-            const preview = document.getElementById('website-preview');
-            preview.className = 'website-preview'; // Reset classes
-            preview.classList.add(`layout-${layout}`); // Add layout specific class
+
+            const root = document.documentElement.style;
+            if (layout === 'modern') {
+                root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '8px');
+                root.setProperty('--preview-spacing-unit', '20px');
+            } else if (layout === 'classic') {
+                root.setProperty('--preview-font-heading', "'Playfair Display', serif");
+                root.setProperty('--preview-font-body', "'Roboto', sans-serif");
+                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
+                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
+            } else if (layout === 'creative') {
+                root.setProperty('--preview-font-heading', "'Pacifico', cursive");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
+                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+            }
             updatePreview();
         }
 
@@ -692,18 +760,20 @@
                 return;
             }
 
-            // Mostra o overlay de carregamento
             const loadingOverlay = document.getElementById('loading-overlay');
             loadingOverlay.classList.add('show');
 
-            // Simula um pequeno atraso para a animação
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
 
             formSections.forEach(section => section.style.display = 'none');
             const websitePreview = document.getElementById('website-preview');
-            websitePreview.style.display = 'flex'; // Certifica-se que está visível
-            websitePreview.classList.add('show'); // Ativa animação
-            document.getElementById('cta-final').style.display = 'block';
+            websitePreview.style.display = 'flex';
+            websitePreview.classList.add('show');
+
+            // Adiciona a classe 'fade-in' a cada seção da prévia para animar
+            document.querySelectorAll('.preview-header, .preview-section, .preview-footer').forEach(el => {
+                el.classList.add('fade-in');
+            });
 
             websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -715,7 +785,7 @@
                 primary_color: currentPrimaryColor,
                 secondary_color: currentSecondaryColor,
                 accent_color: currentAccentColor,
-                layout_style: currentLayout, // Salva o layout escolhido
+                layout_style: currentLayout,
                 titulo_servicos: document.getElementById('titulo_servicos').value,
                 servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
                 contato_email: document.getElementById('contato_email').value,
@@ -729,24 +799,171 @@
             try {
                 const docRef = await db.collection("previews").add(finalData);
                 console.log("Documento salvo com ID: ", docRef.id);
-                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve.`;
+                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
                 feedbackMessage.style.display = 'block';
                 errorMessageDisplay.style.display = 'none';
 
-                // Atualiza o link do WhatsApp com o ID do documento para seu controle
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
                 const whatsappButton = document.getElementById('whatsapp-final-button');
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
 
             } catch (e) {
                 console.error("Erro ao adicionar documento: ", e);
-                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto!`;
+                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto para não perder sua prévia!`;
                 errorMessageDisplay.style.display = 'block';
                 feedbackMessage.style.display = 'none';
             } finally {
                 loadingOverlay.classList.remove('show');
             }
         }
+
+        // Função para abrir a prévia em tela cheia
+        function openFullscreenPreview() {
+            const previewContent = document.getElementById('website-preview').outerHTML;
+            const tempWindow = window.open('', '_blank');
+
+            // Removendo o botão de tela cheia para a nova janela
+            const cleanedPreviewContent = previewContent.replace(/<button id="fullscreen-btn"[^>]*>.*?<\/button>/, '');
+
+            // Construir o HTML da nova janela
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+                    <style>
+                        /* Injetar variáveis CSS dinâmicas */
+                        :root {
+                            --primary-color: ${currentPrimaryColor};
+                            --secondary-color: ${currentSecondaryColor};
+                            --accent-color: ${currentAccentColor};
+                            --preview-font-heading: ${document.documentElement.style.getPropertyValue('--preview-font-heading') || "var(--font-montserrat)"};
+                            --preview-font-body: ${document.documentElement.style.getPropertyValue('--preview-font-body') || "var(--font-open-sans)"};
+                            --preview-border-radius: ${document.documentElement.style.getPropertyValue('--preview-border-radius') || "8px"};
+                            --preview-spacing-unit: ${document.documentElement.style.getPropertyValue('--preview-spacing-unit') || "20px"};
+                            /* Outras variáveis padrão */
+                            --text-color: #333;
+                            --light-bg: #f8f9fa;
+                            --dark-bg: #e9ecef;
+                            --font-montserrat: 'Montserrat', sans-serif;
+                            --font-open-sans: 'Open Sans', sans-serif;
+                        }
+                        /* Copiar todos os estilos do seu arquivo HTML, exceto o container e form-sections */
+                        body {
+                            font-family: var(--preview-font-body);
+                            line-height: 1.6;
+                            margin: 0;
+                            padding: 0;
+                            background-color: var(--light-bg); /* Fundo mais simples para a prévia */
+                            color: var(--text-color);
+                            display: block; /* Não é flex no body aqui */
+                            overflow-x: hidden;
+                        }
+                        .website-preview {
+                            border: none; /* Remover borda e sombra */
+                            box-shadow: none;
+                            border-radius: 0;
+                            margin: 0;
+                            min-height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            opacity: 1; /* Já visível */
+                            transform: none;
+                        }
+                        /* Manter todos os estilos .preview-header, .preview-section, etc. */
+                        .preview-header {
+                            background-color: var(--primary-color);
+                            color: white;
+                            padding: var(--preview-spacing-unit) 20px;
+                            text-align: center;
+                            font-family: var(--preview-font-heading);
+                            border-bottom-left-radius: var(--preview-border-radius);
+                            border-bottom-right-radius: var(--preview-border-radius);
+                            position: relative;
+                        }
+                        .preview-header h1 { margin: 0; color: white; font-size: 2.5em; }
+                        .preview-header p { margin: 8px 0 15px; font-size: 1.2em; opacity: 0.9; }
+                        .preview-header nav { margin-top: 15px; }
+                        .preview-header nav a {
+                            color: white; margin: 0 8px; text-decoration: none; font-weight: 600; font-size: 1.05em;
+                            padding: 8px 15px; border: 1px solid rgba(255,255,255,0.5); border-radius: 5px;
+                            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+                            display: inline-block;
+                        }
+                        .preview-header nav a:hover { opacity: 0.9; transform: translateY(-3px); background-color: rgba(255,255,255,0.1); border-color: white; }
+
+                        .preview-section {
+                            padding: calc(2 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
+                            text-align: center;
+                            font-family: var(--preview-font-body);
+                        }
+                        .preview-section:nth-child(odd) { background-color: var(--light-bg); }
+                        .preview-section h2 {
+                            font-size: 2em; margin-bottom: var(--preview-spacing-unit); color: var(--primary-color);
+                            font-family: var(--preview-font-heading);
+                        }
+                        .preview-section p { max-width: 700px; margin: 0 auto var(--preview-spacing-unit) auto; }
+                        .preview-section ul { list-style: none; padding: 0; max-width: 600px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+                        .preview-section ul li {
+                            background-color: #fff; border: 1px solid #eee; border-radius: var(--preview-border-radius);
+                            padding: 15px 20px; flex: 1 1 calc(33% - 30px); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                            font-size: 1.05em; font-weight: 500; min-width: 200px;
+                        }
+
+                        .preview-contact .contact-item { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; font-size: 1.15em; font-weight: 500; }
+                        .preview-contact .contact-item a { color: var(--primary-color); text-decoration: none; transition: color 0.3s ease; }
+                        .preview-contact .contact-item a:hover { color: #0056b3; }
+                        .preview-contact .icon { margin-right: 10px; font-size: 1.3em; color: var(--accent-color); }
+
+                        .preview-footer {
+                            background-color: var(--secondary-color);
+                            color: white;
+                            padding: var(--preview-spacing-unit);
+                            text-align: center;
+                            font-size: 0.95em;
+                            margin-top: auto;
+                            border-top-left-radius: var(--preview-border-radius);
+                            border-top-right-radius: var(--preview-border-radius);
+                        }
+                        /* Estilos para imagens (logo e serviços) */
+                        .preview-section img {
+                            border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
+                            margin-bottom: var(--preview-spacing-unit);
+                            object-fit: cover;
+                        }
+                        /* Animações e placeholders podem ser omitidos na tela cheia ou ajustados */
+                        .fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
+
+                        /* Você pode adicionar um botão de "Fechar" na tela cheia */
+                        .close-fullscreen-btn {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background-color: rgba(0,0,0,0.5);
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 10px 15px;
+                            cursor: pointer;
+                            font-size: 1em;
+                            z-index: 9999;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <button class="close-fullscreen-btn" onclick="window.close()">Fechar Prévia</button>
+                    ${cleanedPreviewContent}
+                </body>
+                </html>
+            `;
+            tempWindow.document.write(fullHtml);
+            tempWindow.document.close(); // Importante para finalizar o documento
+        }
+
 
         showSection(0);
     </script>
