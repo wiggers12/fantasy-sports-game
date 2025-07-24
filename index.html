@@ -350,8 +350,8 @@
             text-align: center;
             font-size: 0.95em;
             margin-top: auto;
-            border-top-left-radius: var(--preview-border-radius); /* Borda dinâmica */
-            border-top-right-radius: var(--preview-border-radius); /* Borda dinâmica */
+            border-top-left-radius: var(--preview-border-radius);
+            border-top-right-radius: var(--preview-border-radius);
         }
 
         /* Botão do WhatsApp CTA Final */
@@ -571,25 +571,29 @@
         <div class="spinner"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script>
-        // ** SUAS CREDENCIAIS DO FIREBASE AQUI **
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-          apiKey: "SUA_API_KEY", // <-- SUBSTITUA
-          authDomain: "SEU_AUTH_DOMAIN", // <-- SUBSTITUA
-          projectId: "SEU_PROJECT_ID", // <-- SUBSTITUA
-          storageBucket: "SEU_STORAGE_BUCKET", // <-- SUBSTITUA
-          messagingSenderId: "SEU_MESSAGING_SENDER_ID", // <-- SUBSTITUA
-          appId: "SEU_APP_ID" // <-- SUBSTITUA
+            apiKey: "AIzaSyA2kP9ZbC6kiTcShOEZaXtkZcuBKVcPw88", // Seu apiKey
+            authDomain: "fantasysportsgame-dc63d.firebaseapp.com", // Seu authDomain
+            projectId: "fantasysportsgame-dc63d", // Seu projectId
+            storageBucket: "fantasysportsgame-dc63d.firebasestorage.app", // Seu storageBucket
+            messagingSenderId: "179581906873", // Seu messagingSenderId
+            appId: "1:179581906873:web:d5229c525ff972643ad068", // Seu appId
+            measurementId: "G-5V9SDFQK5Y" // Seu measurementId
         };
 
-        // Inicialize o Firebase
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); // Analytics inicializado, mas não usado na lógica principal
+        const db = getFirestore(app); // Inicializa o Firestore
 
-        // Obtenha uma referência para o serviço Firestore
-        const db = firebase.firestore();
-
+        // Variáveis globais para o seu script (agora dentro do escopo do módulo)
         let currentPrimaryColor = '#007bff';
         let currentSecondaryColor = '#343a40';
         let currentAccentColor = '#ffc107';
@@ -598,7 +602,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // Set default colors and layout
+            // Set default colors and layout (já feito no CSS ou HTML)
             document.documentElement.style.setProperty('--primary-color', currentPrimaryColor);
             document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
             document.documentElement.style.setProperty('--accent-color', currentAccentColor);
@@ -616,6 +620,7 @@
             whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
         });
 
+        // Funções para atualização da prévia
         function updatePreview() {
             document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
             document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
@@ -648,6 +653,7 @@
             }
         }
 
+        // Funções de seleção de cores e layout
         function selectColors(element, primary, secondary, accent) {
             document.querySelectorAll('.color-box').forEach(box => {
                 box.classList.remove('selected');
@@ -660,7 +666,7 @@
             currentPrimaryColor = primary;
             currentSecondaryColor = secondary;
             currentAccentColor = accent;
-            updatePreview(); // Re-render content if needed
+            updatePreview();
         }
 
         function selectLayout(element, layout) {
@@ -679,17 +685,18 @@
             } else if (layout === 'classic') {
                 root.setProperty('--preview-font-heading', "'Playfair Display', serif");
                 root.setProperty('--preview-font-body', "'Roboto', sans-serif");
-                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
-                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
+                root.setProperty('--preview-border-radius', '2px');
+                root.setProperty('--preview-spacing-unit', '25px');
             } else if (layout === 'creative') {
                 root.setProperty('--preview-font-heading', "'Pacifico', cursive");
                 root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
-                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
-                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+                root.setProperty('--preview-border-radius', '20px');
+                root.setProperty('--preview-spacing-unit', '15px');
             }
             updatePreview();
         }
 
+        // Funções de navegação do formulário
         let currentSectionIndex = 0;
         const formSections = document.querySelectorAll('.form-section');
 
@@ -742,6 +749,7 @@
             }
         }
 
+        // Função principal para gerar prévia e salvar no Firebase
         async function generateFinalPreview() {
             const finalSection = document.getElementById('section-contact');
             const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
@@ -770,7 +778,6 @@
             websitePreview.style.display = 'flex';
             websitePreview.classList.add('show');
 
-            // Adiciona a classe 'fade-in' a cada seção da prévia para animar
             document.querySelectorAll('.preview-header, .preview-section, .preview-footer').forEach(el => {
                 el.classList.add('fade-in');
             });
@@ -778,7 +785,7 @@
             websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const finalData = {
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                timestamp: serverTimestamp(), // Usando serverTimestamp do modular SDK
                 nome_empresa: document.getElementById('nome_empresa').value,
                 slogan: document.getElementById('slogan').value,
                 descricao: document.getElementById('descricao').value,
@@ -797,7 +804,8 @@
             const errorMessageDisplay = document.getElementById('error-message-display');
 
             try {
-                const docRef = await db.collection("previews").add(finalData);
+                // Usando addDoc e collection do modular SDK
+                const docRef = await addDoc(collection(db, "previews"), finalData);
                 console.log("Documento salvo com ID: ", docRef.id);
                 feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
                 feedbackMessage.style.display = 'block';
@@ -822,18 +830,16 @@
             const previewContentElement = document.getElementById('website-preview');
             const previewContentHtml = previewContentElement.outerHTML;
 
-            // Criar um novo elemento temporário para remover o botão "Ver em Tela Cheia"
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = previewContentHtml;
             const fullscreenBtnInTemp = tempDiv.querySelector('#fullscreen-btn');
             if (fullscreenBtnInTemp) {
-                fullscreenBtnInTemp.remove(); // Remove o botão da cópia temporária
+                fullscreenBtnInTemp.remove();
             }
-            const cleanedPreviewContent = tempDiv.innerHTML; // Pega o HTML limpo
+            const cleanedPreviewContent = tempDiv.innerHTML;
 
             const tempWindow = window.open('', '_blank');
 
-            // Construir o HTML da nova janela
             const fullHtml = `
                 <!DOCTYPE html>
                 <html lang="pt-br">
@@ -969,11 +975,10 @@
                 </html>
             `;
             tempWindow.document.write(fullHtml);
-            tempWindow.document.close(); // Importante para finalizar o documento
+            tempWindow.document.close();
         }
 
-
-        showSection(0);
+        showSection(0); // Garante que a primeira seção do formulário é exibida ao carregar a página
     </script>
 </body>
 </html>
