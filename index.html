@@ -232,10 +232,10 @@
         }
 
         /* Aplica atraso para cada seção */
-        .preview-section:nth-child(1).fade-in { animation-delay: 0.1s; } /* Header */
-        .preview-section:nth-child(2).fade-in { animation-delay: 0.3s; } /* About */
-        .preview-section:nth-child(3).fade-in { animation-delay: 0.5s; } /* Services */
-        .preview-section:nth-child(4).fade-in { animation-delay: 0.7s; } /* Contact */
+        .preview-header.fade-in { animation-delay: 0.1s; } /* Header */
+        .preview-section:nth-of-type(1).fade-in { animation-delay: 0.3s; } /* About */
+        .preview-section:nth-of-type(2).fade-in { animation-delay: 0.5s; } /* Services */
+        .preview-section:nth-of-type(3).fade-in { animation-delay: 0.7s; } /* Contact */
         .preview-footer.fade-in { animation-delay: 0.9s; }
 
         .preview-header {
@@ -286,7 +286,7 @@
             text-align: center;
             font-family: var(--preview-font-body); /* Fonte dinâmica */
         }
-        .preview-section:nth-child(odd) {
+        .preview-section:nth-of-type(odd) {
             background-color: var(--light-bg);
         }
         .preview-section h2 {
@@ -819,11 +819,19 @@
 
         // Função para abrir a prévia em tela cheia
         function openFullscreenPreview() {
-            const previewContent = document.getElementById('website-preview').outerHTML;
-            const tempWindow = window.open('', '_blank');
+            const previewContentElement = document.getElementById('website-preview');
+            const previewContentHtml = previewContentElement.outerHTML;
 
-            // Removendo o botão de tela cheia para a nova janela
-            const cleanedPreviewContent = previewContent.replace(/<button id="fullscreen-btn"[^>]*>.*?<\/button>/, '');
+            // Criar um novo elemento temporário para remover o botão "Ver em Tela Cheia"
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = previewContentHtml;
+            const fullscreenBtnInTemp = tempDiv.querySelector('#fullscreen-btn');
+            if (fullscreenBtnInTemp) {
+                fullscreenBtnInTemp.remove(); // Remove o botão da cópia temporária
+            }
+            const cleanedPreviewContent = tempDiv.innerHTML; // Pega o HTML limpo
+
+            const tempWindow = window.open('', '_blank');
 
             // Construir o HTML da nova janela
             const fullHtml = `
@@ -901,7 +909,7 @@
                             text-align: center;
                             font-family: var(--preview-font-body);
                         }
-                        .preview-section:nth-child(odd) { background-color: var(--light-bg); }
+                        .preview-section:nth-of-type(odd) { background-color: var(--light-bg); }
                         .preview-section h2 {
                             font-size: 2em; margin-bottom: var(--preview-spacing-unit); color: var(--primary-color);
                             font-family: var(--preview-font-heading);
