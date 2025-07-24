@@ -492,6 +492,12 @@
             font-weight: 500;
             min-width: 220px;
             text-align: left;
+            cursor: pointer; /* Torna clicável */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .preview-section ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
         .preview-section ul li i {
             margin-right: 10px;
@@ -691,6 +697,84 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Modal para detalhes de funcionalidade */
+        .feature-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2500; /* Acima da splash screen */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .feature-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .feature-modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .feature-modal-overlay.active .feature-modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .feature-modal-content h3 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .feature-modal-content h3 i {
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+
+        .feature-modal-content p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .feature-modal-content button {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: none;
+            margin-top: 0; /* Remover margem extra */
+        }
+        .feature-modal-content button:hover {
+            background-color: #222;
+            transform: none; /* Remover translateY */
+            box-shadow: none;
+        }
+
 
         /* Responsividade para telas menores */
         @media (max-width: 768px) {
@@ -759,6 +843,16 @@
             .checkbox-item {
                 flex: 1 1 100%; /* Uma coluna em mobile */
                 max-width: unset;
+            }
+            .feature-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .feature-modal-content h3 {
+                font-size: 1.5em;
+            }
+            .feature-modal-content p {
+                font-size: 1em;
             }
         }
     </style>
@@ -1008,6 +1102,14 @@
         <div class="spinner"></div>
     </div>
 
+    <div class="feature-modal-overlay" id="feature-modal-overlay">
+        <div class="feature-modal-content">
+            <h3 id="modal-feature-title"></h3>
+            <p id="modal-feature-description"></p>
+            <button onclick="closeFeatureDetails()">Entendi</button>
+        </div>
+    </div>
+
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -1037,8 +1139,54 @@
         let currentAccentColor = '#ffc107';
         let currentLayout = 'modern'; // Default layout
 
+        // Conteúdo detalhado das funcionalidades para o modal
+        const featureDescriptions = {
+            "Cadastro de Clientes": {
+                icon: "fa-solid fa-user-plus",
+                description: "Gerencie seus contatos, histórico de interações e preferências, personalizando o atendimento e construindo relacionamentos duradouros e eficientes."
+            },
+            "Agenda / Agendamento Online": {
+                icon: "fa-solid fa-calendar-check",
+                description: "Permita que seus clientes agendem serviços ou reuniões online de forma fácil e automatizada, otimizando seu tempo e evitando conflitos de horários. Inclui lembretes automáticos."
+            },
+            "Catálogo de Produtos / Serviços": {
+                icon: "fa-solid fa-boxes-stacked",
+                description: "Exponha seus produtos ou serviços com fotos de alta qualidade, descrições detalhadas e categorias organizadas, facilitando a navegação e a decisão de compra dos seus clientes."
+            },
+            "Gestão de Produtos / Estoque": {
+                icon: "fa-solid fa-boxes-packing",
+                description: "Mantenha o controle total do seu inventário. Adicione, edite e organize produtos, acompanhe o estoque em tempo real e receba alertas para reposição inteligente."
+            },
+            "Controle Financeiro / Dashboard": {
+                icon: "fa-solid fa-chart-line",
+                description: "Tenha uma visão clara da saúde financeira do seu negócio com gráficos e relatórios intuitivos. Acompanhe vendas, despesas, lucros e métricas essenciais para tomadas de decisão."
+            },
+            "Sistema de Pedidos / Compras": {
+                icon: "fa-solid fa-cart-shopping",
+                description: "Simplifique o processo de compra para seus clientes e de gestão de pedidos para sua equipe, com carrinhos de compra, checkout seguro e acompanhamento de status em tempo real."
+            },
+            "Blog / Notícias": {
+                icon: "fa-solid fa-newspaper",
+                description: "Engaje seu público com conteúdo relevante, atraia novos visitantes através de otimização SEO e posicione sua marca como uma autoridade em seu nicho de mercado, gerando tráfego qualificado."
+            },
+            "Integração com Redes Sociais": {
+                icon: "fa-solid fa-share-nodes",
+                description: "Conecte seu site às suas redes sociais favoritas, amplificando seu alcance, direcionando tráfego qualificado e facilitando o compartilhamento de conteúdo, promovendo sua marca."
+            },
+            "Formulário de Contato Personalizado": {
+                icon: "fa-solid fa-envelope-open-text",
+                description: "Capture informações valiosas de seus visitantes com formulários adaptados às suas necessidades, facilitando o contato e a geração de leads qualificados para seu funil de vendas."
+            },
+            "Área de Membros / Login": {
+                icon: "fa-solid fa-user-lock",
+                description: "Ofereça conteúdo exclusivo, serviços personalizados ou uma comunidade privada para seus usuários cadastrados, construindo fidelidade à marca e um ambiente de valor agregado."
+            }
+            // Você pode adicionar mais descrições aqui conforme adicionar mais checkboxes
+        };
+
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializa o estado do checkmark de cores
+            // Inicializa o estado do checkmark de cores para o padrão selecionado
             document.querySelector('.color-box.color1 i').style.display = 'block';
 
             document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -1050,7 +1198,7 @@
 
             const inputs = document.querySelectorAll(
                 '#section-info input, #section-info textarea, ' +
-                '#section-content input:not([type="checkbox"]), #section-content textarea, ' + // Exclui checkboxes
+                '#section-content input:not([type="checkbox"]), #section-content textarea, ' +
                 '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
                 '#section-audience input, #section-audience textarea, ' +
                 '#section-contact input'
@@ -1120,15 +1268,17 @@
                 selectedFeatures.forEach(feature => {
                     const li = document.createElement('li');
                     li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
+                    // Adiciona o evento de clique para abrir o modal
+                    li.onclick = () => openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
                     ulFuncionalidadesDisplay.appendChild(li);
                 });
             } else {
                 // Conteúdo padrão se nenhuma funcionalidade for selecionada
                 ulFuncionalidadesDisplay.innerHTML = `
-                    <li><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
-                    <li><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
-                    <li><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
-                    <li><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                    <li onclick="openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                    <li onclick="openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                    <li onclick="openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                    <li onclick="openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
                 `;
             }
             document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
@@ -1220,13 +1370,14 @@
             inputs.forEach(input => {
                 if (input.hasAttribute('required') && !input.value.trim()) {
                     allFilled = false;
-                    input.classList.add('invalid');
+                    input.classList.add('invalid'); // Adiciona classe para borda vermelha
                 } else {
-                    input.classList.remove('invalid');
+                    input.classList.remove('invalid'); // Remove classe se estiver preenchido
                 }
             });
 
             if (!allFilled) {
+                // Foco no primeiro campo inválido para melhorar a UX
                 const firstInvalidInput = currentSection.querySelector('input.invalid, textarea.invalid');
                 if (firstInvalidInput) {
                     firstInvalidInput.focus();
@@ -1444,6 +1595,12 @@
                             background-color: #fff; border: 1px solid #eee; border-radius: calc(0.8 * var(--preview-border-radius));
                             padding: 20px 25px; flex: 1 1 calc(33% - 40px); box-shadow: 0 3px 10px rgba(0,0,0,0.08);
                             font-size: 1.1em; font-weight: 500; min-width: 220px; text-align: left;
+                            cursor: pointer; /* Torna clicável */
+                            transition: transform 0.2s ease, box-shadow 0.2s ease;
+                        }
+                        .preview-section ul li:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
                         }
                         .preview-section ul li i { margin-right: 10px; color: var(--accent-color); font-size: 1.2em; }
 
