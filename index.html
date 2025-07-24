@@ -94,6 +94,11 @@
             font-size: 1em;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+        /* Adição para feedback de validação */
+        input[type="text"].invalid, input[type="email"].invalid, input[type="url"].invalid, textarea.invalid {
+            border-color: #dc3545 !important; /* Vermelho forte para erro */
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+        }
         input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, textarea:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
@@ -354,7 +359,7 @@
             border-top-right-radius: var(--preview-border-radius);
         }
 
-        /* Botão do WhatsApp CTA Final */
+        /* Botões */
         .whatsapp-button {
             display: inline-block;
             background-color: #25D366; /* Cor do WhatsApp */
@@ -575,9 +580,10 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+        // Importe as funções específicas do Firestore
         import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-        // Your web app's Firebase configuration
+        // Your web app's Firebase configuration (SUAS CREDENCIAIS REAIS)
         const firebaseConfig = {
             apiKey: "AIzaSyA2kP9ZbC6kiTcShOEZaXtkZcuBKVcPw88", // Seu apiKey
             authDomain: "fantasysportsgame-dc63d.firebaseapp.com", // Seu authDomain
@@ -593,7 +599,7 @@
         const analytics = getAnalytics(app); // Analytics inicializado, mas não usado na lógica principal
         const db = getFirestore(app); // Inicializa o Firestore
 
-        // Variáveis globais para o seu script (agora dentro do escopo do módulo)
+        // Variáveis globais para o seu script
         let currentPrimaryColor = '#007bff';
         let currentSecondaryColor = '#343a40';
         let currentAccentColor = '#ffc107';
@@ -609,14 +615,22 @@
 
             const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
             inputs.forEach(input => {
+                // Remove a classe 'invalid' e reset a borda quando o usuário digita
+                input.addEventListener('input', () => {
+                    input.classList.remove('invalid');
+                    input.style.borderColor = ''; // Reseta a borda
+                });
                 input.addEventListener('keyup', updatePreview);
             });
 
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                // Remove a referência específica a Porto Alegre na mensagem do WhatsApp
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
+            // Inicializa com o placeholder
+            // Remove a referência específica a Porto Alegre na mensagem do WhatsApp inicial
             whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
         });
 
@@ -685,13 +699,13 @@
             } else if (layout === 'classic') {
                 root.setProperty('--preview-font-heading', "'Playfair Display', serif");
                 root.setProperty('--preview-font-body', "'Roboto', sans-serif");
-                root.setProperty('--preview-border-radius', '2px');
-                root.setProperty('--preview-spacing-unit', '25px');
+                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
+                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
             } else if (layout === 'creative') {
                 root.setProperty('--preview-font-heading', "'Pacifico', cursive");
                 root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
-                root.setProperty('--preview-border-radius', '20px');
-                root.setProperty('--preview-spacing-unit', '15px');
+                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
+                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
             }
             updatePreview();
         }
@@ -711,60 +725,62 @@
             currentSectionIndex = index;
         }
 
-        function nextSection(nextSectionId) {
+        window.nextSection = async (nextSectionId) => { // Tornada global para acesso de onclick no HTML
             const currentSection = formSections[currentSectionIndex];
-            const nextSection = document.getElementById(nextSectionId);
+            const nextSectionElement = document.getElementById(nextSectionId);
             const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
             let allFilled = true;
+
             inputs.forEach(input => {
                 if (input.hasAttribute('required') && !input.value.trim()) {
                     allFilled = false;
-                    input.style.borderColor = 'red';
+                    input.classList.add('invalid'); // Adiciona classe para borda vermelha
                 } else {
-                    input.style.borderColor = '';
+                    input.classList.remove('invalid'); // Remove classe se estiver preenchido
                 }
             });
 
             if (!allFilled) {
-                alert('Por favor, preencha todos os campos obrigatórios nesta seção para continuar.');
+                // Ação de feedback visual já é o foco da borda vermelha e talvez uma mensagem temporária
+                // alert('Por favor, preencha todos os campos obrigatórios nesta seção para continuar.'); // Descomente se quiser o alert também
                 return;
             }
 
-            if (nextSection) {
+            if (nextSectionElement) {
                 currentSection.classList.remove('active');
-                nextSection.classList.add('active');
-                const nextIndex = Array.from(formSections).indexOf(nextSection);
+                nextSectionElement.classList.add('active');
+                const nextIndex = Array.from(formSections).indexOf(nextSectionElement);
                 currentSectionIndex = nextIndex;
             }
-        }
+        };
 
-        function prevSection(prevSectionId) {
+        window.prevSection = (prevSectionId) => { // Tornada global para acesso de onclick no HTML
             const currentSection = formSections[currentSectionIndex];
-            const prevSection = document.getElementById(prevSectionId);
-            if (prevSection) {
+            const prevSectionElement = document.getElementById(prevSectionId);
+            if (prevSectionElement) {
                 currentSection.classList.remove('active');
-                prevSection.classList.add('active');
-                const prevIndex = Array.from(formSections).indexOf(prevSection);
+                prevSectionElement.classList.add('active');
+                const prevIndex = Array.from(formSections).indexOf(prevSectionElement);
                 currentSectionIndex = prevIndex;
             }
-        }
+        };
 
         // Função principal para gerar prévia e salvar no Firebase
-        async function generateFinalPreview() {
+        window.generateFinalPreview = async () => { // Tornada global
             const finalSection = document.getElementById('section-contact');
             const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
             let allFilled = true;
             inputs.forEach(input => {
                 if (input.hasAttribute('required') && !input.value.trim()) {
                     allFilled = false;
-                    input.style.borderColor = 'red';
+                    input.classList.add('invalid');
                 } else {
-                    input.style.borderColor = '';
+                    input.classList.remove('invalid');
                 }
             });
 
             if (!allFilled) {
-                alert('Por favor, preencha todos os campos obrigatórios na seção de contato para gerar a prévia.');
+                // alert('Por favor, preencha todos os campos obrigatórios na seção de contato para gerar a prévia.'); // Descomente se quiser o alert
                 return;
             }
 
@@ -785,7 +801,7 @@
             websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const finalData = {
-                timestamp: serverTimestamp(), // Usando serverTimestamp do modular SDK
+                timestamp: serverTimestamp(),
                 nome_empresa: document.getElementById('nome_empresa').value,
                 slogan: document.getElementById('slogan').value,
                 descricao: document.getElementById('descricao').value,
@@ -804,7 +820,6 @@
             const errorMessageDisplay = document.getElementById('error-message-display');
 
             try {
-                // Usando addDoc e collection do modular SDK
                 const docRef = await addDoc(collection(db, "previews"), finalData);
                 console.log("Documento salvo com ID: ", docRef.id);
                 feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
@@ -826,7 +841,7 @@
         }
 
         // Função para abrir a prévia em tela cheia
-        function openFullscreenPreview() {
+        window.openFullscreenPreview = () => { // Tornada global
             const previewContentElement = document.getElementById('website-preview');
             const previewContentHtml = previewContentElement.outerHTML;
 
