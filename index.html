@@ -319,7 +319,10 @@
         .preview-section:nth-of-type(1).fade-in { animation-delay: 0.4s; }
         .preview-section:nth-of-type(2).fade-in { animation-delay: 0.6s; }
         .preview-section:nth-of-type(3).fade-in { animation-delay: 0.8s; }
-        .preview-footer.fade-in { animation-delay: 1.0s; }
+        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nova seção */
+        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nova seção */
+        .preview-footer.fade-in { animation-delay: 1.4s; } /* Atraso ajustado */
+
 
         .preview-header {
             background-color: var(--primary-color);
@@ -549,6 +552,68 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         }
 
+        /* Splash Screen Styles */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%); /* Gradiente com sua cor primária */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Acima de tudo */
+            color: white;
+            font-family: var(--font-montserrat);
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none; /* Permite cliques através após o fade-out */
+        }
+        #splash-screen img {
+            max-width: 180px; /* Tamanho da logo na splash */
+            height: auto;
+            margin-bottom: 25px;
+            animation: bounceIn 1s ease-out; /* Animação para a logo */
+            border-radius: 50%; /* Se sua logo for redonda, fica legal */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        #splash-screen h1 {
+            color: white;
+            font-size: 3.5em; /* Tamanho do título */
+            margin: 0;
+            animation: fadeInText 1.5s ease-out;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        #splash-screen p {
+            font-size: 1.5em;
+            margin-top: 10px;
+            opacity: 0.9;
+            animation: fadeInText 1.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+            0% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+            20% { transform: scale3d(1.1, 1.1, 1.1); }
+            40% { transform: scale3d(0.9, 0.9, 0.9); }
+            60% { opacity: 1; transform: scale3d(1.03, 1.03, 1.03); }
+            80% { transform: scale3d(0.97, 0.97, 0.97); }
+            100% { opacity: 1; transform: scale3d(1, 1, 1); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
         /* Responsividade para telas menores */
         @media (max-width: 768px) {
             .container {
@@ -604,10 +669,25 @@
                 bottom: 10px;
                 right: 10px;
             }
+            #splash-screen img {
+                max-width: 120px;
+            }
+            #splash-screen h1 {
+                font-size: 2.5em;
+            }
+            #splash-screen p {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="splash-screen">
+        <img src="https://raw.githubusercontent.com/wiggers12/fantasy-sports-game/main/logo_ww.jpg" alt="Logo Valentim Web">
+        <h1>Valentim Web</h1>
+        <p>Criando a sua presença digital!</p>
+    </div>
+
     <div class="container">
         <h1>Sua Presença Online Começa Aqui! ✨</h1>
         <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #555;">
@@ -670,11 +750,35 @@
             <textarea id="servicos_lista" placeholder="Serviço de Consultoria&#10;Desenvolvimento de E-commerce&#10;Marketing Digital&#10;Criação de Conteúdo" onkeyup="updatePreview()"></textarea>
 
             <button onclick="prevSection('section-design')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-features')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-features">
+            <h2><i class="fa-solid fa-gears"></i> 4. Funcionalidades e Objetivos do Site/App</h2>
+            <label for="funcionalidades_lista"><i class="fa-solid fa-puzzle-piece"></i> Principais Funcionalidades que o Site/App Deve Ter (um por linha):</label>
+            <textarea id="funcionalidades_lista" placeholder="Formulário de Contato&#10;Galeria de Imagens&#10;Integração com Redes Sociais&#10;Blog de Notícias" onkeyup="updatePreview()"></textarea>
+
+            <label for="objetivo_principal"><i class="fa-solid fa-bullseye"></i> Qual o Objetivo Principal do Seu Site/App?</label>
+            <input type="text" id="objetivo_principal" placeholder="Ex: Gerar leads, Vender produtos, Informar sobre a empresa" onkeyup="updatePreview()">
+
+            <button onclick="prevSection('section-content')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-audience')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-audience">
+            <h2><i class="fa-solid fa-users"></i> 5. Público-Alvo e Mensagem Central</h2>
+            <label for="publico_alvo"><i class="fa-solid fa-user-group"></i> Quem é o Seu Público-Alvo Principal?</label>
+            <input type="text" id="publico_alvo" placeholder="Ex: Pequenas empresas, Jovens empreendedores, Famílias" onkeyup="updatePreview()">
+
+            <label for="mensagem_central"><i class="fa-solid fa-message"></i> Qual a Mensagem Mais Importante que o Site/App Deve Transmitir?</label>
+            <textarea id="mensagem_central" placeholder="Ex: Somos a solução definitiva para o seu problema de [problema]. Confiabilidade e inovação ao seu alcance." onkeyup="updatePreview()"></textarea>
+
+            <button onclick="prevSection('section-features')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
             <button onclick="nextSection('section-contact')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
         <div class="form-section" id="section-contact">
-            <h2><i class="fa-solid fa-headset"></i> 4. Detalhes de Contato</h2>
+            <h2><i class="fa-solid fa-headset"></i> 6. Detalhes de Contato</h2>
             <label for="contato_email"><i class="fa-solid fa-at"></i> Seu Email de Contato:</label>
             <input type="email" id="contato_email" placeholder="contato@suaempresa.com" required onkeyup="updatePreview()">
             <label for="contato_telefone"><i class="fa-solid fa-phone"></i> Seu Telefone/WhatsApp (com DDD):</label>
@@ -682,7 +786,7 @@
             <label for="link_redes"><i class="fa-solid fa-share-nodes"></i> Link para uma Rede Social (Instagram/Facebook):</label>
             <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
 
-            <button onclick="prevSection('section-content')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="prevSection('section-audience')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
             <button onclick="generateFinalPreview()"><i class="fa-solid fa-eye"></i> Ver Minha Prévia Incrível!</button>
         </div>
 
@@ -714,6 +818,22 @@
                     <li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>
                 </ul>
                 <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
+            </section>
+            <section class="preview-section preview-features fade-in">
+                <h2 id="preview-titulo-funcionalidades">Funcionalidades Chave do Nosso Site/App</h2>
+                <ul id="preview-funcionalidades-lista">
+                    <li><i class="fa-solid fa-cogs"></i> Formulário de Contato Integrado</li>
+                    <li><i class="fa-solid fa-images"></i> Galeria de Imagens Dinâmica</li>
+                    <li><i class="fa-solid fa-share-alt"></i> Integração com Redes Sociais</li>
+                    <li><i class="fa-solid fa-newspaper"></i> Blog de Notícias Atualizado</li>
+                </ul>
+                <p id="preview-objetivo-principal">Nosso principal objetivo é [Objetivo Principal do Site/App].</p>
+            </section>
+            <section class="preview-section preview-audience fade-in">
+                <h2 id="preview-titulo-publico">Para Quem Criamos Soluções</h2>
+                <p id="preview-publico-alvo">Nosso público-alvo são [Público-Alvo Principal].</p>
+                <p id="preview-mensagem-central">A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**</p>
+                <img src="https://source.unsplash.com/600x250/?target-audience,marketing-strategy,diverse-people" alt="Público-Alvo" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
             <section class="preview-section preview-contact fade-in">
                 <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
@@ -788,7 +908,7 @@
             document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
             document.documentElement.style.setProperty('--accent-color', currentAccentColor);
 
-            const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
+            const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-features input, #section-features textarea, #section-audience input, #section-audience textarea, #section-contact input');
             inputs.forEach(input => {
                 // Remove a classe 'invalid' e reset a borda quando o usuário digita
                 input.addEventListener('input', () => {
@@ -804,6 +924,18 @@
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
             whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
+
+            // Esconde o conteúdo principal e mostra a splash screen
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('splash-screen').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.querySelector('.container').style.display = 'block'; // Mostra o conteúdo principal
+                }, 1000); // Tempo da transição de fade-out
+            }, 3000); // Tempo que a splash screen fica visível (3 segundos)
         });
 
         // Funções para atualização da prévia
@@ -825,6 +957,27 @@
             } else {
                 ulServicos.innerHTML = '<li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li><li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li><li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>';
             }
+
+            // Novas seções de conteúdo
+            document.getElementById('preview-titulo-funcionalidades').textContent = document.getElementById('titulo_funcionalidades')?.value || 'Funcionalidades Chave do Nosso Site/App';
+            const funcionalidadesLista = document.getElementById('funcionalidades_lista')?.value.split('\n').filter(item => item.trim() !== '');
+            const ulFuncionalidades = document.getElementById('preview-funcionalidades-lista');
+            ulFuncionalidades.innerHTML = '';
+            if (funcionalidadesLista && funcionalidadesLista.length > 0) {
+                funcionalidadesLista.forEach(func => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fa-solid fa-cogs"></i> ${func.trim()}`;
+                    ulFuncionalidades.appendChild(li);
+                });
+            } else {
+                ulFuncionalidades.innerHTML = '<li><i class="fa-solid fa-cogs"></i> Formulário de Contato Integrado</li><li><i class="fa-solid fa-images"></i> Galeria de Imagens Dinâmica</li><li><i class="fa-solid fa-share-alt"></i> Integração com Redes Sociais</li><li><i class="fa-solid fa-newspaper"></i> Blog de Notícias Atualizado</li>';
+            }
+            document.getElementById('preview-objetivo-principal').textContent = document.getElementById('objetivo_principal')?.value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
+
+            document.getElementById('preview-titulo-publico').textContent = document.getElementById('titulo_publico')?.value || 'Para Quem Criamos Soluções';
+            document.getElementById('preview-publico-alvo').textContent = document.getElementById('publico_alvo')?.value ? `Nosso público-alvo são ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
+            document.getElementById('preview-mensagem-central').textContent = document.getElementById('mensagem_central')?.value ? `A mensagem mais importante que queremos transmitir é: **${document.getElementById('mensagem_central').value}**` : 'A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**';
+
 
             document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'contato@suaempresa.com');
             document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
@@ -992,6 +1145,10 @@
                 layout_style: currentLayout,
                 titulo_servicos: document.getElementById('titulo_servicos').value,
                 servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
+                funcionalidades_lista: document.getElementById('funcionalidades_lista').value.split('\n').filter(item => item.trim() !== ''),
+                objetivo_principal: document.getElementById('objetivo_principal').value,
+                publico_alvo: document.getElementById('publico_alvo').value,
+                mensagem_central: document.getElementById('mensagem_central').value,
                 contato_email: document.getElementById('contato_email').value,
                 contato_telefone: document.getElementById('contato_telefone').value,
                 link_redes: document.getElementById('link_redes').value,
@@ -1144,7 +1301,7 @@
                             box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
                         }
                         .preview-footer p { margin: 10px 0; opacity: 0.8; }
-                        
+
                         /* Estilos para imagens (logo e serviços) */
                         .preview-section img {
                             border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
