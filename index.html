@@ -1,109 +1,979 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Gerador Inteligente de Site - W.W</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Montserrat', sans-serif; background: #f0f0f0; margin: 0; padding: 0; color: #333; }
-    header { background: #000; text-align: center; padding: 10px 0; }
-    header img { max-height: 80px; }
-    main { padding: 20px; }
-    h1 { text-align: center; color: #2b2b2b; }
-    form { max-width: 700px; margin: 30px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-    input, textarea, select { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-    label { font-weight: 600; margin-top: 10px; display: block; }
-    button { margin-top: 20px; padding: 12px 25px; border: none; background-color: #0077cc; color: white; font-size: 16px; border-radius: 6px; cursor: pointer; }
-    button:hover { background-color: #005fa3; }
-    #preview { max-width: 900px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-    footer { text-align: center; padding: 20px; background: #000; color: #fff; font-size: 14px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Prévia de Site Profissional - Valentim Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis CSS para cores dinâmicas */
+        :root {
+            --primary-color: #007bff; /* Azul vibrante */
+            --secondary-color: #343a40; /* Cinza escuro */
+            --accent-color: #ffc107; /* Amarelo para detalhes */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --dark-bg: #e9ecef;
+            --font-montserrat: 'Montserrat', sans-serif;
+            --font-open-sans: 'Open Sans', sans-serif;
+
+            /* Variáveis de layout padrão (serão sobrescritas pelo JS) */
+            --preview-font-heading: var(--font-montserrat);
+            --preview-font-body: var(--font-open-sans);
+            --preview-border-radius: 8px;
+            --preview-spacing-unit: 20px;
+        }
+
+        body {
+            font-family: var(--font-open-sans);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); /* Gradiente sutil */
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden; /* Evita scroll horizontal indesejado */
+        }
+
+        .container {
+            max-width: 1000px; /* Maior para melhor visualização */
+            width: 95%;
+            margin: 40px auto;
+            background: #fff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Sombra mais forte */
+            animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: var(--font-montserrat);
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 2.8em; /* Maior */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            font-family: var(--font-montserrat);
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600; /* Mais negrito */
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="url"], textarea {
+            width: calc(100% - 22px);
+            padding: 12px; /* Maior */
+            margin-bottom: 20px;
+            border: 1px solid #c9d0da; /* Borda mais suave */
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px; /* Maior */
+        }
+
+        button {
+            padding: 12px 25px; /* Maior e mais espaçoso */
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px; /* Mais arredondado */
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px); /* Efeito "levitar" */
+        }
+        button + button {
+            margin-left: 15px;
+        }
+
+        .form-section {
+            display: none;
+            padding: 25px;
+            border: 1px solid #e0e6ed;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            background-color: var(--light-bg);
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* Sombra interna sutil */
+        }
+        .form-section.active {
+            display: block;
+        }
+
+        .color-options, .layout-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+            flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+        }
+        .color-box, .layout-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #ccc;
+            cursor: pointer;
+            transition: border-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            text-align: center;
+            color: #555;
+            flex-direction: column;
+        }
+        .layout-box {
+            border-radius: 8px; /* Quadrado */
+            width: 120px;
+            height: 80px;
+            font-size: 0.9em;
+            font-weight: 600;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            border-color: #ddd;
+        }
+        .color-box.selected, .layout-box.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
+            transform: scale(1.05);
+        }
+        .color1 { background-color: #007bff; }
+        .color2 { background-color: #28a745; }
+        .color3 { background-color: #dc3545; }
+        .color4 { background-color: #6f42c1; } /* Roxo */
+        .color5 { background-color: #fd7e14; } /* Laranja */
+
+        .layout-box .thumbnail {
+            width: 80%; /* Ajuste o tamanho da miniatura */
+            height: 60%;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex; /* Para centralizar o texto/ícone dentro */
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7em;
+            color: #888;
+            overflow: hidden; /* Garante que o conteúdo não vaze */
+            position: relative;
+        }
+
+        /* Estilos da Prévia do Site */
+        .website-preview {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 40px;
+            background-color: #fff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0; /* Começa invisível */
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .website-preview.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animações para as seções da prévia */
+        .preview-section.fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: sectionFadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes sectionFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Aplica atraso para cada seção */
+        .preview-header.fade-in { animation-delay: 0.1s; } /* Header */
+        .preview-section:nth-of-type(1).fade-in { animation-delay: 0.3s; } /* About */
+        .preview-section:nth-of-type(2).fade-in { animation-delay: 0.5s; } /* Services */
+        .preview-section:nth-of-type(3).fade-in { animation-delay: 0.7s; } /* Contact */
+        .preview-footer.fade-in { animation-delay: 0.9s; }
+
+        .preview-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: var(--preview-spacing-unit) 20px;
+            text-align: center;
+            font-family: var(--preview-font-heading); /* Fonte dinâmica */
+            border-bottom-left-radius: var(--preview-border-radius); /* Borda dinâmica */
+            border-bottom-right-radius: var(--preview-border-radius); /* Borda dinâmica */
+            position: relative; /* Para o botão de "Ver em Tela Cheia" */
+        }
+        .preview-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 2.5em;
+        }
+        .preview-header p {
+            margin: 8px 0 15px;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .preview-header nav {
+            margin-top: 15px;
+        }
+        /* Botões fantasma na prévia */
+        .preview-header nav a {
+            color: white;
+            margin: 0 8px; /* Menor margem para parecer mais com botões */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05em;
+            padding: 8px 15px; /* Padding para parecer botão */
+            border: 1px solid rgba(255,255,255,0.5); /* Borda sutil */
+            border-radius: 5px; /* Bordas arredondadas */
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+            display: inline-block; /* Para o padding funcionar */
+        }
+        .preview-header nav a:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            background-color: rgba(255,255,255,0.1); /* Fundo sutil ao hover */
+            border-color: white; /* Borda mais visível ao hover */
+        }
+
+        .preview-section {
+            padding: calc(2 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
+            text-align: center;
+            font-family: var(--preview-font-body); /* Fonte dinâmica */
+        }
+        .preview-section:nth-of-type(odd) {
+            background-color: var(--light-bg);
+        }
+        .preview-section h2 {
+            font-size: 2em;
+            margin-bottom: var(--preview-spacing-unit);
+            color: var(--primary-color); /* Títulos de seção com cor primária */
+            font-family: var(--preview-font-heading); /* Fonte dinâmica */
+        }
+        .preview-section p {
+            max-width: 700px;
+            margin: 0 auto var(--preview-spacing-unit) auto;
+        }
+        .preview-section ul {
+            list-style: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .preview-section ul li {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: var(--preview-border-radius); /* Borda dinâmica */
+            padding: 15px 20px;
+            flex: 1 1 calc(33% - 30px); /* 3 itens por linha */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 1.05em;
+            font-weight: 500;
+            min-width: 200px;
+        }
+
+        .preview-contact .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+        .preview-contact .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .preview-contact .contact-item a:hover {
+            color: #0056b3;
+        }
+        .preview-contact .icon {
+            margin-right: 10px;
+            font-size: 1.3em;
+            color: var(--accent-color); /* Ícones com cor de destaque */
+        }
+
+        .preview-footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: var(--preview-spacing-unit);
+            text-align: center;
+            font-size: 0.95em;
+            margin-top: auto;
+            border-top-left-radius: var(--preview-border-radius); /* Borda dinâmica */
+            border-top-right-radius: var(--preview-border-radius); /* Borda dinâmica */
+        }
+
+        /* Botão do WhatsApp CTA Final */
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366; /* Cor do WhatsApp */
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,255,0,0.2);
+        }
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+            transform: translateY(-3px);
+        }
+
+        /* Indicador de carregamento */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 123, 255, 0.1);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Botão de Ver em Tela Cheia */
+        #fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        #fullscreen-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <img src="logo_ww.jpg" alt="Logo W.W">
-  </header>
-  <main>
-    <h1>Gerador Inteligente de Site - W.W</h1>
-    <form id="siteForm">
-      <label>Nome da Empresa:</label>
-      <input type="text" id="nome" required>
+    <div class="container">
+        <h1>Sua Presença Online Começa Aqui! ✨</h1>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
+            Crie uma **prévia incrível** do seu futuro site em poucos passos. Descubra o impacto de um design profissional para o seu negócio!
+        </p>
 
-      <label>Setor / Nicho:</label>
-      <select id="nicho" required>
-        <option value="">Selecione...</option>
-        <option value="salão de beleza">Salão de Beleza</option>
-        <option value="barbearia">Barbearia</option>
-        <option value="petshop">Petshop</option>
-        <option value="clínica">Clínica</option>
-        <option value="loja">Loja</option>
-        <option value="restaurante">Restaurante</option>
-      </select>
+        <div class="form-section active" id="section-info">
+            <h2>1. Informações Essenciais do Seu Negócio</h2>
+            <label for="nome_empresa">Nome da Sua Empresa:</label>
+            <input type="text" id="nome_empresa" placeholder="Ex: Minha Empresa Incrível" required onkeyup="updatePreview()">
 
-      <label>Cores Preferidas:</label>
-      <input type="text" id="cores" placeholder="Ex: azul e branco">
+            <label for="slogan">Slogan Memorável (opcional):</label>
+            <input type="text" id="slogan" placeholder="Ex: Soluções Inovadoras para o Seu Sucesso" onkeyup="updatePreview()">
 
-      <label>Serviços ou Produtos:</label>
-      <textarea id="servicos" rows="3"></textarea>
+            <label for="descricao">Conte-nos sobre sua Empresa (2-3 frases):</label>
+            <textarea id="descricao" placeholder="Ex: Somos uma empresa de tecnologia focada em criar soluções web personalizadas que impulsionam o crescimento e a visibilidade de nossos clientes." required onkeyup="updatePreview()"></textarea>
+            <button onclick="nextSection('section-design')">Próximo Passo</button>
+        </div>
 
-      <label>WhatsApp ou Contato:</label>
-      <input type="text" id="contato">
+        <div class="form-section" id="section-design">
+            <h2>2. Escolha o Estilo e a Personalidade do Seu Site</h2>
+            <label>Paleta de Cores:</label>
+            <div class="color-options">
+                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" onclick="selectColors(this, '#007bff', '#343a40', '#ffc107')"></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" onclick="selectColors(this, '#28a745', '#34495e', '#f39c12')"></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" onclick="selectColors(this, '#dc3545', '#364f6b', '#fdcb6e')"></div>
+                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" onclick="selectColors(this, '#6f42c1', '#2c3e50', '#bdc3c7')"></div>
+                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" onclick="selectColors(this, '#fd7e14', '#2d3436', '#ffeaa7')"></div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;">*As cores da prévia serão ajustadas automaticamente.</p>
 
-      <button type="submit">Gerar site com IA</button>
-    </form>
+            <label style="margin-top: 25px;">Estilo de Layout:</label>
+            <div class="layout-options">
+                <div class="layout-box selected" data-layout="modern" onclick="selectLayout(this, 'modern')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?modern-architecture,geometric'); background-size: cover; background-position: center;"></div>
+                    Moderno<span>(Linhas Retas)</span>
+                </div>
+                <div class="layout-box" data-layout="classic" onclick="selectLayout(this, 'classic')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?classic-building,elegant-design'); background-size: cover; background-position: center;"></div>
+                    Clássico<span>(Elegante)</span>
+                </div>
+                <div class="layout-box" data-layout="creative" onclick="selectLayout(this, 'creative')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?abstract-art,colorful-design'); background-size: cover; background-position: center;"></div>
+                    Criativo<span>(Único)</span>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;">*Ajusta o estilo geral da prévia.</p>
 
-    <div id="preview">
-      <h2>Prévia do seu site:</h2>
-      <div id="output"></div>
+            <button onclick="prevSection('section-info')">Anterior</button>
+            <button onclick="nextSection('section-content')">Próximo Passo</button>
+        </div>
+
+        <div class="form-section" id="section-content">
+            <h2>3. Conteúdo Principal do Seu Site</h2>
+            <label for="titulo_servicos">Título da Seção de Serviços/Produtos:</label>
+            <input type="text" id="titulo_servicos" value="Nossos Produtos e Serviços" onkeyup="updatePreview()">
+
+            <label for="servicos_lista">Seus Principais Serviços/Produtos (um por linha):</label>
+            <textarea id="servicos_lista" placeholder="Serviço de Consultoria&#10;Desenvolvimento de E-commerce&#10;Marketing Digital&#10;Criação de Conteúdo" onkeyup="updatePreview()"></textarea>
+
+            <button onclick="prevSection('section-design')">Anterior</button>
+            <button onclick="nextSection('section-contact')">Próximo Passo</button>
+        </div>
+
+        <div class="form-section" id="section-contact">
+            <h2>4. Detalhes de Contato</h2>
+            <label for="contato_email">Seu Email de Contato:</label>
+            <input type="email" id="contato_email" placeholder="contato@suaempresa.com" required onkeyup="updatePreview()">
+            <label for="contato_telefone">Seu Telefone/WhatsApp (com DDD):</label>
+            <input type="text" id="contato_telefone" placeholder="(XX) XXXXX-XXXX" required onkeyup="updatePreview()">
+            <label for="link_redes">Link para uma Rede Social (Instagram/Facebook):</label>
+            <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
+
+            <button onclick="prevSection('section-content')">Anterior</button>
+            <button onclick="generateFinalPreview()">Ver Minha Prévia Incrível!</button>
+        </div>
+
+        <hr style="margin: 40px auto; border: 0; border-top: 1px dashed #ccc; width: 80%;">
+
+        <h2>Sua Prévia de Site - Descubra o Potencial!</h2>
+        <div id="website-preview" class="website-preview">
+            <button id="fullscreen-btn" onclick="openFullscreenPreview()">Ver em Tela Cheia</button>
+
+            <header class="preview-header fade-in">
+                <h1 id="preview-empresa">Sua Empresa Online</h1>
+                <p id="preview-slogan">Transformando Ideias em Resultados</p>
+                <nav>
+                    <a href="#">Início</a>
+                    <a href="#">Serviços</a>
+                    <a href="#">Contato</a>
+                </nav>
+            </header>
+            <section class="preview-section preview-about fade-in">
+                <img src="https://source.unsplash.com/150x150/?logo,abstract" alt="Logo da Empresa" style="border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
+                <h2 id="preview-titulo-sobre">Sobre Nós</h2>
+                <p id="preview-descricao">Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].</p>
+            </section>
+            <section class="preview-section preview-services fade-in">
+                <h2 id="preview-titulo-servicos">Nossos Serviços e Soluções</h2>
+                <ul id="preview-servicos-lista">
+                    <li>Desenvolvimento Web Personalizado</li>
+                    <li>Otimização para SEO</li>
+                    <li>Marketing de Conteúdo</li>
+                </ul>
+                <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
+            </section>
+            <section class="preview-section preview-contact fade-in">
+                <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
+                <div class="contact-item">
+                    <span class="icon">📧</span> <p id="preview-contato-email">contato@suaempresa.com</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📞</span> <p id="preview-contato-telefone">(XX) XXXXX-XXXX</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span> <p id="preview-redes"><a href="#" target="_blank">Nossas Redes Sociais</a></p>
+                </div>
+            </section>
+            <footer class="preview-footer fade-in">
+                <p>&copy; <span id="current-year"></span> Sua Empresa. Prévia criada por Valentim Web. <br>Isso é só o começo!</p>
+            </footer>
+        </div>
+
+        <div id="cta-final" style="text-align: center; margin-top: 40px; display: none;">
+            <h3>Impressionado? Isso é apenas uma FAÍSCA do potencial!</h3>
+            <p style="font-size: 1.2em; max-width: 700px; margin: 20px auto 0 auto; color: #555;">
+                Sua prévia mostra o caminho. Imagine um site profissional completo, com design exclusivo,
+                funcionalidades avançadas, otimizado para o Google e pronto para atrair **clientes reais e qualificados**
+                para o seu negócio!
+            </p>
+            <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
+                Quero o Site Completo e Profissional! Fale com Valentim!
+            </a>
+            <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
+            <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
+        </div>
     </div>
-  </main>
-  <footer>
-    © 2025 W.W • Desenvolvedor Web — Soluções para sua empresa
-  </footer>
 
-  <script>
-    function gerarTemplate(nicho, nome, servicos) {
-      const base = {
-        "salão de beleza": `<h3>Transforme seu visual com a <strong>${nome}</strong></h3><p>Oferecemos: ${servicos}</p>`,
-        "barbearia": `<h3>Estilo, tradição e cuidado — <strong>${nome}</strong></h3><p>Especialistas em: ${servicos}</p>`,
-        "petshop": `<h3>Cuidando do seu melhor amigo na <strong>${nome}</strong></h3><p>Serviços disponíveis: ${servicos}</p>`,
-        "clínica": `<h3>Saúde e bem-estar com a <strong>${nome}</strong></h3><p>Nossos atendimentos: ${servicos}</p>`,
-        "loja": `<h3>Encontre tudo o que precisa na <strong>${nome}</strong></h3><p>Produtos oferecidos: ${servicos}</p>`,
-        "restaurante": `<h3>Sabores incríveis esperam por você na <strong>${nome}</strong></h3><p>Cardápio: ${servicos}</p>`
-      };
-      return base[nicho] || `<h3>Bem-vindo à <strong>${nome}</strong></h3><p>${servicos}</p>`;
-    }
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
 
-    document.getElementById('siteForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nome = document.getElementById('nome').value;
-      const nicho = document.getElementById('nicho').value;
-      const cores = document.getElementById('cores').value;
-      const servicos = document.getElementById('servicos').value;
-      const contato = document.getElementById('contato').value;
-      const corPrimaria = cores.split(' ')[0] || '#0077cc';
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script>
+        // ** SUAS CREDENCIAIS DO FIREBASE AQUI **
+        const firebaseConfig = {
+          apiKey: "SUA_API_KEY", // <-- SUBSTITUA
+          authDomain: "SEU_AUTH_DOMAIN", // <-- SUBSTITUA
+          projectId: "SEU_PROJECT_ID", // <-- SUBSTITUA
+          storageBucket: "SEU_STORAGE_BUCKET", // <-- SUBSTITUA
+          messagingSenderId: "SEU_MESSAGING_SENDER_ID", // <-- SUBSTITUA
+          appId: "SEU_APP_ID" // <-- SUBSTITUA
+        };
 
-      const textoIA = gerarTemplate(nicho, nome, servicos);
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
 
-      const outputHTML = `
-        <section style="padding: 20px; background: ${corPrimaria}; color: white; border-radius: 8px;">
-          <h1>${nome}</h1>
-          <h4>${nicho.charAt(0).toUpperCase() + nicho.slice(1)}</h4>
-        </section>
-        <section style="padding: 20px; margin-top: 20px;">
-          ${textoIA}
-          <p><strong>Contato:</strong> ${contato}</p>
-          <a href="https://wa.me/${contato.replace(/\D/g, '')}" target="_blank"
-             style="display:inline-block;margin-top:10px;padding:10px 20px;background:${corPrimaria};color:white;text-decoration:none;border-radius:5px;">
-             Fale conosco no WhatsApp
-          </a>
-        </section>
-      `;
+        // Obtenha uma referência para o serviço Firestore
+        const db = firebase.firestore();
 
-      document.getElementById('output').innerHTML = outputHTML;
-    });
-  </script>
+        let currentPrimaryColor = '#007bff';
+        let currentSecondaryColor = '#343a40';
+        let currentAccentColor = '#ffc107';
+        let currentLayout = 'modern'; // Default layout
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Set default colors and layout
+            document.documentElement.style.setProperty('--primary-color', currentPrimaryColor);
+            document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
+            document.documentElement.style.setProperty('--accent-color', currentAccentColor);
+
+            const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
+            inputs.forEach(input => {
+                input.addEventListener('keyup', updatePreview);
+            });
+
+            const whatsappButton = document.getElementById('whatsapp-final-button');
+            document.getElementById('nome_empresa').addEventListener('keyup', () => {
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+            });
+            whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
+        });
+
+        function updatePreview() {
+            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
+            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
+            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
+            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Produtos e Soluções';
+
+            const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
+            const ulServicos = document.getElementById('preview-servicos-lista');
+            ulServicos.innerHTML = '';
+            if (servicosLista.length > 0) {
+                servicosLista.forEach(servico => {
+                    const li = document.createElement('li');
+                    li.textContent = servico.trim();
+                    ulServicos.appendChild(li);
+                });
+            } else {
+                ulServicos.innerHTML = '<li>Desenvolvimento Web Personalizado</li><li>Otimização para SEO</li><li>Marketing de Conteúdo</li>';
+            }
+
+            document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'seuemail@empresa.com');
+            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
+            const linkRedes = document.getElementById('link_redes').value;
+            const previewRedesLink = document.querySelector('#preview-redes a');
+            if (linkRedes) {
+                previewRedesLink.href = linkRedes;
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
+            } else {
+                previewRedesLink.href = '#';
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
+            }
+        }
+
+        function selectColors(element, primary, secondary, accent) {
+            document.querySelectorAll('.color-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--secondary-color', secondary);
+            document.documentElement.style.setProperty('--accent-color', accent);
+            currentPrimaryColor = primary;
+            currentSecondaryColor = secondary;
+            currentAccentColor = accent;
+            updatePreview(); // Re-render content if needed
+        }
+
+        function selectLayout(element, layout) {
+            document.querySelectorAll('.layout-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentLayout = layout;
+
+            const root = document.documentElement.style;
+            if (layout === 'modern') {
+                root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '8px');
+                root.setProperty('--preview-spacing-unit', '20px');
+            } else if (layout === 'classic') {
+                root.setProperty('--preview-font-heading', "'Playfair Display', serif");
+                root.setProperty('--preview-font-body', "'Roboto', sans-serif");
+                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
+                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
+            } else if (layout === 'creative') {
+                root.setProperty('--preview-font-heading', "'Pacifico', cursive");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
+                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+            }
+            updatePreview();
+        }
+
+        let currentSectionIndex = 0;
+        const formSections = document.querySelectorAll('.form-section');
+
+        function showSection(index) {
+            formSections.forEach((section, i) => {
+                if (i === index) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            currentSectionIndex = index;
+        }
+
+        function nextSection(nextSectionId) {
+            const currentSection = formSections[currentSectionIndex];
+            const nextSection = document.getElementById(nextSectionId);
+            const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (!allFilled) {
+                alert('Por favor, preencha todos os campos obrigatórios nesta seção para continuar.');
+                return;
+            }
+
+            if (nextSection) {
+                currentSection.classList.remove('active');
+                nextSection.classList.add('active');
+                const nextIndex = Array.from(formSections).indexOf(nextSection);
+                currentSectionIndex = nextIndex;
+            }
+        }
+
+        function prevSection(prevSectionId) {
+            const currentSection = formSections[currentSectionIndex];
+            const prevSection = document.getElementById(prevSectionId);
+            if (prevSection) {
+                currentSection.classList.remove('active');
+                prevSection.classList.add('active');
+                const prevIndex = Array.from(formSections).indexOf(prevSection);
+                currentSectionIndex = prevIndex;
+            }
+        }
+
+        async function generateFinalPreview() {
+            const finalSection = document.getElementById('section-contact');
+            const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (!allFilled) {
+                alert('Por favor, preencha todos os campos obrigatórios na seção de contato para gerar a prévia.');
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.add('show');
+
+            await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
+
+            formSections.forEach(section => section.style.display = 'none');
+            const websitePreview = document.getElementById('website-preview');
+            websitePreview.style.display = 'flex';
+            websitePreview.classList.add('show');
+
+            // Adiciona a classe 'fade-in' a cada seção da prévia para animar
+            document.querySelectorAll('.preview-header, .preview-section, .preview-footer').forEach(el => {
+                el.classList.add('fade-in');
+            });
+
+            websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const finalData = {
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                nome_empresa: document.getElementById('nome_empresa').value,
+                slogan: document.getElementById('slogan').value,
+                descricao: document.getElementById('descricao').value,
+                primary_color: currentPrimaryColor,
+                secondary_color: currentSecondaryColor,
+                accent_color: currentAccentColor,
+                layout_style: currentLayout,
+                titulo_servicos: document.getElementById('titulo_servicos').value,
+                servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
+                contato_email: document.getElementById('contato_email').value,
+                contato_telefone: document.getElementById('contato_telefone').value,
+                link_redes: document.getElementById('link_redes').value,
+            };
+
+            const feedbackMessage = document.getElementById('feedback-message');
+            const errorMessageDisplay = document.getElementById('error-message-display');
+
+            try {
+                const docRef = await db.collection("previews").add(finalData);
+                console.log("Documento salvo com ID: ", docRef.id);
+                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
+                feedbackMessage.style.display = 'block';
+                errorMessageDisplay.style.display = 'none';
+
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                const whatsappButton = document.getElementById('whatsapp-final-button');
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+
+            } catch (e) {
+                console.error("Erro ao adicionar documento: ", e);
+                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto para não perder sua prévia!`;
+                errorMessageDisplay.style.display = 'block';
+                feedbackMessage.style.display = 'none';
+            } finally {
+                loadingOverlay.classList.remove('show');
+            }
+        }
+
+        // Função para abrir a prévia em tela cheia
+        function openFullscreenPreview() {
+            const previewContentElement = document.getElementById('website-preview');
+            const previewContentHtml = previewContentElement.outerHTML;
+
+            // Criar um novo elemento temporário para remover o botão "Ver em Tela Cheia"
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = previewContentHtml;
+            const fullscreenBtnInTemp = tempDiv.querySelector('#fullscreen-btn');
+            if (fullscreenBtnInTemp) {
+                fullscreenBtnInTemp.remove(); // Remove o botão da cópia temporária
+            }
+            const cleanedPreviewContent = tempDiv.innerHTML; // Pega o HTML limpo
+
+            const tempWindow = window.open('', '_blank');
+
+            // Construir o HTML da nova janela
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+                    <style>
+                        /* Injetar variáveis CSS dinâmicas */
+                        :root {
+                            --primary-color: ${currentPrimaryColor};
+                            --secondary-color: ${currentSecondaryColor};
+                            --accent-color: ${currentAccentColor};
+                            --preview-font-heading: ${document.documentElement.style.getPropertyValue('--preview-font-heading') || "var(--font-montserrat)"};
+                            --preview-font-body: ${document.documentElement.style.getPropertyValue('--preview-font-body') || "var(--font-open-sans)"};
+                            --preview-border-radius: ${document.documentElement.style.getPropertyValue('--preview-border-radius') || "8px"};
+                            --preview-spacing-unit: ${document.documentElement.style.getPropertyValue('--preview-spacing-unit') || "20px"};
+                            /* Outras variáveis padrão */
+                            --text-color: #333;
+                            --light-bg: #f8f9fa;
+                            --dark-bg: #e9ecef;
+                            --font-montserrat: 'Montserrat', sans-serif;
+                            --font-open-sans: 'Open Sans', sans-serif;
+                        }
+                        /* Copiar todos os estilos do seu arquivo HTML, exceto o container e form-sections */
+                        body {
+                            font-family: var(--preview-font-body);
+                            line-height: 1.6;
+                            margin: 0;
+                            padding: 0;
+                            background-color: var(--light-bg); /* Fundo mais simples para a prévia */
+                            color: var(--text-color);
+                            display: block; /* Não é flex no body aqui */
+                            overflow-x: hidden;
+                        }
+                        .website-preview {
+                            border: none; /* Remover borda e sombra */
+                            box-shadow: none;
+                            border-radius: 0;
+                            margin: 0;
+                            min-height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            opacity: 1; /* Já visível */
+                            transform: none;
+                        }
+                        /* Manter todos os estilos .preview-header, .preview-section, etc. */
+                        .preview-header {
+                            background-color: var(--primary-color);
+                            color: white;
+                            padding: var(--preview-spacing-unit) 20px;
+                            text-align: center;
+                            font-family: var(--preview-font-heading);
+                            border-bottom-left-radius: var(--preview-border-radius);
+                            border-bottom-right-radius: var(--preview-border-radius);
+                            position: relative;
+                        }
+                        .preview-header h1 { margin: 0; color: white; font-size: 2.5em; }
+                        .preview-header p { margin: 8px 0 15px; font-size: 1.2em; opacity: 0.9; }
+                        .preview-header nav { margin-top: 15px; }
+                        .preview-header nav a {
+                            color: white; margin: 0 8px; text-decoration: none; font-weight: 600; font-size: 1.05em;
+                            padding: 8px 15px; border: 1px solid rgba(255,255,255,0.5); border-radius: 5px;
+                            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+                            display: inline-block;
+                        }
+                        .preview-header nav a:hover { opacity: 0.9; transform: translateY(-3px); background-color: rgba(255,255,255,0.1); border-color: white; }
+
+                        .preview-section {
+                            padding: calc(2 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
+                            text-align: center;
+                            font-family: var(--preview-font-body);
+                        }
+                        .preview-section:nth-of-type(odd) { background-color: var(--light-bg); }
+                        .preview-section h2 {
+                            font-size: 2em; margin-bottom: var(--preview-spacing-unit); color: var(--primary-color);
+                            font-family: var(--preview-font-heading);
+                        }
+                        .preview-section p { max-width: 700px; margin: 0 auto var(--preview-spacing-unit) auto; }
+                        .preview-section ul { list-style: none; padding: 0; max-width: 600px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+                        .preview-section ul li {
+                            background-color: #fff; border: 1px solid #eee; border-radius: var(--preview-border-radius);
+                            padding: 15px 20px; flex: 1 1 calc(33% - 30px); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                            font-size: 1.05em; font-weight: 500; min-width: 200px;
+                        }
+
+                        .preview-contact .contact-item { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; font-size: 1.15em; font-weight: 500; }
+                        .preview-contact .contact-item a { color: var(--primary-color); text-decoration: none; transition: color 0.3s ease; }
+                        .preview-contact .contact-item a:hover { color: #0056b3; }
+                        .preview-contact .icon { margin-right: 10px; font-size: 1.3em; color: var(--accent-color); }
+
+                        .preview-footer {
+                            background-color: var(--secondary-color);
+                            color: white;
+                            padding: var(--preview-spacing-unit);
+                            text-align: center;
+                            font-size: 0.95em;
+                            margin-top: auto;
+                            border-top-left-radius: var(--preview-border-radius);
+                            border-top-right-radius: var(--preview-border-radius);
+                        }
+                        /* Estilos para imagens (logo e serviços) */
+                        .preview-section img {
+                            border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
+                            margin-bottom: var(--preview-spacing-unit);
+                            object-fit: cover;
+                        }
+                        /* Animações e placeholders podem ser omitidos na tela cheia ou ajustados */
+                        .fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
+
+                        /* Você pode adicionar um botão de "Fechar" na tela cheia */
+                        .close-fullscreen-btn {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background-color: rgba(0,0,0,0.5);
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 10px 15px;
+                            cursor: pointer;
+                            font-size: 1em;
+                            z-index: 9999;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <button class="close-fullscreen-btn" onclick="window.close()">Fechar Prévia</button>
+                    ${cleanedPreviewContent}
+                </body>
+                </html>
+            `;
+            tempWindow.document.write(fullHtml);
+            tempWindow.document.close(); // Importante para finalizar o documento
+        }
+
+
+        showSection(0);
+    </script>
 </body>
 </html>
