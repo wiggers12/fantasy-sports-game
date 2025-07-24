@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sua Prévia de Site Profissional - Valentim Web</title>
+    <title>Gerador de Prévia de Site - Seu Sucesso Online</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -280,6 +280,84 @@
              color: var(--primary-color); /* Cor para o ícone de layout */
         }
 
+        /* Checkbox/Funcionalidades */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1em;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex: 1 1 calc(33% - 30px); /* 3 por linha em desktop */
+            min-width: 180px;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .checkbox-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            position: absolute; /* Esconde o checkbox original */
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        .checkbox-item .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .custom-checkbox {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-item .custom-checkbox i {
+            color: white;
+            font-size: 0.9em;
+            display: none; /* Esconde o checkmark por padrão */
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .custom-checkbox i {
+            display: block; /* Mostra o checkmark quando selecionado */
+        }
+
+        .checkbox-item .icon-feature {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+
+
         /* Estilos da Prévia do Site */
         .website-preview {
             border: 1px solid #e0e6ed;
@@ -319,9 +397,10 @@
         .preview-section:nth-of-type(1).fade-in { animation-delay: 0.4s; }
         .preview-section:nth-of-type(2).fade-in { animation-delay: 0.6s; }
         .preview-section:nth-of-type(3).fade-in { animation-delay: 0.8s; }
-        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nova seção */
-        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nova seção */
-        .preview-footer.fade-in { animation-delay: 1.4s; } /* Atraso ajustado */
+        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nova seção (Funcionalidades) */
+        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nova seção (Público/Mensagem) */
+        .preview-section:nth-of-type(6).fade-in { animation-delay: 1.4s; } /* Nova seção (Contato) */
+        .preview-footer.fade-in { animation-delay: 1.6s; } /* Atraso ajustado */
 
 
         .preview-header {
@@ -678,14 +757,18 @@
             #splash-screen p {
                 font-size: 1.2em;
             }
+            .checkbox-item {
+                flex: 1 1 100%; /* Uma coluna em mobile */
+                max-width: unset;
+            }
         }
     </style>
 </head>
 <body>
     <div id="splash-screen">
-        <img src="https://raw.githubusercontent.com/wiggers12/fantasy-sports-game/main/logo_ww.jpg" alt="Logo Valentim Web">
-        <h1>Valentim Web</h1>
-        <p>Criando a sua presença digital!</p>
+        <img src="https://raw.githubusercontent.com/wiggers12/fantasy-sports-game/main/logo_ww.jpg" alt="Logo do Serviço">
+        <h1>Seu Sucesso Online Começa Aqui!</h1>
+        <p>Crie uma prévia do seu site/app e impulsione seu negócio.</p>
     </div>
 
     <div class="container">
@@ -754,9 +837,64 @@
         </div>
 
         <div class="form-section" id="section-features">
-            <h2><i class="fa-solid fa-gears"></i> 4. Funcionalidades e Objetivos do Site/App</h2>
-            <label for="funcionalidades_lista"><i class="fa-solid fa-puzzle-piece"></i> Principais Funcionalidades que o Site/App Deve Ter (um por linha):</label>
-            <textarea id="funcionalidades_lista" placeholder="Formulário de Contato&#10;Galeria de Imagens&#10;Integração com Redes Sociais&#10;Blog de Notícias" onkeyup="updatePreview()"></textarea>
+            <h2><i class="fa-solid fa-gears"></i> 4. Funcionalidades Essenciais do Seu Site/App</h2>
+            <p style="text-align: center; font-size: 1em; color: #666; margin-bottom: 20px;">
+                Selecione as funcionalidades que seu site/app deve ter para atender às necessidades do seu nicho:
+            </p>
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Cadastro de Clientes" data-icon="fa-user-plus" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-user-plus icon-feature"></i> Cadastro de Clientes
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Agenda / Agendamento Online" data-icon="fa-calendar-check" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-calendar-check icon-feature"></i> Agenda / Agendamento
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Catálogo de Produtos / Serviços" data-icon="fa-boxes-stacked" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-boxes-stacked icon-feature"></i> Catálogo de Produtos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Gestão de Produtos / Estoque" data-icon="fa-boxes-packing" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-boxes-packing icon-feature"></i> Gestão de Produtos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Controle Financeiro / Dashboard" data-icon="fa-chart-line" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-chart-line icon-feature"></i> Financeiro / Dashboard
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Sistema de Pedidos / Compras" data-icon="fa-cart-shopping" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-cart-shopping icon-feature"></i> Sistema de Pedidos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Blog / Notícias" data-icon="fa-newspaper" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-newspaper icon-feature"></i> Blog / Notícias
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Integração com Redes Sociais" data-icon="fa-share-nodes" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-share-nodes icon-feature"></i> Redes Sociais
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Formulário de Contato Personalizado" data-icon="fa-envelope-open-text" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-envelope-open-text icon-feature"></i> Formulário de Contato
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Área de Membros / Login" data-icon="fa-user-lock" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-user-lock icon-feature"></i> Área de Membros
+                </label>
+            </div>
+            <label for="outras_funcionalidades"><i class="fa-solid fa-plus-circle"></i> Outras Funcionalidades que Você Precisa (opcional):</label>
+            <textarea id="outras_funcionalidades" placeholder="Ex: Chat online, Integração com ERP, Sistema de Avaliações" onkeyup="updatePreview()"></textarea>
 
             <label for="objetivo_principal"><i class="fa-solid fa-bullseye"></i> Qual o Objetivo Principal do Seu Site/App?</label>
             <input type="text" id="objetivo_principal" placeholder="Ex: Gerar leads, Vender produtos, Informar sobre a empresa" onkeyup="updatePreview()">
@@ -819,20 +957,20 @@
                 </ul>
                 <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
-            <section class="preview-section preview-features fade-in">
-                <h2 id="preview-titulo-funcionalidades">Funcionalidades Chave do Nosso Site/App</h2>
-                <ul id="preview-funcionalidades-lista">
-                    <li><i class="fa-solid fa-cogs"></i> Formulário de Contato Integrado</li>
-                    <li><i class="fa-solid fa-images"></i> Galeria de Imagens Dinâmica</li>
-                    <li><i class="fa-solid fa-share-alt"></i> Integração com Redes Sociais</li>
-                    <li><i class="fa-solid fa-newspaper"></i> Blog de Notícias Atualizado</li>
-                </ul>
-                <p id="preview-objetivo-principal">Nosso principal objetivo é [Objetivo Principal do Site/App].</p>
+            <section class="preview-section preview-features-display fade-in">
+                <h2 id="preview-titulo-funcionalidades">Funcionalidades Essenciais do Seu Site/App</h2>
+                <ul id="preview-funcionalidades-display-list">
+                    </ul>
+                <p id="preview-objetivo-principal-display" style="font-style: italic; margin-top: 20px;">
+                    Nosso principal objetivo é [Objetivo Principal do Site/App].
+                </p>
             </section>
-            <section class="preview-section preview-audience fade-in">
+            <section class="preview-section preview-audience-display fade-in">
                 <h2 id="preview-titulo-publico">Para Quem Criamos Soluções</h2>
-                <p id="preview-publico-alvo">Nosso público-alvo são [Público-Alvo Principal].</p>
-                <p id="preview-mensagem-central">A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**</p>
+                <p id="preview-publico-alvo-display">Nosso público-alvo são [Público-Alvo Principal].</p>
+                <p id="preview-mensagem-central-display" style="font-weight: bold; margin-top: 20px;">
+                    A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
+                </p>
                 <img src="https://source.unsplash.com/600x250/?target-audience,marketing-strategy,diverse-people" alt="Público-Alvo" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
             <section class="preview-section preview-contact fade-in">
@@ -848,7 +986,7 @@
                 </div>
             </section>
             <footer class="preview-footer fade-in">
-                <p>&copy; <span id="current-year"></span> Sua Empresa. Prévia criada por Valentim Web. <br>Isso é só o começo!</p>
+                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [Seu Serviço Web/Sua Marca]. <br>Isso é só o começo!</p>
             </footer>
         </div>
 
@@ -860,7 +998,7 @@
                 para o seu negócio!
             </p>
             <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
-                Quero o Site Completo e Profissional! Fale com Valentim!
+                Quero o Site Completo e Profissional! Fale com [Seu Nome/Sua Marca]!
             </a>
             <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
             <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
@@ -908,7 +1046,13 @@
             document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
             document.documentElement.style.setProperty('--accent-color', currentAccentColor);
 
-            const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-features input, #section-features textarea, #section-audience input, #section-audience textarea, #section-contact input');
+            const inputs = document.querySelectorAll(
+                '#section-info input, #section-info textarea, ' +
+                '#section-content input, #section-content textarea, ' +
+                '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
+                '#section-audience input, #section-audience textarea, ' +
+                '#section-contact input'
+            );
             inputs.forEach(input => {
                 // Remove a classe 'invalid' e reset a borda quando o usuário digita
                 input.addEventListener('input', () => {
@@ -917,6 +1061,12 @@
                 });
                 input.addEventListener('keyup', updatePreview);
             });
+
+            // Adiciona evento de mudança para os checkboxes de funcionalidade
+            document.querySelectorAll('input[type="checkbox"][name="feature"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updatePreview);
+            });
+
 
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
@@ -958,25 +1108,35 @@
                 ulServicos.innerHTML = '<li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li><li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li><li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>';
             }
 
-            // Novas seções de conteúdo
-            document.getElementById('preview-titulo-funcionalidades').textContent = document.getElementById('titulo_funcionalidades')?.value || 'Funcionalidades Chave do Nosso Site/App';
-            const funcionalidadesLista = document.getElementById('funcionalidades_lista')?.value.split('\n').filter(item => item.trim() !== '');
-            const ulFuncionalidades = document.getElementById('preview-funcionalidades-lista');
-            ulFuncionalidades.innerHTML = '';
-            if (funcionalidadesLista && funcionalidadesLista.length > 0) {
-                funcionalidadesLista.forEach(func => {
+            // Novas seções de conteúdo - FUNCIONALIDADES
+            const selectedFeatures = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => ({
+                name: cb.value,
+                icon: cb.dataset.icon // Pega o ícone do atributo data-icon
+            }));
+            const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
+            ulFuncionalidadesDisplay.innerHTML = '';
+            if (selectedFeatures.length > 0) {
+                selectedFeatures.forEach(feature => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<i class="fa-solid fa-cogs"></i> ${func.trim()}`;
-                    ulFuncionalidades.appendChild(li);
+                    li.innerHTML = `<i class="${feature.icon}"></i> ${feature.name}`;
+                    ulFuncionalidadesDisplay.appendChild(li);
                 });
             } else {
-                ulFuncionalidades.innerHTML = '<li><i class="fa-solid fa-cogs"></i> Formulário de Contato Integrado</li><li><i class="fa-solid fa-images"></i> Galeria de Imagens Dinâmica</li><li><i class="fa-solid fa-share-alt"></i> Integração com Redes Sociais</li><li><i class="fa-solid fa-newspaper"></i> Blog de Notícias Atualizado</li>';
+                // Conteúdo padrão se nenhuma funcionalidade for selecionada
+                ulFuncionalidadesDisplay.innerHTML = `
+                    <li><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                    <li><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                    <li><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                    <li><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                `;
             }
-            document.getElementById('preview-objetivo-principal').textContent = document.getElementById('objetivo_principal')?.value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
 
-            document.getElementById('preview-titulo-publico').textContent = document.getElementById('titulo_publico')?.value || 'Para Quem Criamos Soluções';
-            document.getElementById('preview-publico-alvo').textContent = document.getElementById('publico_alvo')?.value ? `Nosso público-alvo são ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
-            document.getElementById('preview-mensagem-central').textContent = document.getElementById('mensagem_central')?.value ? `A mensagem mais importante que queremos transmitir é: **${document.getElementById('mensagem_central').value}**` : 'A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**';
+            document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
+
+            // Novas seções de conteúdo - PÚBLICO E MENSAGEM
+            document.getElementById('preview-titulo-publico').textContent = document.getElementById('publico_alvo').value ? `Para ${document.getElementById('publico_alvo').value}` : 'Para Quem Criamos Soluções';
+            document.getElementById('preview-publico-alvo-display').textContent = document.getElementById('publico_alvo').value ? `Nosso público-alvo principal são: ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
+            document.getElementById('preview-mensagem-central-display').textContent = document.getElementById('mensagem_central').value ? `A mensagem mais importante que queremos transmitir é: **${document.getElementById('mensagem_central').value}**` : 'A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**';
 
 
             document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'contato@suaempresa.com');
@@ -996,10 +1156,9 @@
         function selectColors(element, primary, secondary, accent) {
             document.querySelectorAll('.color-box').forEach(box => {
                 box.classList.remove('selected');
-                box.querySelector('i').style.display = 'none'; // Esconde o ícone de check
+                // Nenhuma alteração aqui, já que o checkmark é adicionado/removido pelo JS no DOM
             });
             element.classList.add('selected');
-            element.querySelector('i').style.display = 'block'; // Mostra o ícone de check
 
             document.documentElement.style.setProperty('--primary-color', primary);
             document.documentElement.style.setProperty('--secondary-color', secondary);
@@ -1061,9 +1220,9 @@
             inputs.forEach(input => {
                 if (input.hasAttribute('required') && !input.value.trim()) {
                     allFilled = false;
-                    input.classList.add('invalid');
+                    input.classList.add('invalid'); // Adiciona classe para borda vermelha
                 } else {
-                    input.classList.remove('invalid');
+                    input.classList.remove('invalid'); // Remove classe se estiver preenchido
                 }
             });
 
@@ -1097,7 +1256,8 @@
 
         // Função principal para gerar prévia e salvar no Firebase
         window.generateFinalPreview = async () => {
-            const finalSection = document.getElementById('section-contact');
+            // Validação da última seção antes de gerar a prévia
+            const finalSection = formSections[formSections.length - 1]; // Pega a última seção
             const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
             let allFilled = true;
             inputs.forEach(input => {
@@ -1114,6 +1274,7 @@
                 if (firstInvalidInput) {
                     firstInvalidInput.focus();
                 }
+                alert('Por favor, preencha todos os campos obrigatórios na seção de Contato para gerar a prévia.');
                 return;
             }
 
@@ -1134,6 +1295,10 @@
 
             websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+            // Coleta funcionalidades selecionadas para o Firebase
+            const selectedFeaturesForFirebase = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => cb.value);
+
+
             const finalData = {
                 timestamp: serverTimestamp(),
                 nome_empresa: document.getElementById('nome_empresa').value,
@@ -1145,7 +1310,8 @@
                 layout_style: currentLayout,
                 titulo_servicos: document.getElementById('titulo_servicos').value,
                 servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
-                funcionalidades_lista: document.getElementById('funcionalidades_lista').value.split('\n').filter(item => item.trim() !== ''),
+                funcionalidades_selecionadas: selectedFeaturesForFirebase, // Salva as funcionalidades selecionadas
+                outras_funcionalidades: document.getElementById('outras_funcionalidades').value, // Outras funcionalidades
                 objetivo_principal: document.getElementById('objetivo_principal').value,
                 publico_alvo: document.getElementById('publico_alvo').value,
                 mensagem_central: document.getElementById('mensagem_central').value,
