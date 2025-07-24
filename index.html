@@ -173,7 +173,22 @@
         .color3 { background-color: #dc3545; }
         .color4 { background-color: #6f42c1; } /* Roxo */
         .color5 { background-color: #fd7e14; } /* Laranja */
-        .layout-box span { margin-top: 5px; }
+
+        .layout-box .thumbnail {
+            width: 80%; /* Ajuste o tamanho da miniatura */
+            height: 60%;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex; /* Para centralizar o texto/ícone dentro */
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7em;
+            color: #888;
+            overflow: hidden; /* Garante que o conteúdo não vaze */
+            position: relative;
+        }
 
         /* Estilos da Prévia do Site */
         .website-preview {
@@ -218,9 +233,12 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 1.05em;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease; /* Adicionado transform aqui */
         }
-        .preview-header nav a:hover { opacity: 0.7; }
+        .preview-header nav a:hover {
+            opacity: 0.8; /* Um pouco mais sutil */
+            transform: translateY(-3px); /* Efeito de "levitar" sutil */
+        }
 
         .preview-section {
             padding: 40px 20px;
@@ -349,19 +367,19 @@
     <div class="container">
         <h1>Sua Presença Online Começa Aqui! ✨</h1>
         <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
-            Crie uma **prévia incrível** do seu futuro site em poucos passos. Descubra o impacto de um design profissional para o seu negócio em Porto Alegre!
+            Crie uma **prévia incrível** do seu futuro site em poucos passos. Descubra o impacto de um design profissional para o seu negócio!
         </p>
 
         <div class="form-section active" id="section-info">
             <h2>1. Informações Essenciais do Seu Negócio</h2>
             <label for="nome_empresa">Nome da Sua Empresa:</label>
-            <input type="text" id="nome_empresa" placeholder="Ex: Padaria Doce Sabor" required onkeyup="updatePreview()">
+            <input type="text" id="nome_empresa" placeholder="Ex: Minha Empresa Incrível" required onkeyup="updatePreview()">
 
             <label for="slogan">Slogan Memorável (opcional):</label>
-            <input type="text" id="slogan" placeholder="Ex: Onde cada pão é uma arte" onkeyup="updatePreview()">
+            <input type="text" id="slogan" placeholder="Ex: Soluções Inovadoras para o Seu Sucesso" onkeyup="updatePreview()">
 
             <label for="descricao">Conte-nos sobre sua Empresa (2-3 frases):</label>
-            <textarea id="descricao" placeholder="Ex: Somos uma padaria artesanal com foco em produtos frescos e de qualidade, servindo a comunidade de Porto Alegre desde 2005." required onkeyup="updatePreview()"></textarea>
+            <textarea id="descricao" placeholder="Ex: Somos uma empresa de tecnologia focada em criar soluções web personalizadas que impulsionam o crescimento e a visibilidade de nossos clientes." required onkeyup="updatePreview()"></textarea>
             <button onclick="nextSection('section-design')">Próximo Passo</button>
         </div>
 
@@ -380,12 +398,15 @@
             <label style="margin-top: 25px;">Estilo de Layout:</label>
             <div class="layout-options">
                 <div class="layout-box selected" data-layout="modern" onclick="selectLayout(this, 'modern')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?modern-architecture,geometric'); background-size: cover; background-position: center;"></div>
                     Moderno<span>(Linhas Retas)</span>
                 </div>
                 <div class="layout-box" data-layout="classic" onclick="selectLayout(this, 'classic')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?classic-building,elegant-design'); background-size: cover; background-position: center;"></div>
                     Clássico<span>(Elegante)</span>
                 </div>
                 <div class="layout-box" data-layout="creative" onclick="selectLayout(this, 'creative')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?abstract-art,colorful-design'); background-size: cover; background-position: center;"></div>
                     Criativo<span>(Único)</span>
                 </div>
             </div>
@@ -412,7 +433,7 @@
             <label for="contato_email">Seu Email de Contato:</label>
             <input type="email" id="contato_email" placeholder="contato@suaempresa.com" required onkeyup="updatePreview()">
             <label for="contato_telefone">Seu Telefone/WhatsApp (com DDD):</label>
-            <input type="text" id="contato_telefone" placeholder="(51) 9XXXX-XXXX" required onkeyup="updatePreview()">
+            <input type="text" id="contato_telefone" placeholder="(XX) XXXXX-XXXX" required onkeyup="updatePreview()">
             <label for="link_redes">Link para uma Rede Social (Instagram/Facebook):</label>
             <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
 
@@ -434,7 +455,7 @@
                 </nav>
             </header>
             <section class="preview-section preview-about">
-                <img src="https://via.placeholder.com/150x150/f0f0f0/cccccc?text=LOGO" alt="Logo Placeholder" style="border-radius: 50%; margin-bottom: 20px;">
+                <img src="https://source.unsplash.com/150x150/?logo,abstract" alt="Logo da Empresa" style="border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
                 <h2 id="preview-titulo-sobre">Sobre Nós</h2>
                 <p id="preview-descricao">Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].</p>
             </section>
@@ -445,7 +466,7 @@
                     <li>Otimização para SEO</li>
                     <li>Marketing de Conteúdo</li>
                 </ul>
-                <img src="https://via.placeholder.com/600x250/e0e0e0/bbbbbb?text=IMAGEM+SERVICOS" alt="Servicos Placeholder" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px;">
+                <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
             <section class="preview-section preview-contact">
                 <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
@@ -453,7 +474,7 @@
                     <span class="icon">📧</span> <p id="preview-contato-email">contato@suaempresa.com</p>
                 </div>
                 <div class="contact-item">
-                    <span class="icon">📞</span> <p id="preview-contato-telefone">(51) XXXXX-XXXX</p>
+                    <span class="icon">📞</span> <p id="preview-contato-telefone">(XX) XXXXX-XXXX</p>
                 </div>
                 <div class="contact-item">
                     <span class="icon">📱</span> <p id="preview-redes"><a href="#" target="_blank">Nossas Redes Sociais</a></p>
@@ -469,12 +490,13 @@
             <p style="font-size: 1.2em; max-width: 700px; margin: 20px auto 0 auto; color: #555;">
                 Sua prévia mostra o caminho. Imagine um site profissional completo, com design exclusivo,
                 funcionalidades avançadas, otimizado para o Google e pronto para atrair **clientes reais e qualificados**
-                para o seu negócio em Porto Alegre.
+                para o seu negócio!
             </p>
             <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
                 Quero o Site Completo e Profissional! Fale com Valentim!
             </a>
-            <p style="margin-top: 20px; font-size: 1.1em; color: #666;">Prefere ligar? (51) XXXX-XXXX</p>
+            <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
+            <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
         </div>
     </div>
 
@@ -514,14 +536,15 @@
             document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
             document.documentElement.style.setProperty('--accent-color', currentAccentColor);
 
-            const defaultColorBox = document.querySelector('.color-box.color1');
-            if (defaultColorBox) {
-                defaultColorBox.classList.add('selected');
-            }
-            const defaultLayoutBox = document.querySelector('.layout-box[data-layout="modern"]');
-            if (defaultLayoutBox) {
-                defaultLayoutBox.classList.add('selected');
-            }
+            // No need to add 'selected' class here, it's already in HTML for default
+            // const defaultColorBox = document.querySelector('.color-box.color1');
+            // if (defaultColorBox) {
+            //     defaultColorBox.classList.add('selected');
+            // }
+            // const defaultLayoutBox = document.querySelector('.layout-box[data-layout="modern"]');
+            // if (defaultLayoutBox) {
+            //     defaultLayoutBox.classList.add('selected');
+            // }
 
             const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
             inputs.forEach(input => {
@@ -532,9 +555,11 @@
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                // Remove a referência específica a Porto Alegre na mensagem do WhatsApp
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
             // Inicializa com o placeholder
+            // Remove a referência específica a Porto Alegre na mensagem do WhatsApp inicial
             whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
         });
 
@@ -542,7 +567,7 @@
             document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
             document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
             document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
-            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Serviços e Soluções';
+            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Produtos e Soluções';
 
             const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
             const ulServicos = document.getElementById('preview-servicos-lista');
@@ -558,7 +583,7 @@
             }
 
             document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'seuemail@empresa.com');
-            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(51) XXXXX-XXXX');
+            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
             const linkRedes = document.getElementById('link_redes').value;
             const previewRedesLink = document.querySelector('#preview-redes a');
             if (linkRedes) {
@@ -591,8 +616,6 @@
             });
             element.classList.add('selected');
             currentLayout = layout;
-            // Aqui você poderia aplicar classes CSS diferentes ao website-preview
-            // Ou mudar fontes/espaçamentos baseados no layout selecionado
             const preview = document.getElementById('website-preview');
             preview.className = 'website-preview'; // Reset classes
             preview.classList.add(`layout-${layout}`); // Add layout specific class
@@ -700,15 +723,27 @@
                 link_redes: document.getElementById('link_redes').value,
             };
 
+            const feedbackMessage = document.getElementById('feedback-message');
+            const errorMessageDisplay = document.getElementById('error-message-display');
+
             try {
                 const docRef = await db.collection("previews").add(finalData);
                 console.log("Documento salvo com ID: ", docRef.id);
-                // Você pode exibir uma mensagem de sucesso no CTA final, se quiser.
+                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve.`;
+                feedbackMessage.style.display = 'block';
+                errorMessageDisplay.style.display = 'none';
+
+                // Atualiza o link do WhatsApp com o ID do documento para seu controle
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                const whatsappButton = document.getElementById('whatsapp-final-button');
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+
             } catch (e) {
                 console.error("Erro ao adicionar documento: ", e);
-                alert("Ocorreu um erro ao salvar sua prévia. Mas não se preocupe, ela já está aqui para você ver!");
+                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto!`;
+                errorMessageDisplay.style.display = 'block';
+                feedbackMessage.style.display = 'none';
             } finally {
-                // Esconde o overlay de carregamento
                 loadingOverlay.classList.remove('show');
             }
         }
