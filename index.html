@@ -49,6 +49,7 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Sombra mais forte */
             animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+            display: none; /* Escondido por padrão, será mostrado pelo JS após a splash screen */
         }
 
         @keyframes fadeIn {
@@ -141,9 +142,9 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 10px; /* Mais arredondado */
+            border-radius: 10px; /* Más arredondado */
             font-size: 1.15em;
-            font-weight: 700; /* Mais negrito */
+            font-weight: 700; /* Más negrito */
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow na transição */
             margin-top: 20px;
@@ -155,8 +156,8 @@
         }
         button:hover {
             background-color: #0056b3;
-            transform: translateY(-3px); /* Efeito "levitar" mais pronunciado */
-            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4); /* Sombra mais forte no hover */
+            transform: translateY(-3px); /* Efeito "levitar" más pronunciado */
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4); /* Sombra más forte no hover */
         }
         button:active {
             transform: translateY(-1px); /* Leve "pressionada" ao clicar */
@@ -170,10 +171,10 @@
             display: none;
             padding: 30px; /* Aumentei o padding interno */
             border: 1px solid #e0e6ed;
-            border-radius: 12px; /* Mais arredondado */
+            border-radius: 12px; /* Más arredondado */
             margin-bottom: 35px;
             background-color: var(--light-bg);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Sombra mais sutil */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Sombra más sutil */
         }
         .form-section.active {
             display: block;
@@ -207,7 +208,7 @@
             width: 80px; /* Aumentei o tamanho */
             height: 80px;
             border-radius: 50%;
-            border: 4px solid #ccc; /* Borda mais grossa */
+            border: 4px solid #ccc; /* Borda más grossa */
             cursor: pointer;
             transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow */
             display: flex;
@@ -221,7 +222,7 @@
             position: relative; /* Para o ícone de check */
         }
         .layout-box {
-            border-radius: 10px; /* Quadrado mais arredondado */
+            border-radius: 10px; /* Quadrado más arredondado */
             width: 140px; /* Aumentei a largura */
             height: 90px; /* Aumentei a altura */
             font-size: 1em; /* Aumentei a fonte */
@@ -232,7 +233,7 @@
         }
         .color-box.selected, .layout-box.selected {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra mais evidente na seleção */
+            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra más evidente na seleção */
             transform: scale(1.1); /* Efeito de destaque maior */
         }
         .color-box i {
@@ -1069,19 +1070,18 @@
                 <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
             <section class="preview-section preview-features-display fade-in">
-                <h2 id="preview-titulo-funcionalidades">Funcionalidades Essenciais do Seu Site/App</h2>
+                <h2 id="preview-titulo-funcionalidades"><i class="fa-solid fa-gears"></i> Funcionalidades Essenciais do Seu Site/App</h2>
                 <ul id="preview-funcionalidades-display-list">
                     </ul>
-                <p id="preview-outras-funcionalidades-display" style="font-size: 1.05em; color: #666; margin-top: 15px;"></p>
                 <p id="preview-objetivo-principal-display" style="font-style: italic; margin-top: 20px;">
-                    Nosso principal objetivo é [Objetivo Principal do Site/App].
+                    <i class="fa-solid fa-bullseye"></i> Nosso principal objetivo é [Objetivo Principal do Site/App].
                 </p>
             </section>
             <section class="preview-section preview-audience-display fade-in">
-                <h2 id="preview-titulo-publico">Para Quem Criamos Soluções</h2>
-                <p id="preview-publico-alvo-display">Nosso público-alvo são [Público-Alvo Principal].</p>
+                <h2 id="preview-titulo-publico"><i class="fa-solid fa-users"></i> Para Quem Criamos Soluções</h2>
+                <p id="preview-publico-alvo-display"><i class="fa-solid fa-user-group"></i> Nosso público-alvo são [Público-Alvo Principal].</p>
                 <p id="preview-mensagem-central-display" style="font-weight: bold; margin-top: 20px;">
-                    A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
+                    <i class="fa-solid fa-comment-dots"></i> A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
                 </p>
                 <img src="https://source.unsplash.com/600x250/?target-audience,marketing-strategy,diverse-people" alt="Público-Alvo" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
@@ -1471,7 +1471,7 @@
 
             await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
 
-            formSections.forEach(section => section.style.display = 'none';
+            formSections.forEach(section => section.style.display = 'none');
             const websitePreview = document.getElementById('website-preview');
             websitePreview.style.display = 'flex';
             websitePreview.classList.add('show');
