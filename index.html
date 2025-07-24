@@ -505,6 +505,24 @@
             font-size: 1.2em;
         }
 
+        /* Estilos específicos para a nova seção de público/mensagem */
+        .preview-section.preview-audience-display p {
+            font-size: 1.25em; /* Texto maior */
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .preview-section.preview-audience-display p#preview-mensagem-central-display {
+            font-size: 1.4em; /* Mensagem central ainda maior */
+            color: var(--primary-color);
+            font-style: italic;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+
         .preview-contact {
             text-align: left;
         }
@@ -1054,6 +1072,7 @@
                 <h2 id="preview-titulo-funcionalidades">Funcionalidades Essenciais do Seu Site/App</h2>
                 <ul id="preview-funcionalidades-display-list">
                     </ul>
+                <p id="preview-outras-funcionalidades-display" style="font-size: 1.05em; color: #666; margin-top: 15px;"></p>
                 <p id="preview-objetivo-principal-display" style="font-style: italic; margin-top: 20px;">
                     Nosso principal objetivo é [Objetivo Principal do Site/App].
                 </p>
@@ -1079,7 +1098,7 @@
                 </div>
             </section>
             <footer class="preview-footer fade-in">
-                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [Seu Serviço Web/Sua Marca]. <br>Isso é só o começo!</p>
+                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [SEU NOME / MARCA AQUI]. <br>Isso é só o começo!</p>
             </footer>
         </div>
 
@@ -1091,7 +1110,7 @@
                 para o seu negócio!
             </p>
             <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
-                Quero o Site Completo e Profissional! Fale com [Seu Nome/Sua Marca]!
+                Quero o Site Completo e Profissional! Fale com [SEU NOME / MARCA AQUI]!
             </a>
             <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
             <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
@@ -1180,8 +1199,11 @@
             "Área de Membros / Login": {
                 icon: "fa-solid fa-user-lock",
                 description: "Ofereça conteúdo exclusivo, serviços personalizados ou uma comunidade privada para seus usuários cadastrados, construindo fidelidade à marca e um ambiente de valor agregado."
+            },
+            "Outras Funcionalidades": { // Conteúdo para o item de 'outras funcionalidades' digitadas
+                icon: "fa-solid fa-plus-circle",
+                description: "Funcionalidades adicionais e específicas que podem ser desenvolvidas sob medida para atender às necessidades exclusivas do seu negócio, garantindo uma solução completa."
             }
-            // Você pode adicionar mais descrições aqui conforme adicionar mais checkboxes
         };
 
 
@@ -1198,7 +1220,7 @@
 
             const inputs = document.querySelectorAll(
                 '#section-info input, #section-info textarea, ' +
-                '#section-content input:not([type="checkbox"]), #section-content textarea, ' +
+                '#section-content input:not([type="checkbox"]), #section-content textarea, ' + // Exclui checkboxes
                 '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
                 '#section-audience input, #section-audience textarea, ' +
                 '#section-contact input'
@@ -1262,25 +1284,41 @@
                 name: cb.value,
                 iconClass: cb.dataset.icon // Pega a classe do ícone do atributo data-icon
             }));
+            const outrasFuncionalidadesText = document.getElementById('outras_funcionalidades').value.trim();
+
             const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
             ulFuncionalidadesDisplay.innerHTML = '';
+            
+            // Adiciona funcionalidades selecionadas
             if (selectedFeatures.length > 0) {
                 selectedFeatures.forEach(feature => {
                     const li = document.createElement('li');
                     li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
-                    // Adiciona o evento de clique para abrir o modal
                     li.onclick = () => openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
                     ulFuncionalidadesDisplay.appendChild(li);
                 });
             } else {
-                // Conteúdo padrão se nenhuma funcionalidade for selecionada
-                ulFuncionalidadesDisplay.innerHTML = `
+                 // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
+                 ulFuncionalidadesDisplay.innerHTML = `
                     <li onclick="openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
                     <li onclick="openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
                     <li onclick="openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
                     <li onclick="openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
                 `;
             }
+
+            // Adiciona 'Outras Funcionalidades' se preenchido
+            const previewOutrasFunc = document.getElementById('preview-outras-funcionalidades-display');
+            if (outrasFuncionalidadesText) {
+                 const liOutras = document.createElement('li');
+                 liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
+                 liOutras.onclick = () => openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
+                 ulFuncionalidadesDisplay.appendChild(liOutras);
+                 previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
+            } else {
+                previewOutrasFunc.style.display = 'none'; // Sempre esconde se não tiver texto, pois agora a lista é a principal
+            }
+
             document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
             
             // Novas seções de conteúdo - PÚBLICO E MENSAGEM
@@ -1433,7 +1471,7 @@
 
             await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
 
-            formSections.forEach(section => section.style.display = 'none');
+            formSections.forEach(section => section.style.display = 'none';
             const websitePreview = document.getElementById('website-preview');
             websitePreview.style.display = 'flex';
             websitePreview.classList.add('show');
@@ -1493,6 +1531,17 @@
                 loadingOverlay.classList.remove('show');
             }
         }
+
+        // Funções para controle do modal de funcionalidade
+        window.openFeatureDetails = (title, description, iconClass) => {
+            document.getElementById('modal-feature-title').innerHTML = `<i class="${iconClass}"></i> ${title}`;
+            document.getElementById('modal-feature-description').textContent = description;
+            document.getElementById('feature-modal-overlay').classList.add('active');
+        };
+
+        window.closeFeatureDetails = () => {
+            document.getElementById('feature-modal-overlay').classList.remove('active');
+        };
 
         // Função para abrir a prévia em tela cheia
         window.openFullscreenPreview = () => {
