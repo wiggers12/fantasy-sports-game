@@ -3,327 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Prévia de Site - Valentim Web</title>
+    <title>Sua Prévia de Site Profissional - Valentim Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Estilos CSS embutidos */
+        /* Variáveis CSS para cores dinâmicas */
+        :root {
+            --primary-color: #007bff; /* Azul vibrante */
+            --secondary-color: #343a40; /* Cinza escuro */
+            --accent-color: #ffc107; /* Amarelo para detalhes */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --dark-bg: #e9ecef;
+            --font-montserrat: 'Montserrat', sans-serif;
+            --font-open-sans: 'Open Sans', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: var(--font-open-sans);
             line-height: 1.6;
-            padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); /* Gradiente sutil */
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
+            overflow-x: hidden; /* Evita scroll horizontal indesejado */
         }
 
         .container {
-            max-width: 900px;
-            width: 100%;
-            margin: 30px auto;
+            max-width: 1000px; /* Maior para melhor visualização */
+            width: 95%;
+            margin: 40px auto;
             background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Sombra mais forte */
+            animation: fadeIn 0.8s ease-out; /* Animação de entrada */
         }
 
-        h1, h2 {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: var(--font-montserrat);
             text-align: center;
-            color: #0056b3;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 2.8em; /* Maior */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            font-family: var(--font-montserrat);
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 600; /* Mais negrito */
+            color: #555;
         }
 
         input[type="text"], input[type="email"], input[type="url"], textarea {
             width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px; /* Maior */
+            margin-bottom: 20px;
+            border: 1px solid #c9d0da; /* Borda mais suave */
+            border-radius: 6px;
             box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+            outline: none;
         }
 
         textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px; /* Maior */
         }
 
         button {
-            padding: 10px 15px;
-            background-color: #007bff;
+            padding: 12px 25px; /* Maior e mais espaçoso */
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px; /* Mais arredondado */
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 15px;
         }
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px); /* Efeito "levitar" */
         }
         button + button {
-            margin-left: 10px;
+            margin-left: 15px;
         }
 
         .form-section {
             display: none;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            background-color: #fdfdfd;
+            padding: 25px;
+            border: 1px solid #e0e6ed;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            background-color: var(--light-bg);
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* Sombra interna sutil */
         }
         .form-section.active {
             display: block;
         }
 
-        .color-options {
+        .color-options, .layout-options {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
             justify-content: center;
+            flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
         }
-        .color-box {
-            width: 50px;
-            height: 50px;
+        .color-box, .layout-box {
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            border: 2px solid #ccc;
+            border: 3px solid #ccc;
             cursor: pointer;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            text-align: center;
+            color: #555;
+            flex-direction: column;
         }
-        .color-box.selected {
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+        .layout-box {
+            border-radius: 8px; /* Quadrado */
+            width: 120px;
+            height: 80px;
+            font-size: 0.9em;
+            font-weight: 600;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            border-color: #ddd;
         }
-        .color1 { background-color: #007bff; } /* Primary */
-        .color2 { background-color: #28a745; } /* Primary */
-        .color3 { background-color: #dc3545; } /* Primary */
+        .color-box.selected, .layout-box.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
+            transform: scale(1.05);
+        }
+        .color1 { background-color: #007bff; }
+        .color2 { background-color: #28a745; }
+        .color3 { background-color: #dc3545; }
+        .color4 { background-color: #6f42c1; } /* Roxo */
+        .color5 { background-color: #fd7e14; } /* Laranja */
+        .layout-box span { margin-top: 5px; }
 
         /* Estilos da Prévia do Site */
         .website-preview {
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
             overflow: hidden;
-            margin-top: 30px;
+            margin-top: 40px;
             background-color: #fff;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-            min-height: 400px; /* Garante altura mínima para a prévia */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
             display: flex;
             flex-direction: column;
+            opacity: 0; /* Começa invisível */
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .website-preview.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .preview-header {
-            background-color: var(--primary-color, #007bff); /* Fallback */
+            background-color: var(--primary-color);
             color: white;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
+            font-family: var(--font-montserrat);
         }
         .preview-header h1 {
             margin: 0;
             color: white;
-            font-size: 2em;
+            font-size: 2.5em;
         }
         .preview-header p {
-            margin: 5px 0 10px;
-            font-size: 1.1em;
+            margin: 8px 0 15px;
+            font-size: 1.2em;
             opacity: 0.9;
         }
         .preview-header nav a {
             color: white;
-            margin: 0 10px;
+            margin: 0 12px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 1.05em;
+            transition: opacity 0.3s ease;
         }
+        .preview-header nav a:hover { opacity: 0.7; }
 
         .preview-section {
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
+            font-family: var(--font-open-sans);
         }
         .preview-section:nth-child(odd) {
-            background-color: #f8f8f8;
+            background-color: var(--light-bg);
         }
         .preview-section h2 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--primary-color); /* Títulos de seção com cor primária */
+        }
+        .preview-section p {
+            max-width: 700px;
+            margin: 0 auto 20px auto;
         }
         .preview-section ul {
             list-style: none;
             padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
         .preview-section ul li {
-            margin-bottom: 8px;
-            font-size: 1.1em;
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px 20px;
+            flex: 1 1 calc(33% - 30px); /* 3 itens por linha */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 1.05em;
+            font-weight: 500;
+            min-width: 200px;
+        }
+
+        .preview-contact .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+        .preview-contact .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .preview-contact .contact-item a:hover {
+            color: #0056b3;
+        }
+        .preview-contact .icon {
+            margin-right: 10px;
+            font-size: 1.3em;
+            color: var(--accent-color); /* Ícones com cor de destaque */
         }
 
         .preview-footer {
-            background-color: var(--secondary-color, #333); /* Fallback */
+            background-color: var(--secondary-color);
             color: white;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
-            font-size: 0.9em;
-            margin-top: auto; /* Empurra o footer para baixo */
+            font-size: 0.95em;
+            margin-top: auto;
         }
 
-        /* Botão do WhatsApp */
+        /* Botão do WhatsApp CTA Final */
         .whatsapp-button {
             display: inline-block;
             background-color: #25D366; /* Cor do WhatsApp */
             color: white;
-            padding: 12px 25px;
+            padding: 15px 35px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1em;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            font-size: 1.2em;
+            margin-top: 30px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,255,0,0.2);
         }
         .whatsapp-button:hover {
             background-color: #1DA851;
+            transform: translateY(-3px);
         }
 
-        /* Variáveis CSS para cores dinâmicas */
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
+        /* Indicador de carregamento */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 123, 255, 0.1);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Crie a Prévia do Seu Site em Minutos!</h1>
-        <p>Preencha as informações e veja seu negócio ganhar forma na web. É rápido e fácil!</p>
+        <h1>Sua Presença Online Começa Aqui! ✨</h1>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
+            Crie uma **prévia incrível** do seu futuro site em poucos passos. Descubra o impacto de um design profissional para o seu negócio em Porto Alegre!
+        </p>
 
         <div class="form-section active" id="section-info">
-            <h2>1. Informações da Empresa</h2>
-            <label for="nome_empresa">Nome da Empresa:</label>
-            <input type="text" id="nome_empresa" placeholder="Sua Empresa Ltda." onkeyup="updatePreview()">
+            <h2>1. Informações Essenciais do Seu Negócio</h2>
+            <label for="nome_empresa">Nome da Sua Empresa:</label>
+            <input type="text" id="nome_empresa" placeholder="Ex: Padaria Doce Sabor" required onkeyup="updatePreview()">
 
-            <label for="slogan">Slogan:</label>
-            <input type="text" id="slogan" placeholder="Seu sucesso online, nossa missão" onkeyup="updatePreview()">
+            <label for="slogan">Slogan Memorável (opcional):</label>
+            <input type="text" id="slogan" placeholder="Ex: Onde cada pão é uma arte" onkeyup="updatePreview()">
 
-            <label for="descricao">Sobre Nós:</label>
-            <textarea id="descricao" placeholder="Uma breve descrição da sua empresa..." onkeyup="updatePreview()"></textarea>
-            <button onclick="nextSection('section-design')">Próximo</button>
+            <label for="descricao">Conte-nos sobre sua Empresa (2-3 frases):</label>
+            <textarea id="descricao" placeholder="Ex: Somos uma padaria artesanal com foco em produtos frescos e de qualidade, servindo a comunidade de Porto Alegre desde 2005." required onkeyup="updatePreview()"></textarea>
+            <button onclick="nextSection('section-design')">Próximo Passo</button>
         </div>
 
         <div class="form-section" id="section-design">
-            <h2>2. Escolha o Estilo</h2>
+            <h2>2. Escolha o Estilo e a Personalidade do Seu Site</h2>
             <label>Paleta de Cores:</label>
             <div class="color-options">
-                <div class="color-box color1" data-primary="#007bff" data-secondary="#6c757d" onclick="selectColors(this, '#007bff', '#6c757d')"></div>
-                <div class="color-box color2" data-primary="#28a745" data-secondary="#ffc107" onclick="selectColors(this, '#28a745', '#ffc107')"></div>
-                <div class="color-box color3" data-primary="#dc3545" data-secondary="#00bcd4" onclick="selectColors(this, '#dc3545', '#00bcd4')"></div>
+                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" onclick="selectColors(this, '#007bff', '#343a40', '#ffc107')"></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" onclick="selectColors(this, '#28a745', '#34495e', '#f39c12')"></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" onclick="selectColors(this, '#dc3545', '#364f6b', '#fdcb6e')"></div>
+                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" onclick="selectColors(this, '#6f42c1', '#2c3e50', '#bdc3c7')"></div>
+                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" onclick="selectColors(this, '#fd7e14', '#2d3436', '#ffeaa7')"></div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;">*As cores da prévia serão ajustadas automaticamente.</p>
+
+            <label style="margin-top: 25px;">Estilo de Layout:</label>
+            <div class="layout-options">
+                <div class="layout-box selected" data-layout="modern" onclick="selectLayout(this, 'modern')">
+                    Moderno<span>(Linhas Retas)</span>
                 </div>
-            <p>Selecione uma paleta para ver a prévia.</p>
+                <div class="layout-box" data-layout="classic" onclick="selectLayout(this, 'classic')">
+                    Clássico<span>(Elegante)</span>
+                </div>
+                <div class="layout-box" data-layout="creative" onclick="selectLayout(this, 'creative')">
+                    Criativo<span>(Único)</span>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;">*Ajusta o estilo geral da prévia.</p>
+
             <button onclick="prevSection('section-info')">Anterior</button>
-            <button onclick="nextSection('section-content')">Próximo</button>
+            <button onclick="nextSection('section-content')">Próximo Passo</button>
         </div>
 
         <div class="form-section" id="section-content">
-            <h2>3. Seções do Site</h2>
-            <label for="titulo_servicos">Título da Seção de Serviços:</label>
-            <input type="text" id="titulo_servicos" value="Nossos Serviços" onkeyup="updatePreview()">
+            <h2>3. Conteúdo Principal do Seu Site</h2>
+            <label for="titulo_servicos">Título da Seção de Serviços/Produtos:</label>
+            <input type="text" id="titulo_servicos" value="Nossos Produtos e Serviços" onkeyup="updatePreview()">
 
-            <label for="servicos_lista">Lista de Serviços (um por linha):</label>
-            <textarea id="servicos_lista" placeholder="Serviço 1&#10;Serviço 2&#10;Serviço 3" onkeyup="updatePreview()"></textarea>
+            <label for="servicos_lista">Seus Principais Serviços/Produtos (um por linha):</label>
+            <textarea id="servicos_lista" placeholder="Serviço de Consultoria&#10;Desenvolvimento de E-commerce&#10;Marketing Digital&#10;Criação de Conteúdo" onkeyup="updatePreview()"></textarea>
 
             <button onclick="prevSection('section-design')">Anterior</button>
-            <button onclick="nextSection('section-contact')">Próximo</button>
+            <button onclick="nextSection('section-contact')">Próximo Passo</button>
         </div>
 
         <div class="form-section" id="section-contact">
-            <h2>4. Contato</h2>
-            <label for="contato_email">Seu Email:</label>
-            <input type="email" id="contato_email" placeholder="contato@empresa.com" onkeyup="updatePreview()">
-            <label for="contato_telefone">Telefone/WhatsApp:</label>
-            <input type="text" id="contato_telefone" placeholder="(XX) XXXXX-XXXX" onkeyup="updatePreview()">
-            <label for="link_redes">Link Rede Social:</label>
+            <h2>4. Detalhes de Contato</h2>
+            <label for="contato_email">Seu Email de Contato:</label>
+            <input type="email" id="contato_email" placeholder="contato@suaempresa.com" required onkeyup="updatePreview()">
+            <label for="contato_telefone">Seu Telefone/WhatsApp (com DDD):</label>
+            <input type="text" id="contato_telefone" placeholder="(51) 9XXXX-XXXX" required onkeyup="updatePreview()">
+            <label for="link_redes">Link para uma Rede Social (Instagram/Facebook):</label>
             <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
 
             <button onclick="prevSection('section-content')">Anterior</button>
-            <button onclick="generateFinalPreview()">Ver Minha Prévia!</button>
+            <button onclick="generateFinalPreview()">Ver Minha Prévia Incrível!</button>
         </div>
 
-        <hr>
+        <hr style="margin: 40px auto; border: 0; border-top: 1px dashed #ccc; width: 80%;">
 
-        <h2>Sua Prévia Rápida do Site:</h2>
+        <h2>Sua Prévia de Site - Descubra o Potencial!</h2>
         <div id="website-preview" class="website-preview">
             <header class="preview-header">
-                <h1 id="preview-empresa">Nome da Sua Empresa</h1>
-                <p id="preview-slogan">Seu Slogan Incrível Aqui</p>
-                <nav><a href="#">Início</a> <a href="#">Serviços</a> <a href="#">Contato</a></nav>
+                <h1 id="preview-empresa">Sua Empresa Online</h1>
+                <p id="preview-slogan">Transformando Ideias em Resultados</p>
+                <nav>
+                    <a href="#">Início</a>
+                    <a href="#">Serviços</a>
+                    <a href="#">Contato</a>
+                </nav>
             </header>
             <section class="preview-section preview-about">
-                <h2 style="color: var(--primary-color);">Sobre Nós</h2>
-                <p id="preview-descricao">A descrição da sua empresa aparecerá aqui. Conte um pouco sobre o que você faz e seus valores.</p>
+                <img src="https://via.placeholder.com/150x150/f0f0f0/cccccc?text=LOGO" alt="Logo Placeholder" style="border-radius: 50%; margin-bottom: 20px;">
+                <h2 id="preview-titulo-sobre">Sobre Nós</h2>
+                <p id="preview-descricao">Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].</p>
             </section>
             <section class="preview-section preview-services">
-                <h2 style="color: var(--primary-color);" id="preview-titulo-servicos">Nossos Serviços</h2>
+                <h2 id="preview-titulo-servicos">Nossos Serviços e Soluções</h2>
                 <ul id="preview-servicos-lista">
-                    <li>Serviço 1</li>
-                    <li>Serviço 2</li>
-                    <li>Serviço 3</li>
+                    <li>Desenvolvimento Web Personalizado</li>
+                    <li>Otimização para SEO</li>
+                    <li>Marketing de Conteúdo</li>
                 </ul>
+                <img src="https://via.placeholder.com/600x250/e0e0e0/bbbbbb?text=IMAGEM+SERVICOS" alt="Servicos Placeholder" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px;">
             </section>
             <section class="preview-section preview-contact">
-                <h2 style="color: var(--primary-color);">Entre em Contato</h2>
-                <p id="preview-contato-email">Email: seuemail@empresa.com</p>
-                <p id="preview-contato-telefone">Telefone: (XX) XXXXX-XXXX</p>
-                <p id="preview-redes"><a href="#" target="_blank" style="color: var(--primary-color);">Nossas Redes Sociais</a></p>
+                <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
+                <div class="contact-item">
+                    <span class="icon">📧</span> <p id="preview-contato-email">contato@suaempresa.com</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📞</span> <p id="preview-contato-telefone">(51) XXXXX-XXXX</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span> <p id="preview-redes"><a href="#" target="_blank">Nossas Redes Sociais</a></p>
+                </div>
             </section>
             <footer class="preview-footer">
-                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por Valentim Web.</p>
+                <p>&copy; <span id="current-year"></span> Sua Empresa. Prévia criada por Valentim Web. <br>Isso é só o começo!</p>
             </footer>
         </div>
 
-        <div id="cta-final" style="text-align: center; margin-top: 30px; display: none;">
-            <h3>Gostou do que viu? Isso é só o começo!</h3>
-            <p>Imagine seu site completo, com fotos profissionais, textos otimizados, formulários funcionando e atraindo clientes reais.</p>
-            <a href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20mais!" target="_blank" class="whatsapp-button">Quero o Site Completo! Fale Conosco no WhatsApp!</a>
-            <p style="margin-top: 15px;">Ou ligue: (XX) XXXX-XXXX</p>
+        <div id="cta-final" style="text-align: center; margin-top: 40px; display: none;">
+            <h3>Impressionado? Isso é apenas uma FAÍSCA do potencial!</h3>
+            <p style="font-size: 1.2em; max-width: 700px; margin: 20px auto 0 auto; color: #555;">
+                Sua prévia mostra o caminho. Imagine um site profissional completo, com design exclusivo,
+                funcionalidades avançadas, otimizado para o Google e pronto para atrair **clientes reais e qualificados**
+                para o seu negócio em Porto Alegre.
+            </p>
+            <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
+                Quero o Site Completo e Profissional! Fale com Valentim!
+            </a>
+            <p style="margin-top: 20px; font-size: 1.1em; color: #666;">Prefere ligar? (51) XXXX-XXXX</p>
         </div>
     </div>
 
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script>
-        // Código JavaScript embutido
+        // ** SUAS CREDENCIAIS DO FIREBASE AQUI **
+        const firebaseConfig = {
+          apiKey: "SUA_API_KEY", // <-- SUBSTITUA
+          authDomain: "SEU_AUTH_DOMAIN", // <-- SUBSTITUA
+          projectId: "SEU_PROJECT_ID", // <-- SUBSTITUA
+          storageBucket: "SEU_STORAGE_BUCKET", // <-- SUBSTITUA
+          messagingSenderId: "SEU_MESSAGING_SENDER_ID", // <-- SUBSTITUA
+          appId: "SEU_APP_ID" // <-- SUBSTITUA
+        };
+
+        // Inicialize o Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Obtenha uma referência para o serviço Firestore
+        const db = firebase.firestore();
+
         let currentPrimaryColor = '#007bff';
-        let currentSecondaryColor = '#6c757d';
+        let currentSecondaryColor = '#343a40';
+        let currentAccentColor = '#ffc107';
+        let currentLayout = 'modern'; // Default layout
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Atualiza o ano no footer
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // Event listeners para atualização em tempo real
+            // Set default colors and layout
+            document.documentElement.style.setProperty('--primary-color', currentPrimaryColor);
+            document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
+            document.documentElement.style.setProperty('--accent-color', currentAccentColor);
+
+            const defaultColorBox = document.querySelector('.color-box.color1');
+            if (defaultColorBox) {
+                defaultColorBox.classList.add('selected');
+            }
+            const defaultLayoutBox = document.querySelector('.layout-box[data-layout="modern"]');
+            if (defaultLayoutBox) {
+                defaultLayoutBox.classList.add('selected');
+            }
+
             const inputs = document.querySelectorAll('#section-info input, #section-info textarea, #section-content input, #section-content textarea, #section-contact input');
             inputs.forEach(input => {
                 input.addEventListener('keyup', updatePreview);
             });
 
-            // Seleciona a primeira opção de cor por padrão
-            const defaultColorBox = document.querySelector('.color-box.color1');
-            if (defaultColorBox) {
-                selectColors(defaultColorBox, defaultColorBox.dataset.primary, defaultColorBox.dataset.secondary);
-            }
+            // Adiciona o nome da empresa ao botão final do WhatsApp para personalização
+            const whatsappButton = document.getElementById('whatsapp-final-button');
+            document.getElementById('nome_empresa').addEventListener('keyup', () => {
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+            });
+            // Inicializa com o placeholder
+            whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`;
         });
 
         function updatePreview() {
-            // Atualiza informações básicas
-            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Nome da Sua Empresa';
-            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Seu Slogan Incrível Aqui';
-            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'A descrição da sua empresa aparecerá aqui. Conte um pouco sobre o que você faz e seus valores.';
+            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
+            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
+            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
+            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Serviços e Soluções';
 
-            // Atualiza serviços
-            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Serviços';
             const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
             const ulServicos = document.getElementById('preview-servicos-lista');
-            ulServicos.innerHTML = ''; // Limpa a lista existente
+            ulServicos.innerHTML = '';
             if (servicosLista.length > 0) {
                 servicosLista.forEach(servico => {
                     const li = document.createElement('li');
@@ -331,13 +554,11 @@
                     ulServicos.appendChild(li);
                 });
             } else {
-                ulServicos.innerHTML = '<li>Serviço 1</li><li>Serviço 2</li><li>Serviço 3</li>'; // Conteúdo padrão
+                ulServicos.innerHTML = '<li>Desenvolvimento Web Personalizado</li><li>Otimização para SEO</li><li>Marketing de Conteúdo</li>';
             }
 
-
-            // Atualiza contato
-            document.getElementById('preview-contato-email').textContent = 'Email: ' + (document.getElementById('contato_email').value || 'seuemail@empresa.com');
-            document.getElementById('preview-contato-telefone').textContent = 'Telefone: ' + (document.getElementById('contato_telefone').value || '(XX) XXXXX-XXXX');
+            document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'seuemail@empresa.com');
+            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(51) XXXXX-XXXX');
             const linkRedes = document.getElementById('link_redes').value;
             const previewRedesLink = document.querySelector('#preview-redes a');
             if (linkRedes) {
@@ -345,28 +566,39 @@
                 previewRedesLink.textContent = 'Nossas Redes Sociais';
             } else {
                 previewRedesLink.href = '#';
-                previewRedesLink.textContent = 'Nossas Redes Sociais'; // Texto padrão
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
             }
         }
 
-        function selectColors(element, primary, secondary) {
-            // Remove a classe 'selected' de todos os boxes
+        function selectColors(element, primary, secondary, accent) {
             document.querySelectorAll('.color-box').forEach(box => {
                 box.classList.remove('selected');
             });
-            // Adiciona a classe 'selected' ao box clicado
             element.classList.add('selected');
 
-            // Atualiza as variáveis CSS
             document.documentElement.style.setProperty('--primary-color', primary);
             document.documentElement.style.setProperty('--secondary-color', secondary);
+            document.documentElement.style.setProperty('--accent-color', accent);
             currentPrimaryColor = primary;
             currentSecondaryColor = secondary;
-            // Opcional: Chama updatePreview() se a mudança de cor não afetar apenas o CSS
-            // updatePreview();
+            currentAccentColor = accent;
+            updatePreview(); // Re-render content if needed
         }
 
-        // Funções para navegação entre as seções do formulário
+        function selectLayout(element, layout) {
+            document.querySelectorAll('.layout-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentLayout = layout;
+            // Aqui você poderia aplicar classes CSS diferentes ao website-preview
+            // Ou mudar fontes/espaçamentos baseados no layout selecionado
+            const preview = document.getElementById('website-preview');
+            preview.className = 'website-preview'; // Reset classes
+            preview.classList.add(`layout-${layout}`); // Add layout specific class
+            updatePreview();
+        }
+
         let currentSectionIndex = 0;
         const formSections = document.querySelectorAll('.form-section');
 
@@ -384,21 +616,19 @@
         function nextSection(nextSectionId) {
             const currentSection = formSections[currentSectionIndex];
             const nextSection = document.getElementById(nextSectionId);
-
-            // Validação básica antes de avançar
             const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
             let allFilled = true;
             inputs.forEach(input => {
-                if (!input.value.trim()) {
+                if (input.hasAttribute('required') && !input.value.trim()) {
                     allFilled = false;
-                    input.style.borderColor = 'red'; // Feedback visual
+                    input.style.borderColor = 'red';
                 } else {
                     input.style.borderColor = '';
                 }
             });
 
             if (!allFilled) {
-                alert('Por favor, preencha todos os campos obrigatórios nesta seção.');
+                alert('Por favor, preencha todos os campos obrigatórios nesta seção para continuar.');
                 return;
             }
 
@@ -421,46 +651,68 @@
             }
         }
 
-        function generateFinalPreview() {
-            // Esconde o formulário e mostra a prévia e a CTA final
+        async function generateFinalPreview() {
+            const finalSection = document.getElementById('section-contact');
+            const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (!allFilled) {
+                alert('Por favor, preencha todos os campos obrigatórios na seção de contato para gerar a prévia.');
+                return;
+            }
+
+            // Mostra o overlay de carregamento
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.add('show');
+
+            // Simula um pequeno atraso para a animação
+            await new Promise(resolve => setTimeout(resolve, 800));
+
             formSections.forEach(section => section.style.display = 'none');
-            document.getElementById('website-preview').style.display = 'block';
+            const websitePreview = document.getElementById('website-preview');
+            websitePreview.style.display = 'flex'; // Certifica-se que está visível
+            websitePreview.classList.add('show'); // Ativa animação
             document.getElementById('cta-final').style.display = 'block';
 
-            // Rola para a prévia
-            document.getElementById('website-preview').scrollIntoView({ behavior: 'smooth' });
+            websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            // Opcional: Aqui você pode coletar os dados para um back-end se tiver um
-            // para salvar as escolhas do cliente e o link da prévia para seu acompanhamento.
             const finalData = {
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 nome_empresa: document.getElementById('nome_empresa').value,
                 slogan: document.getElementById('slogan').value,
                 descricao: document.getElementById('descricao').value,
                 primary_color: currentPrimaryColor,
                 secondary_color: currentSecondaryColor,
+                accent_color: currentAccentColor,
+                layout_style: currentLayout, // Salva o layout escolhido
                 titulo_servicos: document.getElementById('titulo_servicos').value,
                 servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
                 contato_email: document.getElementById('contato_email').value,
                 contato_telefone: document.getElementById('contato_telefone').value,
                 link_redes: document.getElementById('link_redes').value,
             };
-            console.log("Dados finais para envio:", finalData); // Apenas para debug no console
-            // Exemplo de como enviar para um back-end (você precisaria configurar um endpoint)
-            /*
-            fetch('/api/save_preview', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(finalData)
-            })
-            .then(response => response.json())
-            .then(data => console.log('Dados salvos:', data))
-            .catch(error => console.error('Erro ao salvar:', error));
-            */
+
+            try {
+                const docRef = await db.collection("previews").add(finalData);
+                console.log("Documento salvo com ID: ", docRef.id);
+                // Você pode exibir uma mensagem de sucesso no CTA final, se quiser.
+            } catch (e) {
+                console.error("Erro ao adicionar documento: ", e);
+                alert("Ocorreu um erro ao salvar sua prévia. Mas não se preocupe, ela já está aqui para você ver!");
+            } finally {
+                // Esconde o overlay de carregamento
+                loadingOverlay.classList.remove('show');
+            }
         }
 
-        // Inicia mostrando a primeira seção
         showSection(0);
     </script>
 </body>
