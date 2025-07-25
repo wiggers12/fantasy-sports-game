@@ -49,6 +49,7 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Sombra mais forte */
             animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+            display: none; /* Escondido por padrão, será mostrado pelo JS após a splash screen */
         }
 
         @keyframes fadeIn {
@@ -141,9 +142,9 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 10px; /* Mais arredondado */
+            border-radius: 10px; /* Más arredondado */
             font-size: 1.15em;
-            font-weight: 700; /* Mais negrito */
+            font-weight: 700; /* Más negrito */
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow na transição */
             margin-top: 20px;
@@ -155,8 +156,8 @@
         }
         button:hover {
             background-color: #0056b3;
-            transform: translateY(-3px); /* Efeito "levitar" mais pronunciado */
-            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4); /* Sombra mais forte no hover */
+            transform: translateY(-3px); /* Efeito "levitar" más pronunciado */
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4); /* Sombra más forte no hover */
         }
         button:active {
             transform: translateY(-1px); /* Leve "pressionada" ao clicar */
@@ -170,10 +171,10 @@
             display: none;
             padding: 30px; /* Aumentei o padding interno */
             border: 1px solid #e0e6ed;
-            border-radius: 12px; /* Mais arredondado */
+            border-radius: 12px; /* Más arredondado */
             margin-bottom: 35px;
             background-color: var(--light-bg);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Sombra mais sutil */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Sombra más sutil */
         }
         .form-section.active {
             display: block;
@@ -207,7 +208,7 @@
             width: 80px; /* Aumentei o tamanho */
             height: 80px;
             border-radius: 50%;
-            border: 4px solid #ccc; /* Borda mais grossa */
+            border: 4px solid #ccc; /* Borda más grossa */
             cursor: pointer;
             transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow */
             display: flex;
@@ -221,7 +222,7 @@
             position: relative; /* Para o ícone de check */
         }
         .layout-box {
-            border-radius: 10px; /* Quadrado mais arredondado */
+            border-radius: 10px; /* Quadrado más arredondado */
             width: 140px; /* Aumentei a largura */
             height: 90px; /* Aumentei a altura */
             font-size: 1em; /* Aumentei a fonte */
@@ -232,7 +233,7 @@
         }
         .color-box.selected, .layout-box.selected {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra mais evidente na seleção */
+            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra más evidente na seleção */
             transform: scale(1.1); /* Efeito de destaque maior */
         }
         .color-box i {
@@ -492,12 +493,36 @@
             font-weight: 500;
             min-width: 220px;
             text-align: left;
+            cursor: pointer; /* Torna clicável */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .preview-section ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
         .preview-section ul li i {
             margin-right: 10px;
             color: var(--accent-color);
             font-size: 1.2em;
         }
+
+        /* Estilos específicos para a nova seção de público/mensagem */
+        .preview-section.preview-audience-display p {
+            font-size: 1.25em; /* Texto maior */
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        .preview-section.preview-audience-display p#preview-mensagem-central-display {
+            font-size: 1.4em; /* Mensagem central ainda maior */
+            color: var(--primary-color);
+            font-style: italic;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
 
         .preview-contact {
             text-align: left;
@@ -691,6 +716,84 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Modal para detalhes de funcionalidade */
+        .feature-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2500; /* Acima da splash screen */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .feature-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .feature-modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .feature-modal-overlay.active .feature-modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .feature-modal-content h3 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .feature-modal-content h3 i {
+            font-size: 1.2em;
+            color: var(--accent-color);
+        }
+
+        .feature-modal-content p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .feature-modal-content button {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: none;
+            margin-top: 0; /* Remover margem extra */
+        }
+        .feature-modal-content button:hover {
+            background-color: #222;
+            transform: none; /* Remover translateY */
+            box-shadow: none;
+        }
+
 
         /* Responsividade para telas menores */
         @media (max-width: 768px) {
@@ -760,6 +863,16 @@
                 flex: 1 1 100%; /* Uma coluna em mobile */
                 max-width: unset;
             }
+            .feature-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            .feature-modal-content h3 {
+                font-size: 1.5em;
+            }
+            .feature-modal-content p {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
@@ -794,32 +907,22 @@
             <h2><i class="fa-solid fa-palette"></i> 2. Escolha o Estilo e a Personalidade do Seu Site</h2>
             <label><i class="fa-solid fa-droplet"></i> Paleta de Cores:</label>
             <div class="color-options">
-                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" onclick="selectColors(this, '#007bff', '#343a40', '#ffc107')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" onclick="selectColors(this, '#28a745', '#34495e', '#f39c12')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" onclick="selectColors(this, '#dc3545', '#364f6b', '#fdcb6e')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" onclick="selectColors(this, '#6f42c1', '#2c3e50', '#bdc3c7')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" onclick="selectColors(this, '#fd7e14', '#2d3436', '#ffeaa7')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" data-color-index="0"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" data-color-index="1"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" data-color-index="2"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" data-color-index="3"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" data-color-index="4"><i class="fa-solid fa-check"></i></div>
             </div>
             <p style="text-align: center; font-size: 0.9em; color: #666;"><i class="fa-solid fa-info-circle"></i> As cores da prévia serão ajustadas automaticamente.</p>
 
             <label style="margin-top: 25px;"><i class="fa-solid fa-layer-group"></i> Estilo de Layout:</label>
             <div class="layout-options">
-                <div class="layout-box selected" data-layout="modern" onclick="selectLayout(this, 'modern')">
-                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?modern-architecture,geometric'); background-size: cover; background-position: center;"></div>
-                    Moderno<span><i class="fa-solid fa-ruler-combined"></i></span>
-                </div>
-                <div class="layout-box" data-layout="classic" onclick="selectLayout(this, 'classic')">
-                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?classic-building,elegant-design'); background-size: cover; background-position: center;"></div>
-                    Clássico<span><i class="fa-solid fa-chess-knight"></i></span>
-                </div>
-                <div class="layout-box" data-layout="creative" onclick="selectLayout(this, 'creative')">
-                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?abstract-art,colorful-design'); background-size: cover; background-position: center;"></div>
-                    Criativo<span><i class="fa-solid fa-lightbulb"></i></span>
-                </div>
+                <div class="layout-box selected" data-layout="modern" data-layout-index="0"><div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?modern-architecture,geometric'); background-size: cover; background-position: center;"></div>Moderno<span><i class="fa-solid fa-ruler-combined"></i></span></div>
+                <div class="layout-box" data-layout="classic" data-layout-index="1"><div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?classic-building,elegant-design'); background-size: cover; background-position: center;"></div>Clássico<span><i class="fa-solid fa-chess-knight"></i></span></div>
+                <div class="layout-box" data-layout="creative" data-layout-index="2"><div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?abstract-art,colorful-design'); background-size: cover; background-position: center;"></div>Criativo<span><i class="fa-solid fa-lightbulb"></i></span></div>
             </div>
             <p style="text-align: center; font-size: 0.9em; color: #666;"><i class="fa-solid fa-info-circle"></i> Ajusta o estilo geral da prévia.</p>
 
-            <button onclick="prevSection('section-info')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
             <button onclick="nextSection('section-content')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
@@ -957,18 +1060,18 @@
                 <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
             <section class="preview-section preview-features-display fade-in">
-                <h2 id="preview-titulo-funcionalidades">Funcionalidades Essenciais do Seu Site/App</h2>
+                <h2 id="preview-titulo-funcionalidades"><i class="fa-solid fa-gears"></i> Funcionalidades Essenciais do Seu Site/App</h2>
                 <ul id="preview-funcionalidades-display-list">
                     </ul>
                 <p id="preview-objetivo-principal-display" style="font-style: italic; margin-top: 20px;">
-                    Nosso principal objetivo é [Objetivo Principal do Site/App].
+                    <i class="fa-solid fa-bullseye"></i> Nosso principal objetivo é [Objetivo Principal do Site/App].
                 </p>
             </section>
             <section class="preview-section preview-audience-display fade-in">
-                <h2 id="preview-titulo-publico">Para Quem Criamos Soluções</h2>
-                <p id="preview-publico-alvo-display">Nosso público-alvo são [Público-Alvo Principal].</p>
+                <h2 id="preview-titulo-publico"><i class="fa-solid fa-users"></i> Para Quem Criamos Soluções</h2>
+                <p id="preview-publico-alvo-display"><i class="fa-solid fa-user-group"></i> Nosso público-alvo são [Público-Alvo Principal].</p>
                 <p id="preview-mensagem-central-display" style="font-weight: bold; margin-top: 20px;">
-                    A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
+                    <i class="fa-solid fa-comment-dots"></i> A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
                 </p>
                 <img src="https://source.unsplash.com/600x250/?target-audience,marketing-strategy,diverse-people" alt="Público-Alvo" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
             </section>
@@ -985,7 +1088,7 @@
                 </div>
             </section>
             <footer class="preview-footer fade-in">
-                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [Seu Serviço Web/Sua Marca]. <br>Isso é só o começo!</p>
+                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [SEU NOME / MARCA AQUI]. <br>Isso é só o começo!</p>
             </footer>
         </div>
 
@@ -997,7 +1100,7 @@
                 para o seu negócio!
             </p>
             <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
-                Quero o Site Completo e Profissional! Fale com [Seu Nome/Sua Marca]!
+                Quero o Site Completo e Profissional! Fale com [SEU NOME / MARCA AQUI]!
             </a>
             <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
             <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
@@ -1006,6 +1109,14 @@
 
     <div class="loading-overlay" id="loading-overlay">
         <div class="spinner"></div>
+    </div>
+
+    <div class="feature-modal-overlay" id="feature-modal-overlay">
+        <div class="feature-modal-content">
+            <h3 id="modal-feature-title"></h3>
+            <p id="modal-feature-description"></p>
+            <button onclick="closeFeatureDetails()">Entendi</button>
+        </div>
     </div>
 
     <script type="module">
@@ -1037,8 +1148,57 @@
         let currentAccentColor = '#ffc107';
         let currentLayout = 'modern'; // Default layout
 
+        // Conteúdo detalhado das funcionalidades para o modal
+        const featureDescriptions = {
+            "Cadastro de Clientes": {
+                icon: "fa-solid fa-user-plus",
+                description: "Gerencie seus contatos, histórico de interações e preferências, personalizando o atendimento e construindo relacionamentos duradouros e eficientes."
+            },
+            "Agenda / Agendamento Online": {
+                icon: "fa-solid fa-calendar-check",
+                description: "Permita que seus clientes agendem serviços ou reuniões online de forma fácil e automatizada, otimizando seu tempo e evitando conflitos de horários. Inclui lembretes automáticos."
+            },
+            "Catálogo de Produtos / Serviços": {
+                icon: "fa-solid fa-boxes-stacked",
+                description: "Exponha seus produtos ou serviços com fotos de alta qualidade, descrições detalhadas e categorias organizadas, facilitando a navegação e a decisão de compra dos seus clientes."
+            },
+            "Gestão de Produtos / Estoque": {
+                icon: "fa-solid fa-boxes-packing",
+                description: "Mantenha o controle total do seu inventário. Adicione, edite e organize produtos, acompanhe o estoque em tempo real e receba alertas para reposição inteligente."
+            },
+            "Controle Financeiro / Dashboard": {
+                icon: "fa-solid fa-chart-line",
+                description: "Tenha uma visão clara da saúde financeira do seu negócio com gráficos e relatórios intuitivos. Acompanhe vendas, despesas, lucros e métricas essenciais para tomadas de decisão."
+            },
+            "Sistema de Pedidos / Compras": {
+                icon: "fa-solid fa-cart-shopping",
+                description: "Simplifique o processo de compra para seus clientes e de gestão de pedidos para sua equipe, com carrinhos de compra, checkout seguro e acompanhamento de status em tempo real."
+            },
+            "Blog / Notícias": {
+                icon: "fa-solid fa-newspaper",
+                description: "Engaje seu público com conteúdo relevante, atraia novos visitantes através de otimização SEO e posicione sua marca como uma autoridade em seu nicho de mercado, gerando tráfego qualificado."
+            },
+            "Integração com Redes Sociais": {
+                icon: "fa-solid fa-share-nodes",
+                description: "Conecte seu site às suas redes sociais favoritas, amplificando seu alcance, direcionando tráfego qualificado e facilitando o compartilhamento de conteúdo, promovendo sua marca."
+            },
+            "Formulário de Contato Personalizado": {
+                icon: "fa-solid fa-envelope-open-text",
+                description: "Capture informações valiosas de seus visitantes com formulários adaptados às suas necessidades, facilitando o contato e a geração de leads qualificados para seu funil de vendas."
+            },
+            "Área de Membros / Login": {
+                icon: "fa-solid fa-user-lock",
+                description: "Ofereça conteúdo exclusivo, serviços personalizados ou uma comunidade privada para seus usuários cadastrados, construindo fidelidade à marca e um ambiente de valor agregado."
+            },
+            "Outras Funcionalidades": { // Conteúdo para o item de 'outras funcionalidades' digitadas
+                icon: "fa-solid fa-plus-circle",
+                description: "Funcionalidades adicionais e específicas que podem ser desenvolvidas sob medida para atender às necessidades exclusivas do seu negócio, garantindo uma solução completa."
+            }
+        };
+
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializa o estado do checkmark de cores
+            // Inicializa o estado do checkmark de cores para o padrão selecionado
             document.querySelector('.color-box.color1 i').style.display = 'block';
 
             document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -1068,13 +1228,33 @@
                 checkbox.addEventListener('change', updatePreview);
             });
 
+            // CORREÇÃO DA PALETA DE CORES: Anexar event listeners aos color boxes
+            document.querySelectorAll('.color-box').forEach(colorBox => {
+                colorBox.addEventListener('click', function() {
+                    const primary = this.dataset.primary;
+                    const secondary = this.dataset.secondary;
+                    const accent = this.dataset.accent;
+                    console.log('Clicou na cor:', primary); // Log para diagnóstico
+                    selectColors(this, primary, secondary, accent);
+                });
+            });
+
+            // CORREÇÃO DA PALETA DE CORES: Anexar event listeners aos layout boxes
+            document.querySelectorAll('.layout-box').forEach(layoutBox => {
+                layoutBox.addEventListener('click', function() {
+                    const layout = this.dataset.layout;
+                    console.log('Clicou no layout:', layout); // Log para diagnóstico
+                    selectLayout(this, layout);
+                });
+            });
+
 
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
-                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
-            whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20mu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
+            whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20mu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
 
             // Esconde o conteúdo principal e mostra a splash screen
             document.querySelector('.container').style.display = 'none';
@@ -1086,11 +1266,14 @@
                     document.getElementById('splash-screen').style.display = 'none';
                     document.querySelector('.container').style.display = 'block'; // Mostra o conteúdo principal
                 }, 1000); // Tempo da transição de fade-out
-            }, 3000); // Tempo que a splash screen fica visível (3 segundos)
+            }, 3000); // Tempo que a splash screen fica visível (4 segundos)
         });
 
         // Funções para atualização da prévia
-        function updatePreview() {
+        // As funções updatePreview, selectColors, selectLayout, nextSection, prevSection, generateFinalPreview, openFeatureDetails, closeFeatureDetails
+        // PRECISAM SER ATRIBUÍDAS AO OBJETO WINDOW PARA SEREM ACESSÍVEIS PELOS ONCLICK/ONKEYUP DO HTML
+        // Isso foi feito para corrigir o ReferenceError
+        window.updatePreview = function() {
             document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
             document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
             document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
@@ -1114,23 +1297,41 @@
                 name: cb.value,
                 iconClass: cb.dataset.icon // Pega a classe do ícone do atributo data-icon
             }));
+            const outrasFuncionalidadesText = document.getElementById('outras_funcionalidades').value.trim();
+
             const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
             ulFuncionalidadesDisplay.innerHTML = '';
+            
+            // Adiciona funcionalidades selecionadas
             if (selectedFeatures.length > 0) {
                 selectedFeatures.forEach(feature => {
                     const li = document.createElement('li');
                     li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
+                    li.onclick = () => window.openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
                     ulFuncionalidadesDisplay.appendChild(li);
                 });
             } else {
-                // Conteúdo padrão se nenhuma funcionalidade for selecionada
-                ulFuncionalidadesDisplay.innerHTML = `
-                    <li><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
-                    <li><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
-                    <li><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
-                    <li><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                 // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
+                 ulFuncionalidadesDisplay.innerHTML = `
+                    <li onclick="window.openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                    <li onclick="window.openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                    <li onclick="window.openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                    <li onclick="window.openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
                 `;
             }
+
+            // Adiciona 'Outras Funcionalidades' se preenchido
+            const previewOutrasFunc = document.getElementById('preview-outras-funcionalidades-display');
+            if (outrasFuncionalidadesText) {
+                 const liOutras = document.createElement('li');
+                 liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
+                 liOutras.onclick = () => window.openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
+                 ulFuncionalidadesDisplay.appendChild(liOutras);
+                 previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
+            } else {
+                previewOutrasFunc.style.display = 'none'; // Sempre esconde se não tiver texto, pois agora a lista é a principal
+            }
+
             document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
             
             // Novas seções de conteúdo - PÚBLICO E MENSAGEM
@@ -1151,10 +1352,10 @@
                 previewRedesLink.href = '#';
                 previewRedesLink.textContent = 'Nossas Redes Sociais';
             }
-        }
+        };
 
-        // Funções de seleção de cores e layout
-        function selectColors(element, primary, secondary, accent) {
+        window.selectColors = function(element, primary, secondary, accent) {
+            console.log('selectColors executada para:', primary); // Log para diagnóstico
             document.querySelectorAll('.color-box').forEach(box => {
                 box.classList.remove('selected');
             });
@@ -1167,9 +1368,10 @@
             currentSecondaryColor = secondary;
             currentAccentColor = accent;
             updatePreview();
-        }
+        };
 
-        function selectLayout(element, layout) {
+        window.selectLayout = function(element, layout) {
+            console.log('selectLayout executada para:', layout); // Log para diagnóstico
             document.querySelectorAll('.layout-box').forEach(box => {
                 box.classList.remove('selected');
             });
@@ -1194,312 +1396,20 @@
                 root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
             }
             updatePreview();
-        }
-
-        // Funções de navegação do formulário
-        let currentSectionIndex = 0;
-        const formSections = document.querySelectorAll('.form-section');
-
-        function showSection(index) {
-            formSections.forEach((section, i) => {
-                if (i === index) {
-                    section.classList.add('active');
-                } else {
-                    section.classList.remove('active');
-                }
-            });
-            currentSectionIndex = index;
-        }
-
-        window.nextSection = async (nextSectionId) => {
-            const currentSection = formSections[currentSectionIndex];
-            const nextSectionElement = document.getElementById(nextSectionId);
-            const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
-            let allFilled = true;
-
-            inputs.forEach(input => {
-                if (input.hasAttribute('required') && !input.value.trim()) {
-                    allFilled = false;
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            });
-
-            if (!allFilled) {
-                const firstInvalidInput = currentSection.querySelector('input.invalid, textarea.invalid');
-                if (firstInvalidInput) {
-                    firstInvalidInput.focus();
-                }
-                return;
-            }
-
-            if (nextSectionElement) {
-                currentSection.classList.remove('active');
-                nextSectionElement.classList.add('active');
-                const nextIndex = Array.from(formSections).indexOf(nextSectionElement);
-                currentSectionIndex = nextIndex;
-            }
         };
 
-        window.prevSection = (prevSectionId) => {
-            const currentSection = formSections[currentSectionIndex];
-            const prevSectionElement = document.getElementById(prevSectionId);
-            if (prevSectionElement) {
-                currentSection.classList.remove('active');
-                prevSectionElement.classList.add('active');
-                const prevIndex = Array.from(formSections).indexOf(prevSectionElement);
-                currentSectionIndex = prevIndex;
-            }
+        window.openFeatureDetails = function(title, description, iconClass) {
+            console.log('openFeatureDetails executada para:', title); // Log para diagnóstico
+            document.getElementById('modal-feature-title').innerHTML = `<i class="${iconClass}"></i> ${title}`;
+            document.getElementById('modal-feature-description').textContent = description;
+            document.getElementById('feature-modal-overlay').classList.add('active');
         };
 
-        // Função principal para gerar prévia e salvar no Firebase
-        window.generateFinalPreview = async () => {
-            // Validação da última seção antes de gerar a prévia
-            const finalSection = formSections[formSections.length - 1]; // Pega a última seção
-            const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
-            let allFilled = true;
-            inputs.forEach(input => {
-                if (input.hasAttribute('required') && !input.value.trim()) {
-                    allFilled = false;
-                    input.classList.add('invalid');
-                } else {
-                    input.classList.remove('invalid');
-                }
-            });
+        window.closeFeatureDetails = function() {
+            console.log('closeFeatureDetails executada'); // Log para diagnóstico
+            document.getElementById('feature-modal-overlay').classList.remove('active');
+        };
 
-            if (!allFilled) {
-                const firstInvalidInput = finalSection.querySelector('input.invalid, textarea.invalid');
-                if (firstInvalidInput) {
-                    firstInvalidInput.focus();
-                }
-                alert('Por favor, preencha todos os campos obrigatórios na seção de Contato para gerar a prévia.');
-                return;
-            }
-
-            const loadingOverlay = document.getElementById('loading-overlay');
-            loadingOverlay.classList.add('show');
-
-            await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
-
-            formSections.forEach(section => section.style.display = 'none');
-            const websitePreview = document.getElementById('website-preview');
-            websitePreview.style.display = 'flex';
-            websitePreview.classList.add('show');
-
-            // Adiciona a classe 'fade-in' a cada seção da prévia para animar
-            document.querySelectorAll('.preview-header, .preview-section, .preview-footer').forEach(el => {
-                el.classList.add('fade-in');
-            });
-
-            websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            // Coleta funcionalidades selecionadas para o Firebase
-            const selectedFeaturesForFirebase = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => cb.value);
-
-
-            const finalData = {
-                timestamp: serverTimestamp(),
-                nome_empresa: document.getElementById('nome_empresa').value,
-                slogan: document.getElementById('slogan').value,
-                descricao: document.getElementById('descricao').value,
-                primary_color: currentPrimaryColor,
-                secondary_color: currentSecondaryColor,
-                accent_color: currentAccentColor,
-                layout_style: currentLayout,
-                titulo_servicos: document.getElementById('titulo_servicos').value,
-                servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
-                funcionalidades_selecionadas: selectedFeaturesForFirebase, // Salva as funcionalidades selecionadas
-                outras_funcionalidades: document.getElementById('outras_funcionalidades').value, // Outras funcionalidades
-                objetivo_principal: document.getElementById('objetivo_principal').value,
-                publico_alvo: document.getElementById('publico_alvo').value,
-                mensagem_central: document.getElementById('mensagem_central').value,
-                contato_email: document.getElementById('contato_email').value,
-                contato_telefone: document.getElementById('contato_telefone').value,
-                link_redes: document.getElementById('link_redes').value,
-            };
-
-            const feedbackMessage = document.getElementById('feedback-message');
-            const errorMessageDisplay = document.getElementById('error-message-display');
-
-            try {
-                const docRef = await addDoc(collection(db, "previews"), finalData);
-                console.log("Documento salvo com ID: ", docRef.id);
-                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
-                feedbackMessage.style.display = 'block';
-                errorMessageDisplay.style.display = 'none';
-
-                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
-                const whatsappButton = document.getElementById('whatsapp-final-button');
-                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`; // SEUNUMERO <-- SUBSTITUA
-
-            } catch (e) {
-                console.error("Erro ao adicionar documento: ", e);
-                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto para não perder sua prévia!`;
-                errorMessageDisplay.style.display = 'block';
-                feedbackMessage.style.display = 'none';
-            } finally {
-                loadingOverlay.classList.remove('show');
-            }
-        }
-
-        // Função para abrir a prévia em tela cheia
-        window.openFullscreenPreview = () => {
-            const previewContentElement = document.getElementById('website-preview');
-            const previewContentHtml = previewContentElement.outerHTML;
-
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = previewContentHtml;
-            const fullscreenBtnInTemp = tempDiv.querySelector('#fullscreen-btn');
-            if (fullscreenBtnInTemp) {
-                fullscreenBtnInTemp.remove();
-            }
-            const cleanedPreviewContent = tempDiv.innerHTML;
-
-            const tempWindow = window.open('', '_blank');
-
-            const fullHtml = `
-                <!DOCTYPE html>
-                <html lang="pt-br">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-                    <style>
-                        /* Injetar variáveis CSS dinâmicas */
-                        :root {
-                            --primary-color: ${currentPrimaryColor};
-                            --secondary-color: ${currentSecondaryColor};
-                            --accent-color: ${currentAccentColor};
-                            --preview-font-heading: ${document.documentElement.style.getPropertyValue('--preview-font-heading') || "var(--font-montserrat)"};
-                            --preview-font-body: ${document.documentElement.style.getPropertyValue('--preview-font-body') || "var(--font-open-sans)"};
-                            --preview-border-radius: ${document.documentElement.style.getPropertyValue('--preview-border-radius') || "8px"};
-                            --preview-spacing-unit: ${document.documentElement.style.getPropertyValue('--preview-spacing-unit') || "20px"};
-                            /* Outras variáveis padrão */
-                            --text-color: #333;
-                            --light-bg: #f8f9fa;
-                            --dark-bg: #e9ecef;
-                            --font-montserrat: 'Montserrat', sans-serif;
-                            --font-open-sans: 'Open Sans', sans-serif;
-                        }
-                        /* Copiar todos os estilos da prévia do seu arquivo HTML */
-                        body {
-                            font-family: var(--preview-font-body);
-                            line-height: 1.6;
-                            margin: 0;
-                            padding: 0;
-                            background-color: var(--light-bg);
-                            color: var(--text-color);
-                            display: block;
-                            overflow-x: hidden;
-                        }
-                        .website-preview {
-                            border: none;
-                            box-shadow: none;
-                            border-radius: 0;
-                            margin: 0;
-                            min-height: 100vh;
-                            display: flex;
-                            flex-direction: column;
-                            opacity: 1;
-                            transform: none;
-                        }
-                        .preview-header {
-                            background-color: var(--primary-color);
-                            color: white;
-                            padding: calc(1.5 * var(--preview-spacing-unit)) 25px;
-                            text-align: center;
-                            font-family: var(--preview-font-heading);
-                            border-bottom-left-radius: calc(0.8 * var(--preview-border-radius));
-                            border-bottom-right-radius: calc(0.8 * var(--preview-border-radius));
-                            position: relative;
-                        }
-                        .preview-header h1 { margin: 0 0 10px 0; color: white; font-size: 3em; letter-spacing: 0.5px; }
-                        .preview-header p { margin: 10px 0 20px; font-size: 1.3em; opacity: 0.9; font-weight: 500; }
-                        .preview-header nav { margin-top: 20px; }
-                        .preview-header nav a {
-                            color: white; margin: 0 10px; text-decoration: none; font-weight: 600; font-size: 1.1em;
-                            padding: 10px 20px; border: 1px solid rgba(255,255,255,0.6); border-radius: 6px;
-                            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
-                            display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                        }
-                        .preview-header nav a:hover { opacity: 0.95; transform: translateY(-2px); background-color: rgba(255,255,255,0.15); border-color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
-
-                        .preview-section {
-                            padding: calc(2.5 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
-                            text-align: center;
-                            font-family: var(--preview-font-body);
-                        }
-                        .preview-section:nth-of-type(odd) { background-color: var(--light-bg); }
-                        .preview-section h2 {
-                            font-size: 2.4em; margin-bottom: calc(1.5 * var(--preview-spacing-unit)); color: var(--primary-color);
-                            font-family: var(--preview-font-heading); letter-spacing: 0.3px;
-                        }
-                        .preview-section p { max-width: 750px; margin: 0 auto calc(1.5 * var(--preview-spacing-unit)) auto; font-size: 1.15em; line-height: 1.8; color: #555; }
-                        .preview-section ul { list-style: none; padding: 0; max-width: 700px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-                        .preview-section ul li {
-                            background-color: #fff; border: 1px solid #eee; border-radius: calc(0.8 * var(--preview-border-radius));
-                            padding: 20px 25px; flex: 1 1 calc(33% - 40px); box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-                            font-size: 1.1em; font-weight: 500; min-width: 220px; text-align: left;
-                        }
-                        .preview-section ul li i { margin-right: 10px; color: var(--accent-color); font-size: 1.2em; }
-
-                        .preview-contact { text-align: left; }
-                        .preview-contact h2 { text-align: center; }
-                        .preview-contact .contact-item { display: flex; align-items: center; margin-bottom: 20px; font-size: 1.2em; font-weight: 500; color: #444; }
-                        .preview-contact .contact-item a { color: var(--primary-color); text-decoration: none; transition: color 0.3s ease, text-decoration 0.3s ease; }
-                        .preview-contact .contact-item a:hover { color: #0056b3; text-decoration: underline; }
-                        .preview-contact .icon { margin-right: 15px; font-size: 1.5em; color: var(--accent-color); width: 30px; text-align: center; }
-
-                        .preview-footer {
-                            background-color: var(--secondary-color);
-                            color: white;
-                            padding: calc(1.2 * var(--preview-spacing-unit));
-                            text-align: center;
-                            font-size: 1em;
-                            margin-top: auto;
-                            border-top-left-radius: calc(0.8 * var(--preview-border-radius));
-                            border-top-right-radius: calc(0.8 * var(--preview-border-radius));
-                            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-                        }
-                        .preview-footer p { margin: 10px 0; opacity: 0.8; }
-
-                        /* Estilos para imagens (logo e serviços) */
-                        .preview-section img {
-                            border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
-                            margin-bottom: var(--preview-spacing-unit);
-                            object-fit: cover;
-                        }
-                        /* Animações e placeholders podem ser omitidos na tela cheia ou ajustados */
-                        .fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
-
-                        .close-fullscreen-btn {
-                            position: fixed;
-                            top: 20px;
-                            right: 20px;
-                            background-color: rgba(0,0,0,0.5);
-                            color: white;
-                            border: none;
-                            border-radius: 5px;
-                            padding: 10px 15px;
-                            cursor: pointer;
-                            font-size: 1em;
-                            z-index: 9999;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <button class="close-fullscreen-btn" onclick="window.close()">Fechar Prévia</button>
-                    ${cleanedPreviewContent}
-                </body>
-                </html>
-            `;
-            tempWindow.document.write(fullHtml);
-            tempWindow.document.close();
-        }
 
         showSection(0); // Garante que a primeira seção do formulário é exibida ao carregar a página
     </script>
