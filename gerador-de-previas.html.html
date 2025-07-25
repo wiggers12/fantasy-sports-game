@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prévia de Site - Seu Sucesso Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Variáveis CSS para cores dinâmicas */
+        :root {
+            --primary-color: #007bff; /* Azul vibrante */
+            --secondary-color: #343a40; /* Cinza escuro */
+            --accent-color: #ffc107; /* Amarelo para detalhes */
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --dark-bg: #e9ecef;
+            --font-montserrat: 'Montserrat', sans-serif;
+            --font-open-sans: 'Open Sans', sans-serif;
+
+            /* Variáveis de layout padrão (serão sobrescritas pelo JS) */
+            --preview-font-heading: var(--font-montserrat);
+            --preview-font-body: var(--font-open-sans);
+            --preview-border-radius: 8px;
+            --preview-spacing-unit: 20px;
+        }
+
+        body {
+            font-family: var(--font-open-sans);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); /* Gradiente sutil */
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden; /* Evita scroll horizontal indesejado */
+        }
+
+        .container {
+            max-width: 1000px; /* Maior para melhor visualização */
+            width: 95%;
+            margin: 40px auto;
+            background: #fff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Sombra mais forte */
+            animation: fadeIn 0.8s ease-out; /* Animação de entrada */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: var(--font-montserrat);
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 2.8em; /* Maior */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            font-family: var(--font-montserrat);
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600; /* Mais negrito */
+            color: #555;
+        }
+        label i {
+            margin-right: 8px;
+            color: var(--primary-color); /* Ícone da label com cor primária */
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #aaa; /* Cor do placeholder mais suave */
+            opacity: 1; /* Para navegadores que diminuem a opacidade por padrão */
+        }
+
+        input:focus::placeholder,
+        textarea:focus::placeholder {
+            color: transparent; /* Placeholder desaparece ao focar */
+        }
+
+        input::selection, textarea::selection {
+            background-color: var(--accent-color); /* Cor de seleção diferente */
+            color: var(--secondary-color);
+        }
+
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset !important;
+            -webkit-text-fill-color: var(--text-color) !important;
+        }
+
+        input:-webkit-autofill:focus {
+            box-shadow: 0 0 0px 1000px white inset !important, 0 0 5px rgba(0, 123, 255, 0.5) !important;
+            -webkit-text-fill-color: var(--text-color) !important;
+        }
+
+        input, textarea {
+            width: calc(100% - 22px);
+            padding: 12px; /* Maior */
+            margin-bottom: 20px;
+            border: 1px solid #c9d0da; /* Borda mais suave */
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Adição para autofill */
+        }
+        /* Adição para feedback de validação */
+        input.invalid, textarea.invalid {
+            border-color: #dc3545 !important; /* Vermelho forte para erro */
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px; /* Aumentei a altura padrão */
+        }
+
+        button {
+            padding: 14px 30px; /* Ainda maior */
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px; /* Mais arredondado */
+            font-size: 1.15em;
+            font-weight: 700; /* Mais negrito */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow na transição */
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Sombra inicial */
+            display: inline-flex; /* Para alinhar ícones e texto */
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Espaçamento entre texto e ícone */
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px); /* Efeito "levitar" mais pronunciado */
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4); /* Sombra mais forte no hover */
+        }
+        button:active {
+            transform: translateY(-1px); /* Leve "pressionada" ao clicar */
+            box-shadow: 0 2px 5px rgba(0, 86, 179, 0.4);
+        }
+        button + button {
+            margin-left: 15px;
+        }
+
+        .form-section {
+            display: none;
+            padding: 30px; /* Aumentei o padding interno */
+            border: 1px solid #e0e6ed;
+            border-radius: 12px; /* Mais arredondado */
+            margin-bottom: 35px;
+            background-color: var(--light-bg);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Sombra mais sutil */
+        }
+        .form-section.active {
+            display: block;
+            animation: slideIn 0.5s ease-out; /* Nova animação para transição de seção */
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .form-section h2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .form-section h2 i {
+            font-size: 1.2em; /* Tamanho do ícone no título */
+            color: var(--accent-color);
+        }
+
+        .color-options, .layout-options {
+            display: flex;
+            gap: 20px; /* Maior espaçamento entre as opções */
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+        }
+        .color-box, .layout-box {
+            width: 80px; /* Aumentei o tamanho */
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #ccc; /* Borda mais grossa */
+            cursor: pointer;
+            transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em; /* Aumentei a fonte */
+            text-align: center;
+            color: #555;
+            flex-direction: column;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Sombra suave */
+            position: relative; /* Para o ícone de check */
+        }
+        .layout-box {
+            border-radius: 10px; /* Quadrado mais arredondado */
+            width: 140px; /* Aumentei a largura */
+            height: 90px; /* Aumentei a altura */
+            font-size: 1em; /* Aumentei a fonte */
+            font-weight: 600;
+            background-color: #fff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* Sombra suave */
+            border-color: #ddd;
+        }
+        .color-box.selected, .layout-box.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra mais evidente na seleção */
+            transform: scale(1.1); /* Efeito de destaque maior */
+        }
+        .color-box i {
+            font-size: 1.5em; /* Tamanho dos ícones de cor */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white; /* Cor do ícone de check */
+            display: none; /* Escondido por padrão */
+        }
+        .color-box.selected i {
+            display: block; /* Mostra o ícone de check quando selecionado */
+        }
+        .color1 { background-color: #007bff; }
+        .color2 { background-color: #28a745; }
+        .color3 { background-color: #dc3545; }
+        .color4 { background-color: #6f42c1; }
+        .color5 { background-color: #fd7e14; }
+
+        .layout-box .thumbnail {
+            width: 80%;
+            height: 60%;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7em;
+            color: #888;
+            overflow: hidden;
+            position: relative;
+        }
+        .layout-box span {
+            display: block;
+            font-size: 0.9em;
+            text-align: center;
+            color: #555;
+        }
+        .layout-box i {
+             font-size: 1.2em; /* Ícone para layouts */
+             margin-left: 5px;
+             color: var(--primary-color); /* Cor para o ícone de layout */
+        }
+
+        /* Checkbox/Funcionalidades */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1em;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            flex: 1 1 calc(33% - 30px); /* 3 por linha em desktop */
+            min-width: 180px;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .checkbox-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            position: absolute; /* Esconde o checkbox original */
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        .checkbox-item .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .custom-checkbox {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-item .custom-checkbox i {
+            color: white;
+            font-size: 0.9em;
+            display: none; /* Esconde o checkmark por padrão */
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .custom-checkbox i {
+            display: block; /* Mostra o checkmark quando selecionado */
+        }
+
+        .checkbox-item .icon-feature {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+
+
+        /* Estilos da Prévia do Site */
+        .website-preview {
+            border: 1px solid #e0e6ed;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 50px;
+            background-color: #fff;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .website-preview.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animações para as seções da prévia */
+        .preview-section.fade-in {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: sectionFadeIn 0.7s ease-out forwards;
+        }
+
+        @keyframes sectionFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Aplica atraso para cada seção */
+        .preview-header.fade-in { animation-delay: 0.2s; }
+        .preview-section:nth-of-type(1).fade-in { animation-delay: 0.4s; }
+        .preview-section:nth-of-type(2).fade-in { animation-delay: 0.6s; }
+        .preview-section:nth-of-type(3).fade-in { animation-delay: 0.8s; } /* Nova seção (Funcionalidades) */
+        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nova seção (Público/Mensagem) */
+        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nova seção (Contato) */
+        .preview-footer.fade-in { animation-delay: 1.4s; } /* Atraso ajustado */
+
+
+        .preview-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: calc(1.5 * var(--preview-spacing-unit)) 25px;
+            text-align: center;
+            font-family: var(--preview-font-heading);
+            border-bottom-left-radius: calc(0.8 * var(--preview-border-radius));
+            border-bottom-right-radius: calc(0.8 * var(--preview-border-radius));
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .preview-header h1 {
+            margin: 0 0 10px 0;
+            color: white;
+            font-size: 3em;
+            letter-spacing: 0.5px;
+        }
+        .preview-header p {
+            margin: 10px 0 20px;
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        .preview-header nav {
+            margin-top: 20px;
+        }
+        .preview-header nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 6px;
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+            display: inline-block;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .preview-header nav a:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            background-color: rgba(255,255,255,0.15);
+            border-color: white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .preview-section {
+            padding: calc(2.5 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
+            text-align: center;
+            font-family: var(--preview-font-body);
+        }
+        .preview-section:nth-of-type(odd) {
+            background-color: var(--light-bg);
+        }
+        .preview-section h2 {
+            font-size: 2.4em;
+            margin-bottom: calc(1.5 * var(--preview-spacing-unit));
+            color: var(--primary-color);
+            font-family: var(--preview-font-heading);
+            letter-spacing: 0.3px;
+        }
+        .preview-section p {
+            max-width: 750px;
+            margin: 0 auto calc(1.5 * var(--preview-spacing-unit)) auto;
+            font-size: 1.15em;
+            line-height: 1.8;
+            color: #555;
+        }
+        .preview-section ul {
+            list-style: none;
+            padding: 0;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .preview-section ul li {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: calc(0.8 * var(--preview-border-radius));
+            padding: 20px 25px;
+            flex: 1 1 calc(33% - 40px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            font-size: 1.1em;
+            font-weight: 500;
+            min-width: 220px;
+            text-align: left;
+        }
+        .preview-section ul li i {
+            margin-right: 10px;
+            color: var(--accent-color);
+            font-size: 1.2em;
+        }
+
+        .preview-contact {
+            text-align: left;
+        }
+        .preview-contact h2 {
+            text-align: center;
+        }
+        .preview-contact .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #444;
+        }
+        .preview-contact .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+        .preview-contact .contact-item a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .preview-contact .icon {
+            margin-right: 15px;
+            font-size: 1.5em;
+            color: var(--accent-color);
+            width: 30px;
+            text-align: center;
+        }
+
+        .preview-footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: calc(1.2 * var(--preview-spacing-unit));
+            text-align: center;
+            font-size: 1em;
+            margin-top: auto;
+            border-top-left-radius: calc(0.8 * var(--preview-border-radius));
+            border-top-right-radius: calc(0.8 * var(--preview-border-radius));
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+        .preview-footer p {
+            margin: 10px 0;
+            opacity: 0.8;
+        }
+
+        /* Botões CTA Final */
+        .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 18px 40px;
+            border-radius: 35px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-top: 40px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 20px rgba(0,255,0,0.3);
+        }
+        .whatsapp-button:hover {
+            background-color: #1DA851;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 218, 85, 0.4);
+        }
+        .whatsapp-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 218, 85, 0.4);
+        }
+
+        /* Indicador de carregamento */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .spinner {
+            border: 5px solid rgba(0, 123, 255, 0.2);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1.2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Botão de Ver em Tela Cheia - Posição ajustada */
+        #fullscreen-btn {
+            position: absolute;
+            bottom: 15px; /* Posicionado na parte inferior */
+            right: 15px;
+            background-color: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #fullscreen-btn:hover {
+            background-color: rgba(255,255,255,0.5);
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        #fullscreen-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        /* Splash Screen Styles */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%); /* Gradiente com sua cor primária */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000; /* Acima de tudo */
+            color: white;
+            font-family: var(--font-montserrat);
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none; /* Permite cliques através após o fade-out */
+        }
+        #splash-screen img {
+            max-width: 180px; /* Tamanho da logo na splash */
+            height: auto;
+            margin-bottom: 25px;
+            animation: bounceIn 1s ease-out; /* Animação para a logo */
+            border-radius: 50%; /* Se sua logo for redonda, fica legal */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        #splash-screen h1 {
+            color: white;
+            font-size: 3.5em; /* Tamanho do título */
+            margin: 0;
+            animation: fadeInText 1.5s ease-out;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        #splash-screen p {
+            font-size: 1.5em;
+            margin-top: 10px;
+            opacity: 0.9;
+            animation: fadeInText 1.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+            0% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+            20% { transform: scale3d(1.1, 1.1, 1.1); }
+            40% { transform: scale3d(0.9, 0.9, 0.9); }
+            60% { opacity: 1; transform: scale3d(1.03, 1.03, 1.03); }
+            80% { transform: scale3d(0.97, 0.97, 0.97); }
+            100% { opacity: 1; transform: scale3d(1, 1, 1); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.8em; }
+            p { font-size: 1em; }
+            button {
+                font-size: 1em;
+                padding: 12px 20px;
+            }
+            button + button {
+                margin-left: 10px;
+            }
+            .form-section {
+                padding: 20px;
+            }
+            .color-options, .layout-options {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .color-box, .layout-box {
+                width: 70px;
+                height: 70px;
+            }
+            .layout-box {
+                width: 120px;
+                height: 80px;
+            }
+            .preview-header h1 { font-size: 2em; }
+            .preview-header p { font-size: 1em; }
+            .preview-header nav a {
+                font-size: 0.9em;
+                padding: 6px 10px;
+                margin: 0 5px;
+            }
+            .preview-section h2 { font-size: 1.8em; }
+            .preview-section p { font-size: 1em; }
+            .preview-section ul li {
+                padding: 15px 20px;
+                flex: 1 1 100%; /* Uma coluna em mobile */
+            }
+            .whatsapp-button {
+                font-size: 1.1em;
+                padding: 15px 25px;
+            }
+            #fullscreen-btn {
+                padding: 6px 10px;
+                font-size: 0.8em;
+                bottom: 10px;
+                right: 10px;
+            }
+            #splash-screen img {
+                max-width: 120px;
+            }
+            #splash-screen h1 {
+                font-size: 2.5em;
+            }
+            #splash-screen p {
+                font-size: 1.2em;
+            }
+            .checkbox-item {
+                flex: 1 1 100%; /* Uma coluna em mobile */
+                max-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <img src="https://raw.githubusercontent.com/wiggers12/fantasy-sports-game/main/logo_ww.jpg" alt="Logo do Serviço">
+        <h1>Seu Sucesso Online Começa Aqui!</h1>
+        <p>Crie uma prévia do seu site/app e impulsione seu negócio.</p>
+    </div>
+
+    <div class="container">
+        <h1>Sua Presença Online Começa Aqui! ✨</h1>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px; color: #555;">
+            Visualize o potencial do seu negócio online com uma **prévia atraente e profissional**.
+            Preencha os dados e descubra um design feito sob medida para você!
+        </p>
+
+        <div class="form-section active" id="section-info">
+            <h2><i class="fa-solid fa-briefcase"></i> 1. Informações Essenciais do Seu Negócio</h2>
+            <label for="nome_empresa"><i class="fa-solid fa-building"></i> Nome da Sua Empresa:</label>
+            <input type="text" id="nome_empresa" placeholder="Ex: Minha Empresa Incrível" required onkeyup="updatePreview()">
+
+            <label for="slogan"><i class="fa-solid fa-tag"></i> Slogan Memorável (opcional):</label>
+            <input type="text" id="slogan" placeholder="Ex: Soluções Inovadoras para o Seu Sucesso" onkeyup="updatePreview()">
+
+            <label for="descricao"><i class="fa-solid fa-quote-left"></i> Conte-nos sobre sua Empresa (2-3 frases chave):</label>
+            <textarea id="descricao" placeholder="Ex: Somos uma empresa de tecnologia focada em criar soluções web personalizadas que impulsionam o crescimento e a visibilidade de nossos clientes." required onkeyup="updatePreview()"></textarea>
+            <button onclick="nextSection('section-design')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-design">
+            <h2><i class="fa-solid fa-palette"></i> 2. Escolha o Estilo e a Personalidade do Seu Site</h2>
+            <label><i class="fa-solid fa-droplet"></i> Paleta de Cores:</label>
+            <div class="color-options">
+                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" onclick="selectColors(this, '#007bff', '#343a40', '#ffc107')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" onclick="selectColors(this, '#28a745', '#34495e', '#f39c12')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" onclick="selectColors(this, '#dc3545', '#364f6b', '#fdcb6e')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" onclick="selectColors(this, '#6f42c1', '#2c3e50', '#bdc3c7')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" onclick="selectColors(this, '#fd7e14', '#2d3436', '#ffeaa7')"><i class="fa-solid fa-check"></i></div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;"><i class="fa-solid fa-info-circle"></i> As cores da prévia serão ajustadas automaticamente.</p>
+
+            <label style="margin-top: 25px;"><i class="fa-solid fa-layer-group"></i> Estilo de Layout:</label>
+            <div class="layout-options">
+                <div class="layout-box selected" data-layout="modern" onclick="selectLayout(this, 'modern')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?modern-architecture,geometric'); background-size: cover; background-position: center;"></div>
+                    Moderno<span><i class="fa-solid fa-ruler-combined"></i></span>
+                </div>
+                <div class="layout-box" data-layout="classic" onclick="selectLayout(this, 'classic')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?classic-building,elegant-design'); background-size: cover; background-position: center;"></div>
+                    Clássico<span><i class="fa-solid fa-chess-knight"></i></span>
+                </div>
+                <div class="layout-box" data-layout="creative" onclick="selectLayout(this, 'creative')">
+                    <div class="thumbnail" style="background-image: url('https://source.unsplash.com/100x60/?abstract-art,colorful-design'); background-size: cover; background-position: center;"></div>
+                    Criativo<span><i class="fa-solid fa-lightbulb"></i></span>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; color: #666;"><i class="fa-solid fa-info-circle"></i> Ajusta o estilo geral da prévia.</p>
+
+            <button onclick="prevSection('section-info')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-content')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-content">
+            <h2><i class="fa-solid fa-pen-to-square"></i> 3. Conteúdo Principal do Seu Site</h2>
+            <label for="titulo_servicos"><i class="fa-solid fa-clipboard-list"></i> Título da Seção de Serviços/Produtos:</label>
+            <input type="text" id="titulo_servicos" value="Nossos Produtos e Serviços" onkeyup="updatePreview()">
+
+            <label for="servicos_lista"><i class="fa-solid fa-list-check"></i> Seus Principais Serviços/Produtos (um por linha):</label>
+            <textarea id="servicos_lista" placeholder="Serviço de Consultoria&#10;Desenvolvimento de E-commerce&#10;Marketing Digital&#10;Criação de Conteúdo" onkeyup="updatePreview()"></textarea>
+
+            <button onclick="prevSection('section-design')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-features')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-features">
+            <h2><i class="fa-solid fa-gears"></i> 4. Funcionalidades Essenciais do Seu Site/App</h2>
+            <p style="text-align: center; font-size: 1em; color: #666; margin-bottom: 20px;">
+                Selecione as funcionalidades que seu site/app deve ter para atender às necessidades do seu nicho:
+            </p>
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Cadastro de Clientes" data-icon="fa-solid fa-user-plus" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-user-plus icon-feature"></i> Cadastro de Clientes
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Agenda / Agendamento Online" data-icon="fa-solid fa-calendar-check" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-calendar-check icon-feature"></i> Agenda / Agendamento
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Catálogo de Produtos / Serviços" data-icon="fa-solid fa-boxes-stacked" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-boxes-stacked icon-feature"></i> Catálogo de Produtos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Gestão de Produtos / Estoque" data-icon="fa-solid fa-boxes-packing" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-boxes-packing icon-feature"></i> Gestão de Produtos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Controle Financeiro / Dashboard" data-icon="fa-solid fa-chart-line" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-chart-line icon-feature"></i> Financeiro / Dashboard
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Sistema de Pedidos / Compras" data-icon="fa-solid fa-cart-shopping" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-cart-shopping icon-feature"></i> Sistema de Pedidos
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Blog / Notícias" data-icon="fa-solid fa-newspaper" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-newspaper icon-feature"></i> Blog / Notícias
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Integração com Redes Sociais" data-icon="fa-solid fa-share-nodes" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-share-nodes icon-feature"></i> Redes Sociais
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Formulário de Contato Personalizado" data-icon="fa-solid fa-envelope-open-text" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-envelope-open-text icon-feature"></i> Formulário de Contato
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="feature" value="Área de Membros / Login" data-icon="fa-solid fa-user-lock" onchange="updatePreview()">
+                    <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                    <i class="fa-solid fa-user-lock icon-feature"></i> Área de Membros
+                </label>
+            </div>
+            <label for="outras_funcionalidades"><i class="fa-solid fa-plus-circle"></i> Outras Funcionalidades que Você Precisa (opcional):</label>
+            <textarea id="outras_funcionalidades" placeholder="Ex: Chat online, Integração com ERP, Sistema de Avaliações" onkeyup="updatePreview()"></textarea>
+
+            <label for="objetivo_principal"><i class="fa-solid fa-bullseye"></i> Qual o Objetivo Principal do Seu Site/App?</label>
+            <input type="text" id="objetivo_principal" placeholder="Ex: Gerar leads, Vender produtos, Informar sobre a empresa" onkeyup="updatePreview()">
+
+            <button onclick="prevSection('section-content')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-audience')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-audience">
+            <h2><i class="fa-solid fa-users"></i> 5. Público-Alvo e Mensagem Central</h2>
+            <label for="publico_alvo"><i class="fa-solid fa-user-group"></i> Quem é o Seu Público-Alvo Principal?</label>
+            <input type="text" id="publico_alvo" placeholder="Ex: Pequenas empresas, Jovens empreendedores, Famílias" onkeyup="updatePreview()">
+
+            <label for="mensagem_central"><i class="fa-solid fa-message"></i> Qual a Mensagem Mais Importante que o Site/App Deve Transmitir?</label>
+            <textarea id="mensagem_central" placeholder="Ex: Somos a solução definitiva para o seu problema de [problema]. Confiabilidade e inovação ao seu alcance." onkeyup="updatePreview()"></textarea>
+
+            <button onclick="prevSection('section-features')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="nextSection('section-contact')">Próximo Passo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <div class="form-section" id="section-contact">
+            <h2><i class="fa-solid fa-headset"></i> 6. Detalhes de Contato</h2>
+            <label for="contato_email"><i class="fa-solid fa-at"></i> Seu Email de Contato:</label>
+            <input type="email" id="contato_email" placeholder="contato@suaempresa.com" required onkeyup="updatePreview()">
+            <label for="contato_telefone"><i class="fa-solid fa-phone"></i> Seu Telefone/WhatsApp (com DDD):</label>
+            <input type="text" id="contato_telefone" placeholder="(XX) XXXXX-XXXX" required onkeyup="updatePreview()">
+            <label for="link_redes"><i class="fa-solid fa-share-nodes"></i> Link para uma Rede Social (Instagram/Facebook):</label>
+            <input type="url" id="link_redes" placeholder="https://instagram.com/suaempresa" onkeyup="updatePreview()">
+
+            <button onclick="prevSection('section-audience')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="generateFinalPreview()"><i class="fa-solid fa-eye"></i> Ver Minha Prévia Incrível!</button>
+        </div>
+
+        <hr style="margin: 40px auto; border: 0; border-top: 1px dashed #ccc; width: 80%;">
+
+        <h2>Sua Prévia de Site - Descubra o Potencial!</h2>
+        <div id="website-preview" class="website-preview">
+            <button id="fullscreen-btn" onclick="openFullscreenPreview()"><i class="fa-solid fa-expand"></i> Ver em Tela Cheia</button>
+
+            <header class="preview-header fade-in">
+                <h1 id="preview-empresa">Sua Empresa Online</h1>
+                <p id="preview-slogan">Transformando Ideias em Resultados</p>
+                <nav>
+                    <a href="#">Início</a>
+                    <a href="#">Serviços</a>
+                    <a href="#">Contato</a>
+                </nav>
+            </header>
+            <section class="preview-section preview-about fade-in">
+                <img src="https://source.unsplash.com/150x150/?logo,abstract" alt="Logo da Empresa" style="border-radius: 50%; margin-bottom: 20px; object-fit: cover;">
+                <h2 id="preview-titulo-sobre">Sobre Nós</h2>
+                <p id="preview-descricao">Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].</p>
+            </section>
+            <section class="preview-section preview-services fade-in">
+                <h2 id="preview-titulo-servicos">Nossos Serviços e Soluções</h2>
+                <ul id="preview-servicos-lista">
+                    <li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li>
+                    <li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>
+                </ul>
+                <img src="https://source.unsplash.com/600x250/?digital-marketing,teamwork,office" alt="Imagem de Serviços" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
+            </section>
+            <section class="preview-section preview-features-display fade-in">
+                <h2 id="preview-titulo-funcionalidades">Funcionalidades Essenciais do Seu Site/App</h2>
+                <ul id="preview-funcionalidades-display-list">
+                    </ul>
+                <p id="preview-objetivo-principal-display" style="font-style: italic; margin-top: 20px;">
+                    Nosso principal objetivo é [Objetivo Principal do Site/App].
+                </p>
+            </section>
+            <section class="preview-section preview-audience-display fade-in">
+                <h2 id="preview-titulo-publico">Para Quem Criamos Soluções</h2>
+                <p id="preview-publico-alvo-display">Nosso público-alvo são [Público-Alvo Principal].</p>
+                <p id="preview-mensagem-central-display" style="font-weight: bold; margin-top: 20px;">
+                    A mensagem mais importante que queremos transmitir é: **[Mensagem Central do Site/App]**
+                </p>
+                <img src="https://source.unsplash.com/600x250/?target-audience,marketing-strategy,diverse-people" alt="Público-Alvo" style="max-width: 100%; height: auto; margin-top: 20px; border-radius: 8px; object-fit: cover;">
+            </section>
+            <section class="preview-section preview-contact fade-in">
+                <h2 id="preview-titulo-contato">Entre em Contato Conosco</h2>
+                <div class="contact-item">
+                    <span class="icon">📧</span> <p id="preview-contato-email">contato@suaempresa.com</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📞</span> <p id="preview-contato-telefone">(XX) XXXXX-XXXX</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span> <p id="preview-redes"><a href="#" target="_blank">Nossas Redes Sociais</a></p>
+                </div>
+            </section>
+            <footer class="preview-footer fade-in">
+                <p>&copy; <span id="current-year"></span> Seu Negócio. Prévia gerada por [Seu Serviço Web/Sua Marca]. <br>Isso é só o começo!</p>
+            </footer>
+        </div>
+
+        <div id="cta-final" style="text-align: center; margin-top: 40px; display: none;">
+            <h3>Impressionado? Isso é apenas uma FAÍSCA do potencial!</h3>
+            <p style="font-size: 1.2em; max-width: 700px; margin: 20px auto 0 auto; color: #555;">
+                Sua prévia mostra o caminho. Imagine um site profissional completo, com design exclusivo,
+                funcionalidades avançadas, otimizado para o Google e pronto para atrair **clientes reais e qualificados**
+                para o seu negócio!
+            </p>
+            <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
+                Quero o Site Completo e Profissional! Fale com [Seu Nome/Sua Marca]!
+            </a>
+            <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
+            <p id="error-message-display" style="color: red; margin-top: 15px; font-weight: bold; display: none;"></p>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+        // Importe as funções específicas do Firestore
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration (SUAS CREDENCIAIS REAIS)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2kP9ZbC6kiTcShOEZaXtkZcuBKVcPw88", // Seu apiKey <-- SUBSTITUA
+            authDomain: "fantasysportsgame-dc63d.firebaseapp.com", // Seu authDomain <-- SUBSTITUA
+            projectId: "fantasysportsgame-dc63d", // Seu projectId <-- SUBSTITUA
+            storageBucket: "fantasysportsgame-dc63d.firebasestorage.app", // Seu storageBucket <-- SUBSTITUA
+            messagingSenderId: "179581906873", // Seu messagingSenderId <-- SUBSTITUA
+            appId: "1:179581906873:web:d5229c525ff972643ad068", // Seu appId <-- SUBSTITUA
+            measurementId: "G-5V9SDFQK5Y" // Seu measurementId <-- SUBSTITUA
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); // Analytics inicializado, mas não usado na lógica principal
+        const db = getFirestore(app); // Inicializa o Firestore
+
+        // Variáveis globais para o seu script
+        let currentPrimaryColor = '#007bff';
+        let currentSecondaryColor = '#343a40';
+        let currentAccentColor = '#ffc107';
+        let currentLayout = 'modern'; // Default layout
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializa o estado do checkmark de cores
+            document.querySelector('.color-box.color1 i').style.display = 'block';
+
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Set default colors and layout (já feito no CSS ou HTML)
+            document.documentElement.style.setProperty('--primary-color', currentPrimaryColor);
+            document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
+            document.documentElement.style.setProperty('--accent-color', currentAccentColor);
+
+            const inputs = document.querySelectorAll(
+                '#section-info input, #section-info textarea, ' +
+                '#section-content input:not([type="checkbox"]), #section-content textarea, ' + // Exclui checkboxes
+                '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
+                '#section-audience input, #section-audience textarea, ' +
+                '#section-contact input'
+            );
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('invalid');
+                    input.style.borderColor = ''; // Reseta a borda
+                });
+                input.addEventListener('keyup', updatePreview);
+            });
+
+            // Adiciona evento de mudança para os checkboxes de funcionalidade
+            document.querySelectorAll('input[type="checkbox"][name="feature"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updatePreview);
+            });
+
+
+            const whatsappButton = document.getElementById('whatsapp-final-button');
+            document.getElementById('nome_empresa').addEventListener('keyup', () => {
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+            });
+            whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20mu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
+
+            // Esconde o conteúdo principal e mostra a splash screen
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('splash-screen').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.querySelector('.container').style.display = 'block'; // Mostra o conteúdo principal
+                }, 1000); // Tempo da transição de fade-out
+            }, 3000); // Tempo que a splash screen fica visível (3 segundos)
+        });
+
+        // Funções para atualização da prévia
+        function updatePreview() {
+            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
+            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
+            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
+            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Produtos e Soluções';
+
+            const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
+            const ulServicos = document.getElementById('preview-servicos-lista');
+            ulServicos.innerHTML = '';
+            if (servicosLista.length > 0) {
+                servicosLista.forEach(servico => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${servico.trim()}`; // Ícone no item de serviço
+                    ulServicos.appendChild(li);
+                });
+            } else {
+                ulServicos.innerHTML = '<li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li><li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li><li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>';
+            }
+
+            // Novas seções de conteúdo - FUNCIONALIDADES
+            const selectedFeatures = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => ({
+                name: cb.value,
+                iconClass: cb.dataset.icon // Pega a classe do ícone do atributo data-icon
+            }));
+            const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
+            ulFuncionalidadesDisplay.innerHTML = '';
+            if (selectedFeatures.length > 0) {
+                selectedFeatures.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
+                    ulFuncionalidadesDisplay.appendChild(li);
+                });
+            } else {
+                // Conteúdo padrão se nenhuma funcionalidade for selecionada
+                ulFuncionalidadesDisplay.innerHTML = `
+                    <li><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                    <li><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                    <li><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                    <li><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                `;
+            }
+            document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
+            
+            // Novas seções de conteúdo - PÚBLICO E MENSAGEM
+            // Pega o valor do input, se vazio, usa o placeholder de novo
+            document.getElementById('preview-titulo-publico').textContent = document.getElementById('publico_alvo').value ? `Para ${document.getElementById('publico_alvo').value}` : 'Para Quem Criamos Soluções';
+            document.getElementById('preview-publico-alvo-display').textContent = document.getElementById('publico_alvo').value ? `Nosso público-alvo principal são: ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
+            document.getElementById('preview-mensagem-central-display').innerHTML = document.getElementById('mensagem_central').value ? `A mensagem mais importante que queremos transmitir é: <strong>${document.getElementById('mensagem_central').value}</strong>` : 'A mensagem mais importante que queremos transmitir é: <strong>[Mensagem Central do Site/App]</strong>';
+
+
+            document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'contato@suaempresa.com');
+            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
+            const linkRedes = document.getElementById('link_redes').value;
+            const previewRedesLink = document.querySelector('#preview-redes a');
+            if (linkRedes) {
+                previewRedesLink.href = linkRedes;
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
+            } else {
+                previewRedesLink.href = '#';
+                previewRedesLink.textContent = 'Nossas Redes Sociais';
+            }
+        }
+
+        // Funções de seleção de cores e layout
+        function selectColors(element, primary, secondary, accent) {
+            document.querySelectorAll('.color-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--secondary-color', secondary);
+            document.documentElement.style.setProperty('--accent-color', accent);
+            currentPrimaryColor = primary;
+            currentSecondaryColor = secondary;
+            currentAccentColor = accent;
+            updatePreview();
+        }
+
+        function selectLayout(element, layout) {
+            document.querySelectorAll('.layout-box').forEach(box => {
+                box.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            currentLayout = layout;
+
+            const root = document.documentElement.style;
+            if (layout === 'modern') {
+                root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '8px');
+                root.setProperty('--preview-spacing-unit', '20px');
+            } else if (layout === 'classic') {
+                root.setProperty('--preview-font-heading', "'Playfair Display', serif");
+                root.setProperty('--preview-font-body', "'Roboto', sans-serif");
+                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
+                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
+            } else if (layout === 'creative') {
+                root.setProperty('--preview-font-heading', "'Pacifico', cursive");
+                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
+                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+            }
+            updatePreview();
+        }
+
+        // Funções de navegação do formulário
+        let currentSectionIndex = 0;
+        const formSections = document.querySelectorAll('.form-section');
+
+        function showSection(index) {
+            formSections.forEach((section, i) => {
+                if (i === index) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            currentSectionIndex = index;
+        }
+
+        window.nextSection = async (nextSectionId) => {
+            const currentSection = formSections[currentSectionIndex];
+            const nextSectionElement = document.getElementById(nextSectionId);
+            const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
+
+            if (!allFilled) {
+                const firstInvalidInput = currentSection.querySelector('input.invalid, textarea.invalid');
+                if (firstInvalidInput) {
+                    firstInvalidInput.focus();
+                }
+                return;
+            }
+
+            if (nextSectionElement) {
+                currentSection.classList.remove('active');
+                nextSectionElement.classList.add('active');
+                const nextIndex = Array.from(formSections).indexOf(nextSectionElement);
+                currentSectionIndex = nextIndex;
+            }
+        };
+
+        window.prevSection = (prevSectionId) => {
+            const currentSection = formSections[currentSectionIndex];
+            const prevSectionElement = document.getElementById(prevSectionId);
+            if (prevSectionElement) {
+                currentSection.classList.remove('active');
+                prevSectionElement.classList.add('active');
+                const prevIndex = Array.from(formSections).indexOf(prevSectionElement);
+                currentSectionIndex = prevIndex;
+            }
+        };
+
+        // Função principal para gerar prévia e salvar no Firebase
+        window.generateFinalPreview = async () => {
+            // Validação da última seção antes de gerar a prévia
+            const finalSection = formSections[formSections.length - 1]; // Pega a última seção
+            const inputs = finalSection.querySelectorAll('input[required], textarea[required]');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                    input.classList.add('invalid');
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
+
+            if (!allFilled) {
+                const firstInvalidInput = finalSection.querySelector('input.invalid, textarea.invalid');
+                if (firstInvalidInput) {
+                    firstInvalidInput.focus();
+                }
+                alert('Por favor, preencha todos os campos obrigatórios na seção de Contato para gerar a prévia.');
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.add('show');
+
+            await new Promise(resolve => setTimeout(resolve, 800)); // Simula atraso para animação
+
+            formSections.forEach(section => section.style.display = 'none');
+            const websitePreview = document.getElementById('website-preview');
+            websitePreview.style.display = 'flex';
+            websitePreview.classList.add('show');
+
+            // Adiciona a classe 'fade-in' a cada seção da prévia para animar
+            document.querySelectorAll('.preview-header, .preview-section, .preview-footer').forEach(el => {
+                el.classList.add('fade-in');
+            });
+
+            websitePreview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Coleta funcionalidades selecionadas para o Firebase
+            const selectedFeaturesForFirebase = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => cb.value);
+
+
+            const finalData = {
+                timestamp: serverTimestamp(),
+                nome_empresa: document.getElementById('nome_empresa').value,
+                slogan: document.getElementById('slogan').value,
+                descricao: document.getElementById('descricao').value,
+                primary_color: currentPrimaryColor,
+                secondary_color: currentSecondaryColor,
+                accent_color: currentAccentColor,
+                layout_style: currentLayout,
+                titulo_servicos: document.getElementById('titulo_servicos').value,
+                servicos_lista: document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== ''),
+                funcionalidades_selecionadas: selectedFeaturesForFirebase, // Salva as funcionalidades selecionadas
+                outras_funcionalidades: document.getElementById('outras_funcionalidades').value, // Outras funcionalidades
+                objetivo_principal: document.getElementById('objetivo_principal').value,
+                publico_alvo: document.getElementById('publico_alvo').value,
+                mensagem_central: document.getElementById('mensagem_central').value,
+                contato_email: document.getElementById('contato_email').value,
+                contato_telefone: document.getElementById('contato_telefone').value,
+                link_redes: document.getElementById('link_redes').value,
+            };
+
+            const feedbackMessage = document.getElementById('feedback-message');
+            const errorMessageDisplay = document.getElementById('error-message-display');
+
+            try {
+                const docRef = await addDoc(collection(db, "previews"), finalData);
+                console.log("Documento salvo com ID: ", docRef.id);
+                feedbackMessage.textContent = `Sua prévia foi gerada e seus dados enviados com sucesso! ID: ${docRef.id}. Entraremos em contato em breve para transformar essa ideia em realidade.`;
+                feedbackMessage.style.display = 'block';
+                errorMessageDisplay.style.display = 'none';
+
+                const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
+                const whatsappButton = document.getElementById('whatsapp-final-button');
+                whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`; // SEUNUMERO <-- SUBSTITUA
+
+            } catch (e) {
+                console.error("Erro ao adicionar documento: ", e);
+                errorMessageDisplay.textContent = `Ocorreu um erro ao enviar seus dados. Erro: ${e.message}. Por favor, entre em contato direto para não perder sua prévia!`;
+                errorMessageDisplay.style.display = 'block';
+                feedbackMessage.style.display = 'none';
+            } finally {
+                loadingOverlay.classList.remove('show');
+            }
+        }
+
+        // Função para abrir a prévia em tela cheia
+        window.openFullscreenPreview = () => {
+            const previewContentElement = document.getElementById('website-preview');
+            const previewContentHtml = previewContentElement.outerHTML;
+
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = previewContentHtml;
+            const fullscreenBtnInTemp = tempDiv.querySelector('#fullscreen-btn');
+            if (fullscreenBtnInTemp) {
+                fullscreenBtnInTemp.remove();
+            }
+            const cleanedPreviewContent = tempDiv.innerHTML;
+
+            const tempWindow = window.open('', '_blank');
+
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <style>
+                        /* Injetar variáveis CSS dinâmicas */
+                        :root {
+                            --primary-color: ${currentPrimaryColor};
+                            --secondary-color: ${currentSecondaryColor};
+                            --accent-color: ${currentAccentColor};
+                            --preview-font-heading: ${document.documentElement.style.getPropertyValue('--preview-font-heading') || "var(--font-montserrat)"};
+                            --preview-font-body: ${document.documentElement.style.getPropertyValue('--preview-font-body') || "var(--font-open-sans)"};
+                            --preview-border-radius: ${document.documentElement.style.getPropertyValue('--preview-border-radius') || "8px"};
+                            --preview-spacing-unit: ${document.documentElement.style.getPropertyValue('--preview-spacing-unit') || "20px"};
+                            /* Outras variáveis padrão */
+                            --text-color: #333;
+                            --light-bg: #f8f9fa;
+                            --dark-bg: #e9ecef;
+                            --font-montserrat: 'Montserrat', sans-serif;
+                            --font-open-sans: 'Open Sans', sans-serif;
+                        }
+                        /* Copiar todos os estilos da prévia do seu arquivo HTML */
+                        body {
+                            font-family: var(--preview-font-body);
+                            line-height: 1.6;
+                            margin: 0;
+                            padding: 0;
+                            background-color: var(--light-bg);
+                            color: var(--text-color);
+                            display: block;
+                            overflow-x: hidden;
+                        }
+                        .website-preview {
+                            border: none;
+                            box-shadow: none;
+                            border-radius: 0;
+                            margin: 0;
+                            min-height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            opacity: 1;
+                            transform: none;
+                        }
+                        .preview-header {
+                            background-color: var(--primary-color);
+                            color: white;
+                            padding: calc(1.5 * var(--preview-spacing-unit)) 25px;
+                            text-align: center;
+                            font-family: var(--preview-font-heading);
+                            border-bottom-left-radius: calc(0.8 * var(--preview-border-radius));
+                            border-bottom-right-radius: calc(0.8 * var(--preview-border-radius));
+                            position: relative;
+                        }
+                        .preview-header h1 { margin: 0 0 10px 0; color: white; font-size: 3em; letter-spacing: 0.5px; }
+                        .preview-header p { margin: 10px 0 20px; font-size: 1.3em; opacity: 0.9; font-weight: 500; }
+                        .preview-header nav { margin-top: 20px; }
+                        .preview-header nav a {
+                            color: white; margin: 0 10px; text-decoration: none; font-weight: 600; font-size: 1.1em;
+                            padding: 10px 20px; border: 1px solid rgba(255,255,255,0.6); border-radius: 6px;
+                            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+                            display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                        }
+                        .preview-header nav a:hover { opacity: 0.95; transform: translateY(-2px); background-color: rgba(255,255,255,0.15); border-color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+
+                        .preview-section {
+                            padding: calc(2.5 * var(--preview-spacing-unit)) var(--preview-spacing-unit);
+                            text-align: center;
+                            font-family: var(--preview-font-body);
+                        }
+                        .preview-section:nth-of-type(odd) { background-color: var(--light-bg); }
+                        .preview-section h2 {
+                            font-size: 2.4em; margin-bottom: calc(1.5 * var(--preview-spacing-unit)); color: var(--primary-color);
+                            font-family: var(--preview-font-heading); letter-spacing: 0.3px;
+                        }
+                        .preview-section p { max-width: 750px; margin: 0 auto calc(1.5 * var(--preview-spacing-unit)) auto; font-size: 1.15em; line-height: 1.8; color: #555; }
+                        .preview-section ul { list-style: none; padding: 0; max-width: 700px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+                        .preview-section ul li {
+                            background-color: #fff; border: 1px solid #eee; border-radius: calc(0.8 * var(--preview-border-radius));
+                            padding: 20px 25px; flex: 1 1 calc(33% - 40px); box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+                            font-size: 1.1em; font-weight: 500; min-width: 220px; text-align: left;
+                        }
+                        .preview-section ul li i { margin-right: 10px; color: var(--accent-color); font-size: 1.2em; }
+
+                        .preview-contact { text-align: left; }
+                        .preview-contact h2 { text-align: center; }
+                        .preview-contact .contact-item { display: flex; align-items: center; margin-bottom: 20px; font-size: 1.2em; font-weight: 500; color: #444; }
+                        .preview-contact .contact-item a { color: var(--primary-color); text-decoration: none; transition: color 0.3s ease, text-decoration 0.3s ease; }
+                        .preview-contact .contact-item a:hover { color: #0056b3; text-decoration: underline; }
+                        .preview-contact .icon { margin-right: 15px; font-size: 1.5em; color: var(--accent-color); width: 30px; text-align: center; }
+
+                        .preview-footer {
+                            background-color: var(--secondary-color);
+                            color: white;
+                            padding: calc(1.2 * var(--preview-spacing-unit));
+                            text-align: center;
+                            font-size: 1em;
+                            margin-top: auto;
+                            border-top-left-radius: calc(0.8 * var(--preview-border-radius));
+                            border-top-right-radius: calc(0.8 * var(--preview-border-radius));
+                            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+                        }
+                        .preview-footer p { margin: 10px 0; opacity: 0.8; }
+
+                        /* Estilos para imagens (logo e serviços) */
+                        .preview-section img {
+                            border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
+                            margin-bottom: var(--preview-spacing-unit);
+                            object-fit: cover;
+                        }
+                        /* Animações e placeholders podem ser omitidos na tela cheia ou ajustados */
+                        .fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
+
+                        .close-fullscreen-btn {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background-color: rgba(0,0,0,0.5);
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 10px 15px;
+                            cursor: pointer;
+                            font-size: 1em;
+                            z-index: 9999;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <button class="close-fullscreen-btn" onclick="window.close()">Fechar Prévia</button>
+                    ${cleanedPreviewContent}
+                </body>
+                </html>
+            `;
+            tempWindow.document.write(fullHtml);
+            tempWindow.document.close();
+        }
+
+        showSection(0); // Garante que a primeira seção do formulário é exibida ao carregar a página
+    </script>
+</body>
+</html>
