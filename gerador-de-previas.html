@@ -1099,7 +1099,7 @@
                 funcionalidades avançadas, otimizado para o Google e pronto para atrair **clientes reais e qualificados**
                 para o seu negócio!
             </p>
-            <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
+            <a id="whatsapp-final-button" href="https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]" target="_blank" class="whatsapp-button">
                 Quero o Site Completo e Profissional! Fale com [SEU NOME / MARCA AQUI]!
             </a>
             <p id="feedback-message" style="color: green; margin-top: 15px; font-weight: bold; display: none;"></p>
@@ -1147,6 +1147,9 @@
         let currentSecondaryColor = '#343a40';
         let currentAccentColor = '#ffc107';
         let currentLayout = 'modern'; // Default layout
+
+        let currentSectionIndex = 0;
+        const sections = document.querySelectorAll('.form-section');
 
         // Conteúdo detalhado das funcionalidades para o modal
         const featureDescriptions = {
@@ -1199,7 +1202,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             // Inicializa o estado do checkmark de cores para o padrão selecionado
-            document.querySelector('.color-box.color1 i').style.display = 'block';
+            const defaultColorBox = document.querySelector('.color-box.color1');
+            if (defaultColorBox) {
+                defaultColorBox.classList.add('selected');
+                defaultColorBox.querySelector('i').style.display = 'block';
+            }
 
             document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -1228,22 +1235,22 @@
                 checkbox.addEventListener('change', updatePreview);
             });
 
-            // CORREÇÃO DA PALETA DE CORES: Anexar event listeners aos color boxes
+            // Anexar event listeners aos color boxes
             document.querySelectorAll('.color-box').forEach(colorBox => {
                 colorBox.addEventListener('click', function() {
                     const primary = this.dataset.primary;
                     const secondary = this.dataset.secondary;
                     const accent = this.dataset.accent;
-                    console.log('Clicou na cor:', primary); // Log para diagnóstico
+                    console.log('DEBUG: Clicou na cor:', primary); // Log para diagnóstico
                     selectColors(this, primary, secondary, accent);
                 });
             });
 
-            // CORREÇÃO DA PALETA DE CORES: Anexar event listeners aos layout boxes
+            // Anexar event listeners aos layout boxes
             document.querySelectorAll('.layout-box').forEach(layoutBox => {
                 layoutBox.addEventListener('click', function() {
                     const layout = this.dataset.layout;
-                    console.log('Clicou no layout:', layout); // Log para diagnóstico
+                    console.log('DEBUG: Clicou no layout:', layout); // Log para diagnóstico
                     selectLayout(this, layout);
                 });
             });
@@ -1254,7 +1261,7 @@
                 const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
                 whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
             });
-            whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20mu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
+            whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
 
             // Esconde o conteúdo principal e mostra a splash screen
             document.querySelector('.container').style.display = 'none';
@@ -1266,150 +1273,425 @@
                     document.getElementById('splash-screen').style.display = 'none';
                     document.querySelector('.container').style.display = 'block'; // Mostra o conteúdo principal
                 }, 1000); // Tempo da transição de fade-out
-            }, 3000); // Tempo que a splash screen fica visível (4 segundos)
+            }, 3000); // Tempo que a splash screen fica visível (3 segundos)
         });
 
+        // Funções para manipulação de seções
+        function showSection(index) {
+            console.log(`DEBUG: showSection chamada com índice: ${index}`);
+            try {
+                sections.forEach((section, i) => {
+                    if (i === index) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+                currentSectionIndex = index;
+            } catch (error) {
+                console.error("ERRO em showSection:", error);
+            }
+        }
+
+        window.nextSection = function(nextSectionId) {
+            console.log(`DEBUG: nextSection chamada para: ${nextSectionId}`);
+            try {
+                const currentSection = sections[currentSectionIndex];
+                const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
+                let allValid = true;
+
+                console.log(`DEBUG: Verificando ${inputs.length} campos obrigatórios na seção atual.`);
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('invalid');
+                        input.style.borderColor = '#dc3545';
+                        allValid = false;
+                        console.log(`DEBUG: Campo obrigatório vazio: ${input.id}`);
+                    } else {
+                        input.classList.remove('invalid');
+                        input.style.borderColor = '';
+                    }
+                });
+
+                console.log(`DEBUG: allValid = ${allValid}`);
+
+                if (allValid) {
+                    const nextSectionElement = document.getElementById(nextSectionId);
+                    if (nextSectionElement) {
+                        console.log(`DEBUG: Avançando para a seção: ${nextSectionElement.id}`);
+                        showSection(Array.from(sections).indexOf(nextSectionElement));
+                        // Scroll to top of the form for better UX
+                        window.scrollTo({
+                            top: document.querySelector('.container').offsetTop,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        console.error(`ERRO: Elemento da próxima seção (${nextSectionId}) não encontrado.`);
+                    }
+                } else {
+                    alert('Por favor, preencha todos os campos obrigatórios antes de prosseguir.');
+                }
+            } catch (error) {
+                console.error("ERRO em nextSection:", error);
+            }
+        };
+
+        window.prevSection = function(prevSectionId) {
+            console.log(`DEBUG: prevSection chamada para: ${prevSectionId}`);
+            try {
+                const prevSectionElement = document.getElementById(prevSectionId);
+                if (prevSectionElement) {
+                    showSection(Array.from(sections).indexOf(prevSectionElement));
+                    // Scroll to top of the form for better UX
+                    window.scrollTo({
+                        top: document.querySelector('.container').offsetTop,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.error(`ERRO: Elemento da seção anterior (${prevSectionId}) não encontrado.`);
+                }
+            } catch (error) {
+                console.error("ERRO em prevSection:", error);
+            }
+        };
+
         // Funções para atualização da prévia
-        // As funções updatePreview, selectColors, selectLayout, nextSection, prevSection, generateFinalPreview, openFeatureDetails, closeFeatureDetails
-        // PRECISAM SER ATRIBUÍDAS AO OBJETO WINDOW PARA SEREM ACESSÍVEIS PELOS ONCLICK/ONKEYUP DO HTML
-        // Isso foi feito para corrigir o ReferenceError
         window.updatePreview = function() {
-            document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
-            document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
-            document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
-            document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Produtos e Soluções';
+            console.log('DEBUG: updatePreview executada.');
+            try {
+                document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
+                document.getElementById('preview-slogan').textContent = document.getElementById('slogan').value || 'Transformando Ideias em Resultados';
+                document.getElementById('preview-descricao').textContent = document.getElementById('descricao').value || 'Aqui aparecerá a descrição da sua empresa. Somos apaixonados por [seu nicho] e ajudamos [seu público-alvo] a alcançar [objetivo].';
+                document.getElementById('preview-titulo-servicos').textContent = document.getElementById('titulo_servicos').value || 'Nossos Produtos e Soluções';
 
-            const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
-            const ulServicos = document.getElementById('preview-servicos-lista');
-            ulServicos.innerHTML = '';
-            if (servicosLista.length > 0) {
-                servicosLista.forEach(servico => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${servico.trim()}`; // Ícone no item de serviço
-                    ulServicos.appendChild(li);
-                });
-            } else {
-                ulServicos.innerHTML = '<li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li><li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li><li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>';
-            }
+                const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
+                const ulServicos = document.getElementById('preview-servicos-lista');
+                ulServicos.innerHTML = '';
+                if (servicosLista.length > 0) {
+                    servicosLista.forEach(servico => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${servico.trim()}`; // Ícone no item de serviço
+                        ulServicos.appendChild(li);
+                    });
+                } else {
+                    ulServicos.innerHTML = '<li><i class="fa-solid fa-check-circle"></i> Desenvolvimento Web Personalizado</li><li><i class="fa-solid fa-check-circle"></i> Otimização para SEO</li><li><i class="fa-solid fa-check-circle"></i> Marketing de Conteúdo</li>';
+                }
 
-            // Novas seções de conteúdo - FUNCIONALIDADES
-            const selectedFeatures = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => ({
-                name: cb.value,
-                iconClass: cb.dataset.icon // Pega a classe do ícone do atributo data-icon
-            }));
-            const outrasFuncionalidadesText = document.getElementById('outras_funcionalidades').value.trim();
+                // Novas seções de conteúdo - FUNCIONALIDADES
+                const selectedFeatures = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => ({
+                    name: cb.value,
+                    iconClass: cb.dataset.icon // Pega a classe do ícone do atributo data-icon
+                }));
+                const outrasFuncionalidadesText = document.getElementById('outras_funcionalidades').value.trim();
 
-            const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
-            ulFuncionalidadesDisplay.innerHTML = '';
-            
-            // Adiciona funcionalidades selecionadas
-            if (selectedFeatures.length > 0) {
-                selectedFeatures.forEach(feature => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
-                    li.onclick = () => window.openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
-                    ulFuncionalidadesDisplay.appendChild(li);
-                });
-            } else {
-                 // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
-                 ulFuncionalidadesDisplay.innerHTML = `
-                    <li onclick="window.openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
-                    <li onclick="window.openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
-                    <li onclick="window.openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
-                    <li onclick="window.openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
-                `;
-            }
+                const ulFuncionalidadesDisplay = document.getElementById('preview-funcionalidades-display-list');
+                ulFuncionalidadesDisplay.innerHTML = '';
+                
+                // Adiciona funcionalidades selecionadas
+                if (selectedFeatures.length > 0) {
+                    selectedFeatures.forEach(feature => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
+                        li.onclick = () => window.openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
+                        ulFuncionalidadesDisplay.appendChild(li);
+                    });
+                } else {
+                    // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
+                    ulFuncionalidadesDisplay.innerHTML = `
+                        <li onclick="window.openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                        <li onclick="window.openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                        <li onclick="window.openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                        <li onclick="window.openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                    `;
+                }
 
-            // Adiciona 'Outras Funcionalidades' se preenchido
-            const previewOutrasFunc = document.getElementById('preview-outras-funcionalidades-display');
-            if (outrasFuncionalidadesText) {
-                 const liOutras = document.createElement('li');
-                 liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
-                 liOutras.onclick = () => window.openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
-                 ulFuncionalidadesDisplay.appendChild(liOutras);
-                 previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
-            } else {
-                previewOutrasFunc.style.display = 'none'; // Sempre esconde se não tiver texto, pois agora a lista é a principal
-            }
+                // Adiciona 'Outras Funcionalidades' se preenchido
+                const previewOutrasFunc = document.getElementById('preview-outras-funcionalidades-display');
+                if (outrasFuncionalidadesText) {
+                    const liOutras = document.createElement('li');
+                    liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
+                    liOutras.onclick = () => window.openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
+                    ulFuncionalidadesDisplay.appendChild(liOutras);
+                    // previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
+                } else {
+                    // previewOutrasFunc.style.display = 'none'; // Sempre esconde se não tiver texto, pois agora a lista é a principal
+                }
 
-            document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
-            
-            // Novas seções de conteúdo - PÚBLICO E MENSAGEM
-            // Pega o valor do input, se vazio, usa o placeholder de novo
-            document.getElementById('preview-titulo-publico').textContent = document.getElementById('publico_alvo').value ? `Para ${document.getElementById('publico_alvo').value}` : 'Para Quem Criamos Soluções';
-            document.getElementById('preview-publico-alvo-display').textContent = document.getElementById('publico_alvo').value ? `Nosso público-alvo principal são: ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
-            document.getElementById('preview-mensagem-central-display').innerHTML = document.getElementById('mensagem_central').value ? `A mensagem mais importante que queremos transmitir é: <strong>${document.getElementById('mensagem_central').value}</strong>` : 'A mensagem mais importante que queremos transmitir é: <strong>[Mensagem Central do Site/App]</strong>';
+                document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
+                
+                // Novas seções de conteúdo - PÚBLICO E MENSAGEM
+                // Pega o valor do input, se vazio, usa o placeholder de novo
+                document.getElementById('preview-titulo-publico').textContent = document.getElementById('publico_alvo').value ? `Para ${document.getElementById('publico_alvo').value}` : 'Para Quem Criamos Soluções';
+                document.getElementById('preview-publico-alvo-display').textContent = document.getElementById('publico_alvo').value ? `Nosso público-alvo principal são: ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
+                document.getElementById('preview-mensagem-central-display').innerHTML = document.getElementById('mensagem_central').value ? `A mensagem mais importante que queremos transmitir é: <strong>${document.getElementById('mensagem_central').value}</strong>` : 'A mensagem mais importante que queremos transmitir é: <strong>[Mensagem Central do Site/App]</strong>';
 
 
-            document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'contato@suaempresa.com');
-            document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
-            const linkRedes = document.getElementById('link_redes').value;
-            const previewRedesLink = document.querySelector('#preview-redes a');
-            if (linkRedes) {
-                previewRedesLink.href = linkRedes;
-                previewRedesLink.textContent = 'Nossas Redes Sociais';
-            } else {
-                previewRedesLink.href = '#';
-                previewRedesLink.textContent = 'Nossas Redes Sociais';
+                document.getElementById('preview-contato-email').textContent = (document.getElementById('contato_email').value ? 'Email: ' + document.getElementById('contato_email').value : 'contato@suaempresa.com');
+                document.getElementById('preview-contato-telefone').textContent = (document.getElementById('contato_telefone').value ? 'Telefone: ' + document.getElementById('contato_telefone').value : '(XX) XXXXX-XXXX');
+                const linkRedes = document.getElementById('link_redes').value;
+                const previewRedesLink = document.querySelector('#preview-redes a');
+                if (linkRedes) {
+                    previewRedesLink.href = linkRedes;
+                    previewRedesLink.textContent = 'Nossas Redes Sociais';
+                } else {
+                    previewRedesLink.href = '#';
+                    previewRedesLink.textContent = 'Nossas Redes Sociais';
+                }
+            } catch (error) {
+                console.error("ERRO em updatePreview:", error);
             }
         };
 
         window.selectColors = function(element, primary, secondary, accent) {
-            console.log('selectColors executada para:', primary); // Log para diagnóstico
-            document.querySelectorAll('.color-box').forEach(box => {
-                box.classList.remove('selected');
-            });
-            element.classList.add('selected');
+            console.log('DEBUG: selectColors executada para:', primary); // Log para diagnóstico
+            try {
+                document.querySelectorAll('.color-box').forEach(box => {
+                    box.classList.remove('selected');
+                    box.querySelector('i').style.display = 'none'; // Esconde o checkmark
+                });
+                element.classList.add('selected');
+                element.querySelector('i').style.display = 'block'; // Mostra o checkmark
 
-            document.documentElement.style.setProperty('--primary-color', primary);
-            document.documentElement.style.setProperty('--secondary-color', secondary);
-            document.documentElement.style.setProperty('--accent-color', accent);
-            currentPrimaryColor = primary;
-            currentSecondaryColor = secondary;
-            currentAccentColor = accent;
-            updatePreview();
+                document.documentElement.style.setProperty('--primary-color', primary);
+                document.documentElement.style.setProperty('--secondary-color', secondary);
+                document.documentElement.style.setProperty('--accent-color', accent);
+                currentPrimaryColor = primary;
+                currentSecondaryColor = secondary;
+                currentAccentColor = accent;
+                updatePreview();
+            } catch (error) {
+                console.error("ERRO em selectColors:", error);
+            }
         };
 
         window.selectLayout = function(element, layout) {
-            console.log('selectLayout executada para:', layout); // Log para diagnóstico
-            document.querySelectorAll('.layout-box').forEach(box => {
-                box.classList.remove('selected');
-            });
-            element.classList.add('selected');
-            currentLayout = layout;
+            console.log('DEBUG: selectLayout executada para:', layout); // Log para diagnóstico
+            try {
+                document.querySelectorAll('.layout-box').forEach(box => {
+                    box.classList.remove('selected');
+                });
+                element.classList.add('selected');
+                currentLayout = layout;
 
-            const root = document.documentElement.style;
-            if (layout === 'modern') {
-                root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
-                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
-                root.setProperty('--preview-border-radius', '8px');
-                root.setProperty('--preview-spacing-unit', '20px');
-            } else if (layout === 'classic') {
-                root.setProperty('--preview-font-heading', "'Playfair Display', serif");
-                root.setProperty('--preview-font-body', "'Roboto', sans-serif");
-                root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
-                root.setProperty('--preview-spacing-unit', '25px'); /* Mais espaçamento */
-            } else if (layout === 'creative') {
-                root.setProperty('--preview-font-heading', "'Pacifico', cursive");
-                root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
-                root.setProperty('--preview-border-radius', '20px'); /* Mais arredondado */
-                root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+                const root = document.documentElement.style;
+                if (layout === 'modern') {
+                    root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
+                    root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                    root.setProperty('--preview-border-radius', '8px');
+                    root.setProperty('--preview-spacing-unit', '20px');
+                } else if (layout === 'classic') {
+                    root.setProperty('--preview-font-heading', "'Playfair Display', serif");
+                    root.setProperty('--preview-font-body', "'Roboto', sans-serif");
+                    root.setProperty('--preview-border-radius', '2px'); /* Mais quadrado */
+                    root.setProperty('--preview-spacing-unit', '25px'); /* Más espaçamento */
+                } else if (layout === 'creative') {
+                    root.setProperty('--preview-font-heading', "'Pacifico', cursive");
+                    root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                    root.setProperty('--preview-border-radius', '20px'); /* Más arredondado */
+                    root.setProperty('--preview-spacing-unit', '15px'); /* Menos espaçamento */
+                }
+                updatePreview();
+            } catch (error) {
+                console.error("ERRO em selectLayout:", error);
             }
-            updatePreview();
         };
 
         window.openFeatureDetails = function(title, description, iconClass) {
-            console.log('openFeatureDetails executada para:', title); // Log para diagnóstico
-            document.getElementById('modal-feature-title').innerHTML = `<i class="${iconClass}"></i> ${title}`;
-            document.getElementById('modal-feature-description').textContent = description;
-            document.getElementById('feature-modal-overlay').classList.add('active');
+            console.log('DEBUG: openFeatureDetails executada para:', title); // Log para diagnóstico
+            try {
+                document.getElementById('modal-feature-title').innerHTML = `<i class="${iconClass}"></i> ${title}`;
+                document.getElementById('modal-feature-description').textContent = description;
+                document.getElementById('feature-modal-overlay').classList.add('active');
+            } catch (error) {
+                console.error("ERRO em openFeatureDetails:", error);
+            }
         };
 
         window.closeFeatureDetails = function() {
-            console.log('closeFeatureDetails executada'); // Log para diagnóstico
-            document.getElementById('feature-modal-overlay').classList.remove('active');
+            console.log('DEBUG: closeFeatureDetails executada'); // Log para diagnóstico
+            try {
+                document.getElementById('feature-modal-overlay').classList.remove('active');
+            } catch (error) {
+                console.error("ERRO em closeFeatureDetails:", error);
+            }
         };
 
+        window.generateFinalPreview = async function() {
+            console.log('DEBUG: generateFinalPreview executada.');
+            try {
+                const currentSection = sections[currentSectionIndex];
+                const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
+                let allValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        input.classList.add('invalid');
+                        input.style.borderColor = '#dc3545';
+                        allValid = false;
+                        console.log(`DEBUG: Campo obrigatório vazio na seção final: ${input.id}`);
+                    } else {
+                        input.classList.remove('invalid');
+                        input.style.borderColor = '';
+                    }
+                });
+
+                if (!allValid) {
+                    alert('Por favor, preencha todos os campos obrigatórios antes de gerar a prévia.');
+                    return;
+                }
+
+                document.getElementById('loading-overlay').classList.add('show');
+                document.getElementById('error-message-display').style.display = 'none';
+                document.getElementById('feedback-message').style.display = 'none';
+
+                const empresaNome = document.getElementById('nome_empresa').value;
+                const slogan = document.getElementById('slogan').value;
+                const descricao = document.getElementById('descricao').value;
+                const tituloServicos = document.getElementById('titulo_servicos').value;
+                const servicosLista = document.getElementById('servicos_lista').value.split('\n').filter(item => item.trim() !== '');
+                const outrasFuncionalidades = document.getElementById('outras_funcionalidades').value;
+                const objetivoPrincipal = document.getElementById('objetivo_principal').value;
+                const publicoAlvo = document.getElementById('publico_alvo').value;
+                const mensagemCentral = document.getElementById('mensagem_central').value;
+                const contatoEmail = document.getElementById('contato_email').value;
+                const contatoTelefone = document.getElementById('contato_telefone').value;
+                const linkRedes = document.getElementById('link_redes').value;
+
+                const selectedFeatures = Array.from(document.querySelectorAll('input[name="feature"]:checked')).map(cb => cb.value);
+
+                const previewData = {
+                    timestamp: serverTimestamp(),
+                    empresaNome,
+                    slogan,
+                    descricao,
+                    tituloServicos,
+                    servicosLista,
+                    selectedFeatures,
+                    outrasFuncionalidades,
+                    objetivoPrincipal,
+                    publicoAlvo,
+                    mensagemCentral,
+                    contatoEmail,
+                    contatoTelefone,
+                    linkRedes,
+                    design: {
+                        primaryColor: currentPrimaryColor,
+                        secondaryColor: currentSecondaryColor,
+                        accentColor: currentAccentColor,
+                        layout: currentLayout
+                    }
+                };
+
+                console.log('DEBUG: Dados da prévia para salvar:', previewData);
+
+                try {
+                    const docRef = await addDoc(collection(db, "previews"), previewData);
+                    console.log("DEBUG: Documento escrito com ID: ", docRef.id);
+                    document.getElementById('feedback-message').textContent = 'Prévia gerada e dados salvos com sucesso! ID: ' + docRef.id;
+                    document.getElementById('feedback-message').style.display = 'block';
+
+                    const whatsappButton = document.getElementById('whatsapp-final-button');
+                    whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20(ID:%20${docRef.id})%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`; // SEUNUMERO <-- SUBSTITUA
+                    whatsappButton.style.display = 'inline-block'; // Garante que o botão aparece
+                } catch (e) {
+                    console.error("ERRO ao adicionar documento: ", e);
+                    document.getElementById('error-message-display').textContent = 'Erro ao salvar a prévia. Tente novamente.';
+                    document.getElementById('error-message-display').style.display = 'block';
+                } finally {
+                    document.getElementById('loading-overlay').classList.remove('show');
+                    document.getElementById('cta-final').style.display = 'block';
+                    document.getElementById('website-preview').classList.add('show');
+
+                    // Animação de fade-in para as seções da prévia
+                    document.querySelectorAll('.preview-section, .preview-header, .preview-footer').forEach(section => {
+                        section.classList.remove('fade-in'); // Remove para resetar a animação
+                        void section.offsetWidth; // Trigger reflow
+                        section.classList.add('fade-in'); // Adiciona novamente para animar
+                    });
+                }
+            } catch (error) {
+                console.error("ERRO geral em generateFinalPreview:", error);
+                document.getElementById('loading-overlay').classList.remove('show');
+                document.getElementById('error-message-display').textContent = 'Ocorreu um erro inesperado ao gerar a prévia.';
+                document.getElementById('error-message-display').style.display = 'block';
+            }
+        };
+
+        window.openFullscreenPreview = function() {
+            console.log('DEBUG: openFullscreenPreview executada.');
+            const previewElement = document.getElementById('website-preview');
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="pt-br">
+                <head>
+                    <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+                    <style>
+                        body { margin: 0; font-family: 'Open Sans', sans-serif; }
+                        .website-preview {
+                            border: none;
+                            box-shadow: none;
+                            min-height: 100vh;
+                            width: 100%;
+                            border-radius: 0;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        #fullscreen-btn { display: none; } /* Esconde o botão de tela cheia na nova janela */
+                        /* Copia todas as variáveis CSS e estilos de preview do pai */
+                        ${document.querySelector('style').innerHTML}
+                    </style>
+                </head>
+                <body>
+                    ${previewElement.innerHTML}
+                    <script>
+                        // Re-initialize dynamic styles and content in the new window
+                        document.documentElement.style.setProperty('--primary-color', '${currentPrimaryColor}');
+                        document.documentElement.style.setProperty('--secondary-color', '${currentSecondaryColor}');
+                        document.documentElement.style.setProperty('--accent-color', '${currentAccentColor}');
+                        
+                        // Re-apply layout styles if necessary (e.g., fonts, border-radius, spacing)
+                        const root = document.documentElement.style;
+                        const layout = '${currentLayout}'; // Get current layout from parent
+                        if (layout === 'modern') {
+                            root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
+                            root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                            root.setProperty('--preview-border-radius', '8px');
+                            root.setProperty('--preview-spacing-unit', '20px');
+                        } else if (layout === 'classic') {
+                            root.setProperty('--preview-font-heading', "'Playfair Display', serif");
+                            root.setProperty('--preview-font-body', "'Roboto', sans-serif");
+                            root.setProperty('--preview-border-radius', '2px');
+                            root.setProperty('--preview-spacing-unit', '25px');
+                        } else if (layout === 'creative') {
+                            root.setProperty('--preview-font-heading', "'Pacifico', cursive");
+                            root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
+                            root.setProperty('--preview-border-radius', '20px');
+                            root.setProperty('--preview-spacing-unit', '15px');
+                        }
+
+                        // Re-add event listeners for feature modals if needed
+                        const featureDescriptions = ${JSON.stringify(featureDescriptions)};
+                        window.openFeatureDetails = function(title, description, iconClass) {
+                            alert(\`\${title}: \n\${description}\`); // Simple alert for fullscreen mode
+                        };
+                        document.querySelectorAll('.preview-section ul li').forEach(li => {
+                            const featureName = li.textContent.trim().replace(/^(.*?) (.*)$/, '$2'); // Extract name
+                            const feature = featureDescriptions[featureName] || featureDescriptions['Outras Funcionalidades'];
+                            if (feature) {
+                                li.onclick = () => window.openFeatureDetails(featureName, feature.description, feature.icon);
+                            }
+                        });
+                    </script>
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
+        };
 
         showSection(0); // Garante que a primeira seção do formulário é exibida ao carregar a página
     </script>
