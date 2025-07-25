@@ -159,9 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const whatsappButton = document.getElementById('whatsapp-final-button');
     document.getElementById('nome_empresa').addEventListener('keyup', () => {
         const empresaNome = document.getElementById('nome_empresa').value || 'Cliente Interessado';
-        whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
+        whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20${encodeURIComponent(empresaNome)}`;
     });
-    whatsappButton.href = `https://api.whatsapp.com/send?phone=SEUNUMERO&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
+    whatsappButton.href = `https://api.whatsapp.com/send?phone=5551989378751&text=Olá,%20gostei%20da%20prévia%20do%20meu%20site%20e%20quero%20saber%20como%20ficaria%20pronto!%20Meu%20nome%20é%20[Nome da Empresa]`; // SEUNUMERO <-- SUBSTITUA
 
     // Esconde o conteúdo principal e mostra a splash screen
     document.querySelector('.container').style.display = 'none';
@@ -491,7 +491,7 @@ function generateFinalPreview() {
         console.log('DEBUG: Dados da prévia para salvar:', previewData);
 
         try {
-            const docRef = await addDoc(collection(db, "previews"), previewData);
+            const docRef = wait addDoc(collection(db, "previews"), previewData);
             console.log("DEBUG: Documento escrito com ID: ", docRef.id);
             document.getElementById('feedback-message').textContent = 'Prévia gerada e dados salvos com sucesso! ID: ' + docRef.id;
             document.getElementById('feedback-message').style.display = 'block';
