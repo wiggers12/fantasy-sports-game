@@ -93,7 +93,7 @@
         input::placeholder,
         textarea::placeholder {
             color: #aaa; /* Cor do placeholder más suave */
-            opacity: 1; /* Para navegadores que diminuem a opacidad por padrão */
+            opacity: 1; /* Para navegadores que diminuem a opacidade por padrão */
         }
 
         input:focus::placeholder,
@@ -1116,7 +1116,7 @@
         <div class="feature-modal-content">
             <h3 id="modal-feature-title"></h3>
             <p id="modal-feature-description"></p>
-            <button id="close-modal-btn">Entendi</button>
+            <button onclick="window.closeFeatureDetails()">Entendi</button>
         </div>
     </div>
 
@@ -1150,7 +1150,7 @@
         let currentLayout = 'modern'; // Default layout
 
         let currentSectionIndex = 0;
-        const formSections = document.querySelectorAll('.form-section');
+        const formSections = document.querySelectorAll('.form-section'); // Mudança de 'sections' para 'formSections'
 
         // Conteúdo detalhado das funcionalidades para o modal
         const featureDescriptions = {
@@ -1219,8 +1219,8 @@
             // Anexa event listeners aos inputs para updatePreview e validação
             const inputs = document.querySelectorAll(
                 '#section-info input, #section-info textarea, ' +
-                '#section-content input:not([type="checkbox"]), #section-content textarea, ' + // Exclui checkboxes
-                '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
+                '#section-content input:not([type="checkbox"]), #section-content textarea, ' +
+                '#section-features input:not([type="checkbox"]), #section-features textarea, ' +
                 '#section-audience input, #section-audience textarea, ' +
                 '#section-contact input, #section-contact textarea' // Adicionado textarea para contato
             );
@@ -1235,17 +1235,16 @@
             // Adiciona event listeners aos botões de navegação
             document.querySelectorAll('button.next-button').forEach(button => {
                 button.addEventListener('click', function() {
-                    nextSection(this.dataset.nextSection);
+                    window.nextSection(this.dataset.nextSection);
                 });
             });
             document.querySelectorAll('button.prev-button').forEach(button => {
                 button.addEventListener('click', function() {
-                    prevSection(this.dataset.prevSection);
+                    window.prevSection(this.dataset.prevSection);
                 });
             });
-            document.getElementById('generate-preview-btn').addEventListener('click', generateFinalPreview);
-            document.getElementById('fullscreen-btn').addEventListener('click', openFullscreenPreview);
-            document.getElementById('close-modal-btn').addEventListener('click', closeFeatureDetails); // Listener para fechar o modal
+            document.getElementById('generate-preview-btn').addEventListener('click', window.generateFinalPreview);
+            document.getElementById('fullscreen-btn').addEventListener('click', window.openFullscreenPreview);
 
 
             // Adiciona event listeners aos color boxes
@@ -1254,8 +1253,8 @@
                     const primary = this.dataset.primary;
                     const secondary = this.dataset.secondary;
                     const accent = this.dataset.accent;
-                    console.log('DEBUG: Clicou na cor:', primary); // Log para diagnóstico
-                    selectColors(this, primary, secondary, accent);
+                    console.log('DEBUG: Clicou na cor:', primary);
+                    window.selectColors(this, primary, secondary, accent);
                 });
             });
 
@@ -1263,8 +1262,8 @@
             document.querySelectorAll('.layout-box').forEach(layoutBox => {
                 layoutBox.addEventListener('click', function() {
                     const layout = this.dataset.layout;
-                    console.log('DEBUG: Clicou no layout:', layout); // Log para diagnóstico
-                    selectLayout(this, layout);
+                    console.log('DEBUG: Clicou no layout:', layout);
+                    window.selectLayout(this, layout);
                 });
             });
 
@@ -1298,7 +1297,7 @@
         function showSection(index) {
             console.log(`DEBUG: showSection chamada com índice: ${index}`);
             try {
-                formSections.forEach((section, i) => {
+                formSections.forEach((section, i) => { // Mudança de 'sections' para 'formSections'
                     if (i === index) {
                         section.classList.add('active');
                     } else {
@@ -1311,10 +1310,10 @@
             }
         }
 
-        function nextSection(nextSectionId) {
+        window.nextSection = function(nextSectionId) {
             console.log(`DEBUG: nextSection chamada para: ${nextSectionId}`);
             try {
-                const currentSection = formSections[currentSectionIndex];
+                const currentSection = formSections[currentSectionIndex]; // Mudança de 'sections' para 'formSections'
                 const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
                 let allValid = true;
 
@@ -1338,7 +1337,7 @@
                     const nextSectionElement = document.getElementById(nextSectionId);
                     if (nextSectionElement) {
                         console.log(`DEBUG: Avançando para a seção: ${nextSectionElement.id}`);
-                        showSection(Array.from(formSections).indexOf(nextSectionElement));
+                        showSection(Array.from(formSections).indexOf(nextSectionElement)); // Mudança de 'sections' para 'formSections'
                         // Scroll to top of the form for better UX
                         window.scrollTo({
                             top: document.querySelector('.container').offsetTop,
@@ -1353,14 +1352,14 @@
             } catch (error) {
                 console.error("ERRO em nextSection:", error);
             }
-        }
+        };
 
-        function prevSection(prevSectionId) {
+        window.prevSection = function(prevSectionId) {
             console.log(`DEBUG: prevSection chamada para: ${prevSectionId}`);
             try {
                 const prevSectionElement = document.getElementById(prevSectionId);
                 if (prevSectionElement) {
-                    showSection(Array.from(formSections).indexOf(prevSectionElement));
+                    showSection(Array.from(formSections).indexOf(prevSectionElement)); // Mudança de 'sections' para 'formSections'
                     // Scroll to top of the form for better UX
                     window.scrollTo({
                         top: document.querySelector('.container').offsetTop,
@@ -1372,10 +1371,10 @@
             } catch (error) {
                 console.error("ERRO em prevSection:", error);
             }
-        }
+        };
 
         // Funções para atualização da prévia
-        function updatePreview() {
+        window.updatePreview = function() {
             console.log('DEBUG: updatePreview executada.');
             try {
                 document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
@@ -1411,16 +1410,16 @@
                     selectedFeatures.forEach(feature => {
                         const li = document.createElement('li');
                         li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
-                        li.onclick = () => openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
+                        li.onclick = () => window.openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
                         ulFuncionalidadesDisplay.appendChild(li);
                     });
                 } else {
                     // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
                     ulFuncionalidadesDisplay.innerHTML = `
-                        <li onclick="openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
-                        <li onclick="openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
-                        <li onclick="openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
-                        <li onclick="openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                        <li onclick="window.openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                        <li onclick="window.openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                        <li onclick="window.openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                        <li onclick="window.openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
                     `;
                 }
 
@@ -1429,7 +1428,7 @@
                 if (outrasFuncionalidadesText) {
                     const liOutras = document.createElement('li');
                     liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
-                    liOutras.onclick = () => openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
+                    liOutras.onclick = () => window.openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
                     ulFuncionalidadesDisplay.appendChild(liOutras);
                     // previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
                 } else {
@@ -1716,7 +1715,7 @@
                     </script>
                 </body>
                 </html>
-
+            `);
             newWindow.document.close();
         };
 
