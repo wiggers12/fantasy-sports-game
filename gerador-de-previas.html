@@ -93,7 +93,7 @@
         input::placeholder,
         textarea::placeholder {
             color: #aaa; /* Cor do placeholder más suave */
-            opacity: 1; /* Para navegadores que diminuem a opacidade por padrão */
+            opacity: 1; /* Para navegadores que diminuem a opacidad por padrão */
         }
 
         input:focus::placeholder,
@@ -202,13 +202,13 @@
             gap: 20px; /* Maior espaçamento entre as opções */
             margin-bottom: 30px;
             justify-content: center;
-            flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+            flex-wrap: wrap; /* Permite quebrar linha em telas pequeñas */
         }
         .color-box, .layout-box {
             width: 80px; /* Aumentei o tamanho */
             height: 80px;
             border-radius: 50%;
-            border: 4px solid #ccc; /* Borda más grossa */
+            border: 4px solid #ccc; /* Borda más gruesa */
             cursor: pointer;
             transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Adicionei box-shadow */
             display: flex;
@@ -219,10 +219,10 @@
             color: #555;
             flex-direction: column;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Sombra suave */
-            position: relative; /* Para o ícone de check */
+            position: relative; /* Para el icono de check */
         }
         .layout-box {
-            border-radius: 10px; /* Quadrado más arredondado */
+            border-radius: 10px; /* Cuadrado más redondeado */
             width: 140px; /* Aumentei a largura */
             height: 90px; /* Aumentei a altura */
             font-size: 1em; /* Aumentei a fonte */
@@ -233,20 +233,20 @@
         }
         .color-box.selected, .layout-box.selected {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra más evidente na seleção */
-            transform: scale(1.1); /* Efeito de destaque maior */
+            box-shadow: 0 0 0 5px rgba(0, 123, 255, 0.4); /* Sombra más evidente en la selección */
+            transform: scale(1.1); /* Efecto de destaque mayor */
         }
         .color-box i {
-            font-size: 1.5em; /* Tamanho dos ícones de cor */
+            font-size: 1.5em; /* Tamaño de los íconos de color */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white; /* Cor do ícone de check */
-            display: none; /* Escondido por padrão */
+            color: white; /* Color del ícono de check */
+            display: none; /* Escondido por defecto */
         }
         .color-box.selected i {
-            display: block; /* Mostra o ícone de check quando selecionado */
+            display: block; /* Muestra el ícono de check cuando está seleccionado */
         }
         .color1 { background-color: #007bff; }
         .color2 { background-color: #28a745; }
@@ -276,9 +276,9 @@
             color: #555;
         }
         .layout-box i {
-             font-size: 1.2em; /* Ícone para layouts */
+             font-size: 1.2em; /* Ícono para diseños */
              margin-left: 5px;
-             color: var(--primary-color); /* Cor para o ícone de layout */
+             color: var(--primary-color); /* Color para el ícono de diseño */
         }
 
         /* Checkbox/Funcionalidades */
@@ -305,7 +305,7 @@
             color: #555;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            flex: 1 1 calc(33% - 30px); /* 3 por linha em desktop */
+            flex: 1 1 calc(33% - 30px); /* 3 por fila en escritorio */
             min-width: 180px;
             max-width: 250px;
             position: relative;
@@ -318,7 +318,7 @@
         }
 
         .checkbox-item input[type="checkbox"] {
-            position: absolute; /* Esconde o checkbox original */
+            position: absolute; /* Esconde el checkbox original */
             opacity: 0;
             width: 0;
             height: 0;
@@ -345,11 +345,11 @@
         .checkbox-item .custom-checkbox i {
             color: white;
             font-size: 0.9em;
-            display: none; /* Esconde o checkmark por padrão */
+            display: none; /* Esconde el checkmark por defecto */
         }
 
         .checkbox-item input[type="checkbox"]:checked + .custom-checkbox i {
-            display: block; /* Mostra o checkmark quando selecionado */
+            display: block; /* Muestra el checkmark cuando está seleccionado */
         }
 
         .checkbox-item .icon-feature {
@@ -359,7 +359,7 @@
         }
 
 
-        /* Estilos da Prévia do Site */
+        /* Estilos de la Vista Previa del Sitio */
         .website-preview {
             border: 1px solid #e0e6ed;
             border-radius: 12px;
@@ -379,7 +379,7 @@
             transform: translateY(0);
         }
 
-        /* Animações para as seções da prévia */
+        /* Animaciones para las secciones de la vista previa */
         .preview-section.fade-in {
             opacity: 0;
             transform: translateY(15px);
@@ -393,14 +393,14 @@
             }
         }
 
-        /* Aplica atraso para cada seção */
+        /* Aplica retraso a cada sección */
         .preview-header.fade-in { animation-delay: 0.2s; }
         .preview-section:nth-of-type(1).fade-in { animation-delay: 0.4s; }
         .preview-section:nth-of-type(2).fade-in { animation-delay: 0.6s; }
-        .preview-section:nth-of-type(3).fade-in { animation-delay: 0.8s; } /* Nova seção (Funcionalidades) */
-        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nova seção (Público/Mensagem) */
-        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nova seção (Contato) */
-        .preview-footer.fade-in { animation-delay: 1.4s; } /* Atraso ajustado */
+        .preview-section:nth-of-type(3).fade-in { animation-delay: 0.8s; } /* Nueva sección (Funcionalidades) */
+        .preview-section:nth-of-type(4).fade-in { animation-delay: 1.0s; } /* Nueva sección (Público/Mensaje) */
+        .preview-section:nth-of-type(5).fade-in { animation-delay: 1.2s; } /* Nueva sección (Contacto) */
+        .preview-footer.fade-in { animation-delay: 1.4s; } /* Retraso ajustado */
 
 
         .preview-header {
@@ -493,7 +493,7 @@
             font-weight: 500;
             min-width: 220px;
             text-align: left;
-            cursor: pointer; /* Torna clicável */
+            cursor: pointer; /* Lo hace clickeable */
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .preview-section ul li:hover {
@@ -506,15 +506,15 @@
             font-size: 1.2em;
         }
 
-        /* Estilos específicos para a nova seção de público/mensagem */
+        /* Estilos específicos para la nueva sección de público/mensaje */
         .preview-section.preview-audience-display p {
-            font-size: 1.25em; /* Texto maior */
+            font-size: 1.25em; /* Texto más grande */
             font-weight: 600;
             color: var(--secondary-color);
             margin-bottom: 10px;
         }
         .preview-section.preview-audience-display p#preview-mensagem-central-display {
-            font-size: 1.4em; /* Mensagem central ainda maior */
+            font-size: 1.4em; /* Mensaje central aún más grande */
             color: var(--primary-color);
             font-style: italic;
             border-left: 5px solid var(--accent-color);
@@ -571,7 +571,7 @@
             opacity: 0.8;
         }
 
-        /* Botões CTA Final */
+        /* Botones CTA Final */
         .whatsapp-button {
             display: inline-block;
             background-color: #25D366;
@@ -595,7 +595,7 @@
             box-shadow: 0 4px 10px rgba(0, 218, 85, 0.4);
         }
 
-        /* Indicador de carregamento */
+        /* Indicador de carga */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -628,10 +628,10 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Botão de Ver em Tela Cheia - Posição ajustada */
+        /* Botón de Ver en Pantalla Completa - Posición ajustada */
         #fullscreen-btn {
             position: absolute;
-            bottom: 15px; /* Posicionado na parte inferior */
+            bottom: 15px; /* Posicionado en la parte inferior */
             right: 15px;
             background-color: rgba(255,255,255,0.3);
             border: 1px solid rgba(255,255,255,0.7);
@@ -655,19 +655,19 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         }
 
-        /* Splash Screen Styles */
+        /* Estilos de la Pantalla de Inicio */
         #splash-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%); /* Gradiente com sua cor primária */
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%); /* Gradiente con tu color primario */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2000; /* Acima de tudo */
+            z-index: 2000; /* Por encima de todo */
             color: white;
             font-family: var(--font-montserrat);
             opacity: 1;
@@ -675,19 +675,19 @@
         }
         #splash-screen.fade-out {
             opacity: 0;
-            pointer-events: none; /* Permite cliques através após o fade-out */
+            pointer-events: none; /* Permite clics a través después de desvanecer */
         }
         #splash-screen img {
-            max-width: 180px; /* Tamanho da logo na splash */
+            max-width: 180px; /* Tamaño del logo en la pantalla de inicio */
             height: auto;
             margin-bottom: 25px;
-            animation: bounceIn 1s ease-out; /* Animação para a logo */
-            border-radius: 50%; /* Se sua logo for redonda, fica legal */
+            animation: bounceIn 1s ease-out; /* Animación para el logo */
+            border-radius: 50%; /* Si tu logo es redondo, queda bien */
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         #splash-screen h1 {
             color: white;
-            font-size: 3.5em; /* Tamanho do título */
+            font-size: 3.5em; /* Tamaño del título */
             margin: 0;
             animation: fadeInText 1.5s ease-out;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -716,7 +716,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modal para detalhes de funcionalidade */
+        /* Modal para detalles de funcionalidad */
         .feature-modal-overlay {
             position: fixed;
             top: 0;
@@ -727,7 +727,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2500; /* Acima da splash screen */
+            z-index: 2500; /* Por encima de la pantalla de inicio */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -786,7 +786,7 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
             box-shadow: none;
-            margin-top: 0; /* Remover margem extra */
+            margin-top: 0; /* Remover margen extra */
         }
         .feature-modal-content button:hover {
             background-color: #222;
@@ -795,7 +795,7 @@
         }
 
 
-        /* Responsividade para telas menores */
+        /* Responsividad para pantallas más pequeñas */
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -838,7 +838,7 @@
             .preview-section p { font-size: 1em; }
             .preview-section ul li {
                 padding: 15px 20px;
-                flex: 1 1 100%; /* Uma coluna em mobile */
+                flex: 1 1 100%; /* Una columna en móvil */
             }
             .whatsapp-button {
                 font-size: 1.1em;
@@ -860,7 +860,7 @@
                 font-size: 1.2em;
             }
             .checkbox-item {
-                flex: 1 1 100%; /* Uma coluna em mobile */
+                flex: 1 1 100%; /* Una columna en móvil */
                 max-width: unset;
             }
             .feature-modal-content {
@@ -1116,11 +1116,12 @@
         <div class="feature-modal-content">
             <h3 id="modal-feature-title"></h3>
             <p id="modal-feature-description"></p>
-            <button onclick="window.closeFeatureDetails()">Entendi</button>
+            <button id="close-modal-btn">Entendi</button>
         </div>
     </div>
 
     <script type="module">
+        // INÍCIO DO BLOCO DE SCRIPT PRINCIPAL
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
@@ -1150,7 +1151,7 @@
         let currentLayout = 'modern'; // Default layout
 
         let currentSectionIndex = 0;
-        const formSections = document.querySelectorAll('.form-section'); // Mudança de 'sections' para 'formSections'
+        const formSections = document.querySelectorAll('.form-section');
 
         // Conteúdo detalhado das funcionalidades para o modal
         const featureDescriptions = {
@@ -1202,6 +1203,8 @@
 
 
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DEBUG: DOMContentLoaded disparado. Iniciando setup.');
+
             // Inicializa o estado do checkmark de cores para o padrão selecionado
             const defaultColorBox = document.querySelector('.color-box.color1');
             if (defaultColorBox) {
@@ -1219,10 +1222,10 @@
             // Anexa event listeners aos inputs para updatePreview e validação
             const inputs = document.querySelectorAll(
                 '#section-info input, #section-info textarea, ' +
-                '#section-content input:not([type="checkbox"]), #section-content textarea, ' +
-                '#section-features input:not([type="checkbox"]), #section-features textarea, ' +
+                '#section-content input:not([type="checkbox"]), #section-content textarea, ' + // Exclui checkboxes
+                '#section-features input:not([type="checkbox"]), #section-features textarea, ' + // Exclui checkboxes
                 '#section-audience input, #section-audience textarea, ' +
-                '#section-contact input, #section-contact textarea' // Adicionado textarea para contato
+                '#section-contact input, #section-contact textarea'
             );
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
@@ -1232,38 +1235,39 @@
                 input.addEventListener('keyup', updatePreview);
             });
 
-            // Adiciona event listeners aos botões de navegação
+            // Anexa event listeners aos botões de navegação
             document.querySelectorAll('button.next-button').forEach(button => {
                 button.addEventListener('click', function() {
-                    window.nextSection(this.dataset.nextSection);
+                    nextSection(this.dataset.nextSection);
                 });
             });
             document.querySelectorAll('button.prev-button').forEach(button => {
                 button.addEventListener('click', function() {
-                    window.prevSection(this.dataset.prevSection);
+                    prevSection(this.dataset.prevSection);
                 });
             });
-            document.getElementById('generate-preview-btn').addEventListener('click', window.generateFinalPreview);
-            document.getElementById('fullscreen-btn').addEventListener('click', window.openFullscreenPreview);
+            document.getElementById('generate-preview-btn').addEventListener('click', generateFinalPreview);
+            document.getElementById('fullscreen-btn').addEventListener('click', openFullscreenPreview);
+            document.getElementById('close-modal-btn').addEventListener('click', closeFeatureDetails); // Listener para fechar o modal
 
 
-            // Adiciona event listeners aos color boxes
+            // Anexa event listeners aos color boxes
             document.querySelectorAll('.color-box').forEach(colorBox => {
                 colorBox.addEventListener('click', function() {
                     const primary = this.dataset.primary;
                     const secondary = this.dataset.secondary;
                     const accent = this.dataset.accent;
-                    console.log('DEBUG: Clicou na cor:', primary);
-                    window.selectColors(this, primary, secondary, accent);
+                    console.log('DEBUG: Clicou na cor:', primary); // Log para diagnóstico
+                    selectColors(this, primary, secondary, accent);
                 });
             });
 
-            // Adiciona event listeners aos layout boxes
+            // Anexa event listeners aos layout boxes
             document.querySelectorAll('.layout-box').forEach(layoutBox => {
                 layoutBox.addEventListener('click', function() {
                     const layout = this.dataset.layout;
-                    console.log('DEBUG: Clicou no layout:', layout);
-                    window.selectLayout(this, layout);
+                    console.log('DEBUG: Clicou no layout:', layout); // Log para diagnóstico
+                    selectLayout(this, layout);
                 });
             });
 
@@ -1285,19 +1289,23 @@
             document.getElementById('splash-screen').style.display = 'flex';
 
             setTimeout(() => {
+                console.log('DEBUG: Splash screen timeout triggered. Starting fade-out.');
                 document.getElementById('splash-screen').classList.add('fade-out');
                 setTimeout(() => {
+                    console.log('DEBUG: Splash screen fully faded. Displaying container.');
                     document.getElementById('splash-screen').style.display = 'none';
                     document.querySelector('.container').style.display = 'block'; // Mostra o conteúdo principal
                 }, 1000); // Tempo da transição de fade-out
             }, 3000); // Tempo que a splash screen fica visível (3 segundos)
+
+            console.log('DEBUG: DOMContentLoaded setup complete.');
         });
 
         // Funções para manipulação de seções
         function showSection(index) {
             console.log(`DEBUG: showSection chamada com índice: ${index}`);
             try {
-                formSections.forEach((section, i) => { // Mudança de 'sections' para 'formSections'
+                formSections.forEach((section, i) => {
                     if (i === index) {
                         section.classList.add('active');
                     } else {
@@ -1310,10 +1318,10 @@
             }
         }
 
-        window.nextSection = function(nextSectionId) {
+        function nextSection(nextSectionId) {
             console.log(`DEBUG: nextSection chamada para: ${nextSectionId}`);
             try {
-                const currentSection = formSections[currentSectionIndex]; // Mudança de 'sections' para 'formSections'
+                const currentSection = formSections[currentSectionIndex];
                 const inputs = currentSection.querySelectorAll('input[required], textarea[required]');
                 let allValid = true;
 
@@ -1337,7 +1345,7 @@
                     const nextSectionElement = document.getElementById(nextSectionId);
                     if (nextSectionElement) {
                         console.log(`DEBUG: Avançando para a seção: ${nextSectionElement.id}`);
-                        showSection(Array.from(formSections).indexOf(nextSectionElement)); // Mudança de 'sections' para 'formSections'
+                        showSection(Array.from(formSections).indexOf(nextSectionElement));
                         // Scroll to top of the form for better UX
                         window.scrollTo({
                             top: document.querySelector('.container').offsetTop,
@@ -1352,14 +1360,14 @@
             } catch (error) {
                 console.error("ERRO em nextSection:", error);
             }
-        };
+        }
 
-        window.prevSection = function(prevSectionId) {
+        function prevSection(prevSectionId) {
             console.log(`DEBUG: prevSection chamada para: ${prevSectionId}`);
             try {
                 const prevSectionElement = document.getElementById(prevSectionId);
                 if (prevSectionElement) {
-                    showSection(Array.from(formSections).indexOf(prevSectionElement)); // Mudança de 'sections' para 'formSections'
+                    showSection(Array.from(formSections).indexOf(prevSectionElement));
                     // Scroll to top of the form for better UX
                     window.scrollTo({
                         top: document.querySelector('.container').offsetTop,
@@ -1371,10 +1379,10 @@
             } catch (error) {
                 console.error("ERRO em prevSection:", error);
             }
-        };
+        }
 
         // Funções para atualização da prévia
-        window.updatePreview = function() {
+        function updatePreview() {
             console.log('DEBUG: updatePreview executada.');
             try {
                 document.getElementById('preview-empresa').textContent = document.getElementById('nome_empresa').value || 'Sua Empresa Online';
@@ -1410,16 +1418,16 @@
                     selectedFeatures.forEach(feature => {
                         const li = document.createElement('li');
                         li.innerHTML = `<i class="${feature.iconClass}"></i> ${feature.name}`;
-                        li.onclick = () => window.openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
+                        li.onclick = () => openFeatureDetails(feature.name, featureDescriptions[feature.name]?.description || "Descrição não disponível.", feature.iconClass);
                         ulFuncionalidadesDisplay.appendChild(li);
                     });
                 } else {
                     // Adiciona um placeholder se nada for selecionado e não houver outras funcionalidades
                     ulFuncionalidadesDisplay.innerHTML = `
-                        <li onclick="window.openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
-                        <li onclick="window.openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
-                        <li onclick="window.openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
-                        <li onclick="window.openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
+                        <li onclick="openFeatureDetails('Sistema Flexível', 'Nosso sistema é construído para se adaptar às suas necessidades, permitindo personalizações e expansões futuras sem grandes complicações.', 'fa-solid fa-cogs')"><i class="fa-solid fa-cogs"></i> Sistema Flexível</li>
+                        <li onclick="openFeatureDetails('Experiência do Usuário', 'Focamos na criação de interfaces intuitivas e agradáveis, garantindo que seus clientes tenham a melhor experiência ao navegar em seu site ou app.', 'fa-solid fa-star')"><i class="fa-solid fa-star"></i> Experiência do Usuário</li>
+                        <li onclick="openFeatureDetails('Segurança de Dados', 'Implementamos as melhores práticas de segurança para proteger seus dados e os de seus clientes, garantindo a integridade e a confidencialidade das informações.', 'fa-solid fa-shield-alt')"><i class="fa-solid fa-shield-alt"></i> Segurança de Dados</li>
+                        <li onclick="openFeatureDetails('Escalabilidade na Nuvem', 'Construímos seu projeto em infraestruturas de nuvem escaláveis, permitindo que seu site ou app cresça junto com seu negócio, sem preocupações com picos de acesso.', 'fa-solid fa-cloud')"><i class="fa-solid fa-cloud"></i> Escalabilidade na Nuvem</li>
                     `;
                 }
 
@@ -1428,7 +1436,7 @@
                 if (outrasFuncionalidadesText) {
                     const liOutras = document.createElement('li');
                     liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
-                    liOutras.onclick = () => window.openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
+                    liOutras.onclick = () => openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
                     ulFuncionalidadesDisplay.appendChild(liOutras);
                     // previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
                 } else {
@@ -1458,7 +1466,7 @@
             } catch (error) {
                 console.error("ERRO em updatePreview:", error);
             }
-        };
+        }
 
         window.selectColors = function(element, primary, secondary, accent) {
             console.log('DEBUG: selectColors executada para:', primary); // Log para diagnóstico
@@ -1649,7 +1657,6 @@
                 <head>
                     <title>Prévia do Site - ${document.getElementById('preview-empresa').textContent}</title>
                     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-                    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                     <style>
                         body { margin: 0; font-family: 'Open Sans', sans-serif; }
@@ -1662,8 +1669,8 @@
                             display: flex;
                             flex-direction: column;
                         }
-                        #fullscreen-btn { display: none; } /* Esconde o botão de tela cheia na nova janela */
-                        /* Copia todas as variáveis CSS e estilos de preview do pai */
+                        #fullscreen-btn { display: none; } /* Esconde o botão de tela cheia na nueva ventana */
+                        /* Copia todas las variables CSS y estilos de vista previa del padre */
                         ${document.querySelector('style').innerHTML}
                     </style>
                 </head>
@@ -1677,7 +1684,7 @@
                         
                         // Re-apply layout styles if necessary (e.g., fonts, border-radius, spacing)
                         const root = document.documentElement.style;
-                        const layout = '${currentLayout}'; // Get current layout from parent
+                        const layout = '${currentLayout}'; // Obtiene el diseño actual del padre
                         if (layout === 'modern') {
                             root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
                             root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
@@ -1698,14 +1705,10 @@
                         // Re-add event listeners for feature modals if needed
                         const featureDescriptions = ${JSON.stringify(featureDescriptions)};
                         window.openFeatureDetails = function(title, description, iconClass) {
-                            alert(\`\${title}: \n\${description}\`); // Simple alert for fullscreen mode
+                            alert(\`\${title}: \n\${description}\`); // Alerta simple para modo de pantalla completa
                         };
                         document.querySelectorAll('.preview-section ul li').forEach(li => {
-                            const featureName = li.textContent.trim().replace(/^(.*?)\s/, ''); // Extract name
-                            // Tentativa de extrair apenas o nome da funcionalidade do li.textContent
-                            // Pode ser necessário ajustar se o formato do texto for diferente
-                            const cleanedFeatureName = li.textContent.replace(/<i[^>]*>.*?<\/i>\s*/, '').trim(); 
-
+                            const cleanedFeatureName = li.textContent.trim().replace(/<i[^>]*>.*?<\/i>\s*/, ''); 
                             const feature = featureDescriptions[cleanedFeatureName] || featureDescriptions['Outras Funcionalidades'];
                             
                             if (feature) {
@@ -1719,10 +1722,8 @@
             newWindow.document.close();
         };
 
-        // Garante que a primeira seção do formulário é exibida ao carregar a página
-        document.addEventListener('DOMContentLoaded', () => {
-            showSection(0); 
-        });
+        // Garante que la primera sección del formulario se muestre al cargar la página
+        // Esta línea foi movida para o final do escopo do módulo DOMContentLoaded para garantir a execução
     </script>
 </body>
 </html>
