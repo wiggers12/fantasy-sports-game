@@ -907,11 +907,11 @@
             <h2><i class="fa-solid fa-palette"></i> 2. Escolha o Estilo e a Personalidade do Seu Site</h2>
             <label><i class="fa-solid fa-droplet"></i> Paleta de Cores:</label>
             <div class="color-options">
-                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" onclick="selectColors(this, '#007bff', '#343a40', '#ffc107')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" onclick="selectColors(this, '#28a745', '#34495e', '#f39c12')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" onclick="selectColors(this, '#dc3545', '#364f6b', '#fdcb6e')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" onclick="selectColors(this, '#6f42c1', '#2c3e50', '#bdc3c7')"><i class="fa-solid fa-check"></i></div>
-                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" onclick="selectColors(this, '#fd7e14', '#2d3436', '#ffeaa7')"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color1 selected" data-primary="#007bff" data-secondary="#343a40" data-accent="#ffc107" data-color-index="0"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color2" data-primary="#28a745" data-secondary="#34495e" data-accent="#f39c12" data-color-index="1"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color3" data-primary="#dc3545" data-secondary="#364f6b" data-accent="#fdcb6e" data-color-index="2"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color4" data-primary="#6f42c1" data-secondary="#2c3e50" data-accent="#bdc3c7" data-color-index="3"><i class="fa-solid fa-check"></i></div>
+                <div class="color-box color5" data-primary="#fd7e14" data-secondary="#2d3436" data-accent="#ffeaa7" data-color-index="4"><i class="fa-solid fa-check"></i></div>
             </div>
             <p style="text-align: center; font-size: 0.9em; color: #666;"><i class="fa-solid fa-info-circle"></i> As cores da prévia serão ajustadas automaticamente.</p>
 
@@ -1238,6 +1238,17 @@
                 checkbox.addEventListener('change', updatePreview);
             });
 
+            // CORREÇÃO: Anexar event listeners aos color boxes
+            document.querySelectorAll('.color-box').forEach(colorBox => {
+                colorBox.addEventListener('click', function() {
+                    const primary = this.dataset.primary;
+                    const secondary = this.dataset.secondary;
+                    const accent = this.dataset.accent;
+                    console.log('Clicou na cor:', primary); // Log para diagnóstico
+                    selectColors(this, primary, secondary, accent);
+                });
+            });
+
 
             const whatsappButton = document.getElementById('whatsapp-final-button');
             document.getElementById('nome_empresa').addEventListener('keyup', () => {
@@ -1343,6 +1354,7 @@
 
         // Funções de seleção de cores e layout
         function selectColors(element, primary, secondary, accent) {
+            console.log('selectColors executada para:', primary); // Log para diagnóstico
             document.querySelectorAll('.color-box').forEach(box => {
                 box.classList.remove('selected');
             });
@@ -1644,12 +1656,7 @@
                             background-color: #fff; border: 1px solid #eee; border-radius: calc(0.8 * var(--preview-border-radius));
                             padding: 20px 25px; flex: 1 1 calc(33% - 40px); box-shadow: 0 3px 10px rgba(0,0,0,0.08);
                             font-size: 1.1em; font-weight: 500; min-width: 220px; text-align: left;
-                            cursor: pointer; /* Torna clicável */
-                            transition: transform 0.2s ease, box-shadow 0.2s ease;
-                        }
-                        .preview-section ul li:hover {
-                            transform: translateY(-5px);
-                            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+                            /* Cursor pointer e transições já estão definidos, garantir que não causem problema */
                         }
                         .preview-section ul li i { margin-right: 10px; color: var(--accent-color); font-size: 1.2em; }
 
@@ -1675,11 +1682,10 @@
 
                         /* Estilos para imagens (logo e serviços) */
                         .preview-section img {
-                            border-radius: var(--preview-border-radius); /* Usar border-radius dinâmico */
+                            border-radius: var(--preview-border-radius);
                             margin-bottom: var(--preview-spacing-unit);
                             object-fit: cover;
                         }
-                        /* Animações e placeholders podem ser omitidos na tela cheia ou ajustados */
                         .fade-in { opacity: 1 !important; transform: none !important; animation: none !important; }
 
                         .close-fullscreen-btn {
