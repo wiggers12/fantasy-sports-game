@@ -1,4 +1,5 @@
 // INÍCIO DO BLOCO DE JAVASCRIPT PRINCIPAL (script-gerador.js)
+// Este arquivo contém toda a lógica do seu gerador de prévias.
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
@@ -22,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app); // Analytics inicializado, mas não usado na lógica principal
 const db = getFirestore(app); // Inicializa o Firestore
 
-// Variáveis globais para o seu script
+// Variáveis globais para o seu script (acesse-as via window.variavel se precisar de fora do módulo)
 let currentPrimaryColor = '#007bff';
 let currentSecondaryColor = '#343a40';
 let currentAccentColor = '#ffc107';
@@ -32,7 +33,7 @@ let currentSectionIndex = 0;
 const formSections = document.querySelectorAll('.form-section');
 
 // Conteúdo detalhado das funcionalidades para o modal
-const featureDescriptions = {
+window.featureDescriptions = { // Exposto em window para o modal na nova janela
     "Cadastro de Clientes": {
         icon: "fa-solid fa-user-plus",
         description: "Gerencie seus contatos, histórico de interações e preferências, personalizando o atendimento e construindo relacionamentos duradouros e eficientes."
@@ -316,15 +317,11 @@ function updatePreview() {
             liOutras.innerHTML = `<i class="fa-solid fa-plus-circle"></i> Outras: ${outrasFuncionalidadesText}`;
             liOutras.onclick = () => openFeatureDetails('Outras Funcionalidades', featureDescriptions['Outras Funcionalidades'].description || "Funcionalidades adicionais.", 'fa-solid fa-plus-circle');
             ulFuncionalidadesDisplay.appendChild(liOutras);
-            // previewOutrasFunc.style.display = 'none'; // Esconde o p original se a lista for usada
-        } else {
-            // previewOutrasFunc.style.display = 'none'; // Sempre esconde se não tiver texto, pois agora a lista é a principal
         }
 
         document.getElementById('preview-objetivo-principal-display').textContent = document.getElementById('objetivo_principal').value ? `Nosso principal objetivo é ${document.getElementById('objetivo_principal').value}.` : 'Nosso principal objetivo é [Objetivo Principal do Site/App].';
         
         // Novas seções de conteúdo - PÚBLICO E MENSAGEM
-        // Pega o valor do input, se vazio, usa o placeholder de novo
         document.getElementById('preview-titulo-publico').textContent = document.getElementById('publico_alvo').value ? `Para ${document.getElementById('publico_alvo').value}` : 'Para Quem Criamos Soluções';
         document.getElementById('preview-publico-alvo-display').textContent = document.getElementById('publico_alvo').value ? `Nosso público-alvo principal são: ${document.getElementById('publico_alvo').value}.` : 'Nosso público-alvo são [Público-Alvo Principal].';
         document.getElementById('preview-mensagem-central-display').innerHTML = document.getElementById('mensagem_central').value ? `A mensagem más importante que queremos transmitir é: <strong>${document.getElementById('mensagem_central').value}</strong>` : 'A mensagem más importante que queremos transmitir é: <strong>[Mensagem Central do Site/App]</strong>';
@@ -555,15 +552,25 @@ function openFullscreenPreview() {
         </head>
         <body>
             ${previewElement.innerHTML}
-            <script>
-                // Re-initialize dynamic styles and content in the new window
-                document.documentElement.style.setProperty('--primary-color', '${currentPrimaryColor}');
-                document.documentElement.style.setProperty('--secondary-color', '${currentSecondaryColor}');
-                document.documentElement.style.setProperty('--accent-color', '${currentAccentColor}');
+            <script type="module"> // Importante: script type="module" para usar imports e variables del módulo padre
+                import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+                // Es necesario re-inicializar Firebase si vas a hacer operaciones de BD en esta nueva ventana
+                // o pasar la instancia 'app' y 'db' desde el padre. Para este caso, simplifiquemos.
+
+                // Acceso a las variables globales y funciones que ya fueron expuestas en el padre
+                const currentPrimaryColor = window.currentPrimaryColor;
+                const currentSecondaryColor = window.currentSecondaryColor;
+                const currentAccentColor = window.currentAccentColor;
+                const currentLayout = window.currentLayout;
+                const featureDescriptions = window.featureDescriptions; // Accede a las descripciones globales
+
+                document.documentElement.style.setProperty('--primary-color', currentPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', currentSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', currentAccentColor);
                 
-                // Re-apply layout styles if necessary (e.g., fonts, border-radius, spacing)
+                // Vuelve a aplicar los estilos de diseño si es necesario (ej. fuentes, border-radius, espaciado)
                 const root = document.documentElement.style;
-                const layout = '${currentLayout}'; // Obtiene el diseño actual del padre
+                const layout = currentLayout; // Obtiene el diseño actual del padre
                 if (layout === 'modern') {
                     root.setProperty('--preview-font-heading', "'Montserrat', sans-serif");
                     root.setProperty('--preview-font-body', "'Open Sans', sans-serif");
@@ -581,10 +588,9 @@ function openFullscreenPreview() {
                     root.setProperty('--preview-spacing-unit', '15px');
                 }
 
-                // Re-add event listeners for feature modals if needed
-                const featureDescriptions = ${JSON.stringify(featureDescriptions)};
+                // Vuelve a añadir los escuchadores de eventos para los modales de características si es necesario
                 window.openFeatureDetails = function(title, description, iconClass) {
-                    alert(\`\${title}: \n\${description}\`); // Alerta simple para modo de pantalla completa
+                    alert(\`Función: \${title}\n\nDescripción: \${description}\`); // Alerta simple para modo de pantalla completa
                 };
                 document.querySelectorAll('.preview-section ul li').forEach(li => {
                     const cleanedFeatureName = li.textContent.trim().replace(/<i[^>]*>.*?<\/i>\s*/, ''); 
@@ -599,6 +605,5 @@ function openFullscreenPreview() {
         </html>
     `);
     newWindow.document.close();
-};
-
-// FIM DO BLOCO DE SCRIPT PRINCIPAL
+}
+// FIM DO BLOCO DE JAVASCRIPT PRINCIPAL (script-gerador.js)
